@@ -1,0 +1,278 @@
+body {
+	background: #FDFDFD;
+    color: #2B2827;
+    overflow: hidden;
+    width: 100%;
+    padding-top: 0px;
+    margin-top:  0px;
+    margin-left: 5pt;
+    margin-right: 0pt;
+}
+
+#header {
+    text-align: center;
+    text-decoration: underline;
+    color: #6e736e;
+    font-size: 24pt;
+    font-family: serif;
+    padding-right: 10pt;
+}
+
+#struct_table {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+#calendar {
+    width: 100%;
+}
+
+#error_reportSettings, #error_mileagesEditor, #error_act_create, #error_add_expended, #error_waybill_create, #error_add_way {
+    color: #b22222;
+    width: 100%;
+    padding-left: 10pt;
+    font-size: 12pt;
+    border-color: #b22222;
+    border-style: solid;
+    border-width: 1pt;
+}
+
+#reportSettings, #act_create_form, #act_expended, #frmRequest, #waybill_create_form {
+    overflow: hidden;
+}
+
+#frmRequest table, #mileagesEditor table, #reportSettings table, #act_create_form table, #add_expended table,
+#calendarSettings table, #waybill_create_form table, #add_way table {
+    width: 100%;
+}
+
+#reportSettings table .col1, #act_create_form table .col1, #add_expended table .col1, #mileagesEditor table .col1,
+#waybill_create_form table .col1, #add_way table .col1 {
+    width: 30%;
+}
+
+#waybill_create_form .col2, #waybill_create_form .col4 {
+    white-space: nowrap;
+    width: 35%;
+}
+
+#reportSettings select {
+    width: 100%;
+}
+
+#waybill_start_date, #waybill_end_date, #waybill_mileage_before, #waybill_mileage_after {
+    width: 90%
+}
+
+#frmRequest select, #frmRequest textarea, #frmRequest fieldset, #act_create_form select, #act_create_form textarea,
+#frmRequest .date_field, #frmRequest .time_field, #frmRequest .text_field,
+#reason_for_repair, #act_date, #act_expended_edit_name, #act_expended_list,
+#act_expended_edit_count, #waybill_create_form select, #waybill_address_supply, #waybill_given_fuel,
+#way_value, #way_out_time, #way_return_time, #way_distance, #waybill_fuel_before {
+    width: 95%;
+}
+
+#rqlb1, #rqlb2, #rqlb3, #rqlb4, #rqlb5, #rqlb6, #rplb, #btnShowCalendar,
+#btnReports, #btnCreateRequest, #btnCreateAct, #btnCreateWaybill, #left_menu_requests_title {
+	display:block;
+	width: 170pt;
+    font-size: 12pt;
+}
+
+.btnAcceptRequest, .btnRejectRequest, .btnCancelRequest, .btnCompleteRequest, .btnUnCompleteRequest, .btnChangeRequest,
+    .btnModifyAct, .btnDeleteAct, .btnReportByAct, .btnModifyWaybill, .btnDeleteWaybill, .btnReportByWaybill {
+    font-size: 12pt;
+    width: 170pt;
+}
+
+#left_menu {
+	vertical-align: top;
+}
+
+#btnCreateRequest, #btnCreateAct, #btnCreateWaybill, #btnShowCalendar {
+    margin-top: 7pt;
+}
+
+#struct_table {
+	width: 99%;
+    height: 100%;
+}
+
+#mileage_date, #mileage_value, #mileage_type {
+    width: 90%;
+}
+
+#request_group {
+    width: 100%;
+}
+
+#request_group #divTransportRequests {
+    width: 100%;
+}
+
+#select_car_form select, #calendarSettings select {
+    width: 100%;
+}
+
+td#body {
+    vertical-align: top;
+}
+
+#request_result_success {
+    color: green;
+    border:1px solid green;
+}
+
+#request_result_error {
+    color: #cd0a0a;
+    border:1px solid #cd0a0a;
+}
+
+#request_count {
+    color: #cd0a0a;
+    border:1px solid #cd0a0a;
+    margin-top: 5px;
+}
+
+#detail_table {
+    padding-left:50px;
+    border: 0px;
+    width: 100%;
+}
+
+#detail_table .odd {
+    background-color: #FDFDFD;
+}
+
+#detail_table .even {
+    background-color: #f2f2f2;
+}
+
+#detail_table #detail_header {
+    text-decoration: underline;
+}
+
+.required_field_mark {
+    color: #cd0a0a;
+}
+
+#modify_buttons {
+    text-align: center;
+}
+
+#modify_buttons_table {
+    width: 100%;
+}
+
+#example thead tr#header {
+    text-align: right;
+    font-size: 36pt;
+    color: gray;
+    font-style: oblique;
+}
+
+.alignCenter {
+    text-align: center;
+}
+
+#permission_denied {
+    margin-top: 10pt;
+    color: red;
+    text-align: center;
+    text-decoration: underline;
+    width: 100%;
+}
+
+.req_accepted_status {
+    color: #00a9e2;
+}
+
+.req_canceled_status, .act_deleted_status {
+    color: #f40000;
+}
+
+.expire_mileage {
+    color: #f40000;
+}
+
+.expire_req_count {
+    color: #f40000;
+}
+
+.req_canceled_by_user {
+    color: #ffa71a;
+}
+
+.req_complete_status, .act_active_status {
+    color: #42a506;
+}
+
+.req_looking_status {
+    color: #9a9f9a;
+}
+
+.req_without_stage {
+    color: #f40000;
+}
+
+#calendarSettings td {
+    vertical-align: top;
+}
+
+#ParamTable td {
+    vertical-align: top;
+}
+
+#ShowMyRequestsOnly {
+    margin-left: 2em;
+    margin-top: 2pt;
+}
+
+.dispetcher_car {
+    background-color: #1ffbf6;
+}
+
+.owner_car {
+    background-color: #f3ff63;
+}
+
+.taxi_car {
+    background-color: #ffffff;
+}
+
+.department {
+    background-color: #dcdcdc;
+    font-weight: bold;
+}
+
+.report_group {
+    background-color: #dcdcdc;
+    font-weight: bold;
+}
+
+.report {
+    background-color: #ffffff;
+}
+
+.req_count {
+    color: red;
+}
+
+.expended_table, .ways_table {
+    border-width: 1px;
+    border-style: solid;
+    border-color: #9a9f9a;
+    width:  70%;
+}
+
+.ways_table {
+    width: 95%
+}
+
+.expended_table td, .ways_table td {
+    text-align: center;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #9a9f9a;
+    background-color: #FDFDFD;
+}
