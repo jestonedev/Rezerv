@@ -1704,6 +1704,15 @@ class Request {
             $department = $ldap->GetLoginParam("COMPANY");
             $sWhere .= "(department = '".$department."')";
         }
+        if ( $sWhere == "" )
+        {
+            $sWhere = "WHERE ";
+        }
+        else
+        {
+            $sWhere .= " AND ";
+        }
+        $sWhere .= "(request_date > DATE_SUB(NOW(), INTERVAL 6 MONTH))";
         return $sWhere;
     }
 
