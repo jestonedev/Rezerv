@@ -1457,8 +1457,10 @@ class Request {
                 $result.='<button value="'.$id_waybill.'" class="btnModifyWaybill">Изменить лист</button>';
                 $result.='<button value="'.$id_waybill.'" class="btnDeleteWaybill">Удалить лист</button>';
             }
+            //Добавляем кнопку формирования акта выполненных работ в odt (Тип А)
+            $result.='<button value="'.$id_waybill.'" class="btnReportByWaybill">Лист (Тип А)</button>';
             //Добавляем кнопку формирования акта выполненных работ в odt
-            $result.='<button value="'.$id_waybill.'" class="btnReportByWaybill">Создать лист</button>';
+            $result.='<button value="'.$id_waybill.'" class="btnReportByWaybillWithPeriod">Лист (Тип Б)</button>';
             $result.='</td></tr></table>';
         }
         return $result;

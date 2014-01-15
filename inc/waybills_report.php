@@ -6,7 +6,10 @@ include_once 'const.php';
 $TBS = new clsTinyButStrong;
 $TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
 
-$TBS->LoadTemplate('../report_templates/waybill_report.ods');
+if (isset($_GET['id_report_type']) && $_GET['id_report_type'] == 2)
+    $TBS->LoadTemplate('../report_templates/waybill_report_period.ods');
+else
+    $TBS->LoadTemplate('../report_templates/waybill_report.ods');
 $TBS->SetOption('charset', 'UTF-8');
 
 $con=mysqli_connect(MYSQL_SERVER, MYSQL_USER, MYSQL_PASSWORD, MYSQL_BASE);
@@ -18,7 +21,7 @@ if (!isset($_GET['id_waybill']))
     die('Не объявлена переменная id_waybill');
 $id_waybill = $_GET['id_waybill'];
 
-$query = "SELECT w.id_waybill, w.start_date, c.model, c.number,
+$query = "SELECT w.id_waybill, w.start_date, w.end_date, c.model, c.number,
   d.name as driver, m.name as mechanic, ds.name as dispatcher, d.employee_code, d.license_number, d.class, da.abbr AS department, w.address_supply, ft.fuel_type, w.mileage_before, w.mileage_after,
   w.given_fuel, w.fuel_before, ROUND(w.fuel_before - ABS(w.mileage_after-w.mileage_before)*c.rate_of_fuel_consumption/100 + IFNULL(w.given_fuel, 0),4) AS fuel_after,
   c.rate_of_fuel_consumption, ROUND(ABS(w.mileage_after-w.mileage_before)*c.rate_of_fuel_consumption/100,4) AS rate_of_fuel_factical
@@ -62,6 +65,14 @@ $date_parts = explode("-", $date_parts[0]);
 $day = intval($date_parts[2]);
 $month = intval($date_parts[1]);
 $year = intval(substr($date_parts[0], 2));
+
+$date_end = $row["end_date"];
+$date_parts_end = explode(" ",$date_end);
+$date_parts_end = explode("-", $date_parts_end[0]);
+$day_end = intval($date_parts_end[2]);
+$month_end = intval($date_parts_end[1]);
+$year_end = intval(substr($date_parts_end[0], 2));
+
 $car_model = $row["model"];
 $car_num = $row["number"];
 $emp_code = $row["employee_code"];

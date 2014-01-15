@@ -80,7 +80,8 @@ body {
 }
 
 .btnAcceptRequest, .btnRejectRequest, .btnCancelRequest, .btnCompleteRequest, .btnUnCompleteRequest, .btnChangeRequest,
-    .btnModifyAct, .btnDeleteAct, .btnReportByAct, .btnModifyWaybill, .btnDeleteWaybill, .btnReportByWaybill {
+    .btnModifyAct, .btnDeleteAct, .btnReportByAct, .btnModifyWaybill, .btnDeleteWaybill, .btnReportByWaybill,
+    .btnReportByWaybillWithPeriod {
     font-size: 12pt;
     width: 170pt;
 }

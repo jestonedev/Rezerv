@@ -6,6 +6,9 @@
  * To change this template use File | Settings | File Templates.
  */
 
+// Когда я начинал это писать, только Бог и я понимали, что я делаю
+// Сейчас остался только Бог
+
 $(document).ready(function(){
 
     //Переменные настройки отчетов
@@ -921,7 +924,13 @@ $(document).ready(function(){
         });
         $('.btnReportByWaybill').button().click(function() {
             var id_waybill = $(this).attr("value");
-            $.fileDownload('inc/waybills_report.php?id_waybill='+id_waybill,
+            $.fileDownload('inc/waybills_report.php?id_report_type=1&id_waybill='+id_waybill,
+                {failMessageHtml: "Не удалось загрузить файл, попробуйте еще раз."});
+            return false;
+        });
+        $('.btnReportByWaybillWithPeriod').button().click(function() {
+            var id_waybill = $(this).attr("value");
+            $.fileDownload('inc/waybills_report.php?id_report_type=2&id_waybill='+id_waybill,
                 {failMessageHtml: "Не удалось загрузить файл, попробуйте еще раз."});
             return false;
         });
@@ -2083,7 +2092,7 @@ $(document).ready(function(){
     //Служебные функции//
     /////////////////////
 
-    //
+    //Функция изменения вида топлива
     function change_fuel_type()
     {
         var id_car = $("#waybill_create_form select[name='car_id']").attr("value");
