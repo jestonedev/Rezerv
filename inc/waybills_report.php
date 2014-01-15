@@ -7,9 +7,9 @@ $TBS = new clsTinyButStrong;
 $TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
 
 if (isset($_GET['id_report_type']) && $_GET['id_report_type'] == 2)
-    $TBS->LoadTemplate('../report_templates/waybill_report_period.ods');
+    $TBS->LoadTemplate('../report_templates/waybill_report_night.ods');
 else
-    $TBS->LoadTemplate('../report_templates/waybill_report.ods');
+    $TBS->LoadTemplate('../report_templates/waybill_report_day.ods');
 $TBS->SetOption('charset', 'UTF-8');
 
 $con=mysqli_connect(MYSQL_SERVER, MYSQL_USER, MYSQL_PASSWORD, MYSQL_BASE);
@@ -23,8 +23,8 @@ $id_waybill = $_GET['id_waybill'];
 
 $query = "SELECT w.id_waybill, w.start_date, w.end_date, c.model, c.number,
   d.name as driver, m.name as mechanic, ds.name as dispatcher, d.employee_code, d.license_number, d.class, da.abbr AS department, w.address_supply, ft.fuel_type, w.mileage_before, w.mileage_after,
-  w.given_fuel, w.fuel_before, ROUND(w.fuel_before - ABS(w.mileage_after-w.mileage_before)*c.rate_of_fuel_consumption/100 + IFNULL(w.given_fuel, 0),4) AS fuel_after,
-  c.rate_of_fuel_consumption, ROUND(ABS(w.mileage_after-w.mileage_before)*c.rate_of_fuel_consumption/100,4) AS rate_of_fuel_factical
+  w.given_fuel, w.fuel_before, ROUND(w.fuel_before - ABS(w.mileage_after-w.mileage_before)*fc.fuel_consumption/100 + IFNULL(w.given_fuel, 0),4) AS fuel_after,
+  fc.fuel_consumption AS rate_of_fuel_consumption, ROUND(ABS(w.mileage_after-w.mileage_before)*fc.fuel_consumption/100,4) AS rate_of_fuel_factical
 FROM waybills w
   LEFT JOIN cars c ON (c.id = w.id_car)
   LEFT JOIN drivers d  USING (id_driver)
@@ -32,6 +32,8 @@ FROM waybills w
   LEFT JOIN dispatchers ds  USING (id_dispatcher)
   LEFT JOIN fuel_types ft USING (id_fuel_type)
   LEFT JOIN dep_abbrs da USING (department)
+  LEFT JOIN fuel_consumption fc ON
+    (c.id = fc.id_car AND DAY(fc.start_date) <= DAY(w.start_date) AND DAY(fc.end_date) >= DAY(w.start_date))
 WHERE w.id_waybill = ".addslashes($id_waybill);
 
 $query_expended = "SELECT * FROM ways WHERE id_waybill=".addslashes($id_waybill);
@@ -85,8 +87,6 @@ $department = $row["department"];
 $address_supply = $row["address_supply"];
 $mileage_before = $row["mileage_before"];
 $mileage_after = $row["mileage_after"];
-$out_time = "8:00";
-$return_time = "18:00";
 $fuel_type = $row["fuel_type"];
 $given_fuel = $row["given_fuel"];
 $fuel_before = $row["fuel_before"];

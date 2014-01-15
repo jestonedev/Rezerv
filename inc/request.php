@@ -1334,16 +1334,19 @@ class Request {
     public function GetWaybillDetails($id_waybill)
     {
         $query = "SELECT w.department, w.address_supply, w.mileage_before, w.mileage_after, w.fuel_before,
-            ROUND(w.fuel_before - (w.mileage_after-w.mileage_before)*c.rate_of_fuel_consumption/100 + IFNULL(w.given_fuel, 0),3) AS fuel_after,
-            w.given_fuel, c.rate_of_fuel_consumption,
-            ROUND((w.mileage_after-w.mileage_before)*c.rate_of_fuel_consumption/100,3) AS rate_of_fuel , d.name AS driver, d.employee_code, d.license_number, d.class,
-            m.name AS mechanic, ds.name AS dispatcher, w.deleted
-              FROM waybills w
-              LEFT JOIN mechanics m ON (w.id_mechanic = m.id_mechanic)
-              LEFT JOIN cars c ON (w.id_car = c.id)
-              LEFT JOIN drivers d ON (w.id_driver = d.id_driver)
-              LEFT JOIN dispatchers ds ON (w.id_dispatcher = ds.id_dispatcher)
-              LEFT JOIN fuel_types ft ON (w.id_fuel_type = ft.id_fuel_type) where id_waybill = $id_waybill";
+              ROUND(w.fuel_before - (w.mileage_after-w.mileage_before)*fc.fuel_consumption/100 + IFNULL(w.given_fuel, 0),3) AS fuel_after,
+              w.given_fuel, fc.fuel_consumption AS rate_of_fuel_consumption,
+              ROUND((w.mileage_after-w.mileage_before)*fc.fuel_consumption/100,3) AS rate_of_fuel , d.name AS driver, d.employee_code, d.license_number, d.class,
+              m.name AS mechanic, ds.name AS dispatcher, w.deleted
+            FROM waybills w
+                LEFT JOIN mechanics m ON (w.id_mechanic = m.id_mechanic)
+                LEFT JOIN cars c ON (w.id_car = c.id)
+                LEFT JOIN drivers d ON (w.id_driver = d.id_driver)
+                LEFT JOIN dispatchers ds ON (w.id_dispatcher = ds.id_dispatcher)
+                LEFT JOIN fuel_types ft ON (w.id_fuel_type = ft.id_fuel_type)
+                LEFT JOIN fuel_consumption fc ON
+                (c.id = fc.id_car AND DAY(fc.start_date) <= DAY(w.start_date) AND DAY(fc.end_date) >= DAY(w.start_date))
+            WHERE id_waybill = $id_waybill";
         $result = mysqli_query($this->con, $query);
 
         $query_ways = "select * from ways where id_waybill = $id_waybill";
@@ -1458,9 +1461,9 @@ class Request {
                 $result.='<button value="'.$id_waybill.'" class="btnDeleteWaybill">Удалить лист</button>';
             }
             //Добавляем кнопку формирования акта выполненных работ в odt (Тип А)
-            $result.='<button value="'.$id_waybill.'" class="btnReportByWaybill">Лист (Тип А)</button>';
+            $result.='<button value="'.$id_waybill.'" class="btnReportByWaybill">Лист (День)</button>';
             //Добавляем кнопку формирования акта выполненных работ в odt
-            $result.='<button value="'.$id_waybill.'" class="btnReportByWaybillWithPeriod">Лист (Тип Б)</button>';
+            $result.='<button value="'.$id_waybill.'" class="btnReportByWaybillWithPeriod">Лист (Ночь)</button>';
             $result.='</td></tr></table>';
         }
         return $result;
