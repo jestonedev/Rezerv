@@ -23,8 +23,8 @@ $id_waybill = $_GET['id_waybill'];
 
 $query = "SELECT w.id_waybill, w.start_date, w.end_date, c.model, c.number,
   d.name as driver, m.name as mechanic, ds.name as dispatcher, d.employee_code, d.license_number, d.class, da.abbr AS department, w.address_supply, ft.fuel_type, w.mileage_before, w.mileage_after,
-  w.given_fuel, w.fuel_before, ROUND(w.fuel_before - ABS(w.mileage_after-w.mileage_before)*fc.fuel_consumption/100 + IFNULL(w.given_fuel, 0),4) AS fuel_after,
-  fc.fuel_consumption AS rate_of_fuel_consumption, ROUND(ABS(w.mileage_after-w.mileage_before)*fc.fuel_consumption/100,4) AS rate_of_fuel_factical
+  w.given_fuel, w.fuel_before, ROUND(w.fuel_before - ABS(w.mileage_after-w.mileage_before)*fc.fuel_consumption/100 + IFNULL(w.given_fuel, 0),3) AS fuel_after,
+  fc.fuel_consumption AS rate_of_fuel_consumption, ROUND(ABS(w.mileage_after-w.mileage_before)*fc.fuel_consumption/100,3) AS rate_of_fuel_factical
 FROM waybills w
   LEFT JOIN cars c ON (c.id = w.id_car)
   LEFT JOIN drivers d  USING (id_driver)
@@ -33,7 +33,7 @@ FROM waybills w
   LEFT JOIN fuel_types ft USING (id_fuel_type)
   LEFT JOIN dep_abbrs da USING (department)
   LEFT JOIN fuel_consumption fc ON
-    (c.id = fc.id_car AND DAY(fc.start_date) <= DAY(w.start_date) AND DAY(fc.end_date) >= DAY(w.start_date))
+    (c.id = fc.id_car AND DATE(fc.start_date) <= DATE(w.start_date) AND DATE(fc.end_date) >= DATE(w.start_date))
 WHERE w.id_waybill = ".addslashes($id_waybill);
 
 $query_expended = "SELECT * FROM ways WHERE id_waybill=".addslashes($id_waybill);
