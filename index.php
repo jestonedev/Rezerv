@@ -229,6 +229,12 @@ header("Cache-Control: no-cache, must-revalidate");
     <div id='waybill_create_form'>                                       <!--Форма подачи путевого листа-->
         <table>
             <tr>
+                <td>Номер</td>
+                <td colspan="3">
+                    <input id="waybill_number" type="text">
+                </td>
+            </tr>
+            <tr>
                 <td class = "col1">Период действия (с-по)<span class="required_field_mark">*</span></td>
                 <td class = "col2"><input id="waybill_start_date" type="text"></td>
                 <td class = "col4"><input id="waybill_end_date" type="text"></td>

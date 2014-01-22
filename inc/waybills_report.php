@@ -21,7 +21,7 @@ if (!isset($_GET['id_waybill']))
     die('Не объявлена переменная id_waybill');
 $id_waybill = $_GET['id_waybill'];
 
-$query = "SELECT w.id_waybill, w.start_date, w.end_date, c.model, c.number,
+$query = "SELECT w.waybill_number, w.start_date, w.end_date, c.model, c.number,
   d.name as driver, m.name as mechanic, ds.name as dispatcher, d.employee_code, d.license_number, d.class, da.abbr AS department, w.address_supply, ft.fuel_type, w.mileage_before, w.mileage_after,
   w.given_fuel, w.fuel_before, ROUND(w.fuel_before - ABS(w.mileage_after-w.mileage_before)*fc.fuel_consumption/100 + IFNULL(w.given_fuel, 0),3) AS fuel_after,
   fc.fuel_consumption AS rate_of_fuel_consumption, ROUND(ABS(w.mileage_after-w.mileage_before)*fc.fuel_consumption/100,3) AS rate_of_fuel_factical
@@ -61,6 +61,7 @@ if ($con)
     mysqli_close($con);
 
 //Переменные, которые надо заполнить
+$waybill_number = $row['waybill_number'];
 $date = $row["start_date"];
 $date_parts = explode(" ",$date);
 $date_parts = explode("-", $date_parts[0]);

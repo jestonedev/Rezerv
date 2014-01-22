@@ -68,7 +68,7 @@ body {
 #frmRequest .date_field, #frmRequest .time_field, #frmRequest .text_field,
 #reason_for_repair, #act_date, #act_expended_edit_name, #act_expended_list,
 #act_expended_edit_count, #waybill_create_form select, #waybill_address_supply, #waybill_given_fuel,
-#way_value, #way_out_time, #way_return_time, #way_distance, #waybill_fuel_before {
+#way_value, #way_out_time, #way_return_time, #way_distance, #waybill_fuel_before, #waybill_number {
     width: 95%;
 }
 

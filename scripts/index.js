@@ -411,6 +411,7 @@ $(document).ready(function(){
     //Обработчик события нажатия на кнопку "Создать акт"
     $('#btnCreateWaybill').button().click(function() {
         $("#error_waybill_create").hide();
+        $("#waybill_number").attr("value","");
         $("#waybill_start_date").attr("value","");
         $("#waybill_end_date").attr("value","");
         $("#waybill_address_supply").attr("value","ул. Ленина, 37");
@@ -864,6 +865,7 @@ $(document).ready(function(){
                         $("#waybill_create_form select[name='dispatcher_id']").attr("value", info["id_dispatcher"]);
                         $("#waybill_create_form select[name='department']").attr("value",info["department"]);
                         $("#waybill_create_form select[name='fuel_type_id']").attr("value",info["id_fuel_type"]);
+                        $("#waybill_number").attr("value", info["waybill_number"]);
                         $("#waybill_address_supply").attr("value", info["address_supply"]);
                         $("#waybill_mileage_before").attr("value", info["mileage_before"]);
                         $("#waybill_mileage_after").attr("value", info["mileage_after"]);
@@ -1236,7 +1238,7 @@ $(document).ready(function(){
     {
         var msga = "";
         var aData = oTable.fnGetData( nTr );
-        var id_waybill = aData[1];
+        var id_waybill = $(aData[0]).attr('value')
         $.ajax({
             type: "POST",
             url: "inc/details_by_id.php",
@@ -2341,6 +2343,7 @@ $(document).ready(function(){
     {
         $("#error_waybill_create div").remove();
         $("#error_waybill_create").hide();
+        var waybill_number = $("#waybill_number").attr("value");
         var waybill_start_date = $("#waybill_start_date").attr("value");
         var waybill_end_date = $("#waybill_end_date").attr("value");
         var car_id = $("#waybill_create_form select[name='car_id']").attr("value");
@@ -2367,6 +2370,11 @@ $(document).ready(function(){
         if (!dateCorrect(waybill_start_date) || !dateCorrect(waybill_end_date))
         {
             $("#error_waybill_create").append("<div>Период действия путевого листа задан некорректно</div>");
+            is_correct = false;
+        }
+        if (($.trim(waybill_number) != "") && (!intCorrect(waybill_number)))
+        {
+            $("#error_waybill_create").append("<div>Номер путевого листа указан неверно</div>");
             is_correct = false;
         }
         if (($.trim(waybill_mileage_before) != "") && (!intCorrect(waybill_mileage_before)))
@@ -2404,7 +2412,7 @@ $(document).ready(function(){
             action = "action=insert_waybill";
         else
             action = "action=update_waybill&waybill_id="+id_waybill;
-        var data = action+"&start_date="+waybill_start_date+"&end_date="+waybill_end_date+"&car_id="+car_id+
+        var data = action+"&number="+waybill_number+"&start_date="+waybill_start_date+"&end_date="+waybill_end_date+"&car_id="+car_id+
             "&driver_id="+driver_id+"&mechanic_id="+mechanic_id+"&dispatcher_id="+dispatcher_id+"&department="+department+
             "&address_supply="+address_supply+"&mileage_before="+waybill_mileage_before+
             "&mileage_after="+waybill_mileage_after+"&fuel_before="+waybill_fuel_before+

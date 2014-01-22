@@ -1473,15 +1473,17 @@ class Request {
     {
         if (!Auth::hasPrivilege(AUTH_MODIFY_WAYBILLS))
             $this->fatal_error('У вас нет прав на создание путевых листов');
-        $query = "INSERT INTO waybills(id_car, id_driver, id_mechanic, id_dispatcher, start_date, end_date, address_supply, department,
+        $query = "INSERT INTO waybills(id_car, id_driver, id_mechanic, id_dispatcher, waybill_number, start_date, end_date, address_supply, department,
             mileage_before, mileage_after, fuel_before, given_fuel, id_fuel_type)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $pq = mysqli_prepare($this->con, $query);
 
         $car_id = $args['car_id'];
         $driver_id = $args['driver_id'];
         $mechanic_id = $args['mechanic_id'];
         $dispatcher_id = $args['dispatcher_id'];
+        $number = $args['number'];
+        $number = (trim($number) == "") ? null : trim($number);
         $department = stripslashes($args['department']);
         $address_supply = $args['address_supply'];
         $mileage_before = $args['mileage_before'];
@@ -1497,8 +1499,7 @@ class Request {
         $start_date = $start_date_parts[2].'-'.$start_date_parts[1].'-'.$start_date_parts[0];
         $end_date_parts = explode('.', $args['end_date']);
         $end_date = $end_date_parts[2].'-'.$end_date_parts[1].'-'.$end_date_parts[0];
-
-        mysqli_bind_param($pq,'iiiissssiiddi',$car_id, $driver_id, $mechanic_id, $dispatcher_id, $start_date,
+        mysqli_bind_param($pq,'iiiiissssiiddi',$car_id, $driver_id, $mechanic_id, $dispatcher_id, $number, $start_date,
             $end_date, $address_supply, $department,
             $mileage_before, $mileage_after, $fuel_before, $given_fuel, $fuel_type_id);
         mysqli_execute($pq);
@@ -1555,7 +1556,7 @@ class Request {
     {
         if (!Auth::hasPrivilege(AUTH_MODIFY_WAYBILLS))
             $this->fatal_error('У вас нет прав на изменение путевого листа');
-        $query = "UPDATE waybills SET id_car = ?, id_driver = ?, id_mechanic = ?, id_dispatcher = ?, start_date = ?, end_date = ?,
+        $query = "UPDATE waybills SET id_car = ?, id_driver = ?, id_mechanic = ?, id_dispatcher = ?, waybill_number = ?, start_date = ?, end_date = ?,
           address_supply = ?, department = ?, mileage_before = ?, mileage_after = ?, fuel_before = ?,
           given_fuel = ?, id_fuel_type = ? WHERE id_waybill = ?";
         $pq = mysqli_prepare($this->con, $query);
@@ -1563,6 +1564,8 @@ class Request {
         $driver_id = $args['driver_id'];
         $mechanic_id = $args['mechanic_id'];
         $dispatcher_id = $args['dispatcher_id'];
+        $number = $args['number'];
+        $number = (trim($number) == "") ? null : trim($number);
         $department = stripslashes($args['department']);
         $address_supply = $args['address_supply'];
         $mileage_before = $args['mileage_before'];
@@ -1579,7 +1582,7 @@ class Request {
         $end_date_parts = explode('.', $args['end_date']);
         $end_date = $end_date_parts[2].'-'.$end_date_parts[1].'-'.$end_date_parts[0];
         $waybill_id = $args['waybill_id'];
-        mysqli_bind_param($pq,'iiiissssiiddii',$car_id, $driver_id, $mechanic_id, $dispatcher_id, $start_date, $end_date, $address_supply,
+        mysqli_bind_param($pq,'iiiiissssiiddii',$car_id, $driver_id, $mechanic_id, $dispatcher_id, $number, $start_date, $end_date, $address_supply,
             $department, $mileage_before, $mileage_after, $fuel_before, $given_fuel,
             $fuel_type_id, $waybill_id);
         mysqli_execute($pq);

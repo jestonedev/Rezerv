@@ -34,11 +34,11 @@ class WaybillsClass
     ///////////////////////////////////////////////////////////////////////////
 
     public function Columns() {
-        return array('edit_lbl','id_waybill','car','start_date','status');
+        return array('edit_lbl','waybill_number','car','start_date','status');
     }
 
     public function Table() {
-        return "(SELECT CONCAT('<img src=\'img/details_open.png\' value=\'',id_waybill,'\'>') AS edit_lbl,w.id_waybill,
+        return "(SELECT CONCAT('<img src=\'img/details_open.png\' value=\'',id_waybill,'\'>') AS edit_lbl, w.waybill_number,
             CONCAT(c.model,' г/н ',c.number) AS car,  DATE(w.start_date) AS start_date, IF(w.deleted = 0, 'Действительный', 'Удаленный') AS `status`
             FROM waybills w
             LEFT JOIN cars c ON (w.id_car = c.id)) t";
@@ -49,7 +49,7 @@ class WaybillsClass
     }
 
     public function IndexColumn() {
-        return "id_waybill";
+        return "waybill_number";
     }
 
     public function DisplayColumnNames()
