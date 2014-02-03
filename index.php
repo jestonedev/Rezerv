@@ -35,7 +35,6 @@ header("Cache-Control: no-cache, must-revalidate");
 	if(defined("DEVELOP_MODE")){ 
 		//die("Сервис временно недоступен!!!");
 	}
-
 	?>
     <?php
 
@@ -159,49 +158,72 @@ header("Cache-Control: no-cache, must-revalidate");
     <div id='act_create_form'>                                       <!--Форма подачи акта выполненных работ-->
         <table>
             <tr>
-                <td>Дата формирования акта<span class="required_field_mark">*</span></td><td><input id="act_date" type="text"></td>
+                <td>Номер акта</td>
+                <td colspan="2">
+                    <input id="act_number" type="text">
+                </td>
+            </tr>
+            <tr>
+                <td>Дата формирования акта<span class="required_field_mark">*</span></td>
+                <td colspan="2"><input id="act_date" type="text" colspan="2"></td>
             </tr>
             <tr>
                 <td class="col1">Ответственный<span class="required_field_mark">*</span></td>
-                <td class="col2" id="act_respondent" name="act_respondent">
+                <td class="col2" id="act_respondent" name="act_respondent" colspan="2">
                 </td>
             </tr>
             <tr>
                 <td>Транспортное средство<span class="required_field_mark">*</span></td>
-                <td id="act_car" name="act_car">
+                <td id="act_car" name="act_car" colspan="2">
                 </td>
             </tr>
             <tr>
                 <td>Водитель<span class="required_field_mark">*</span></td>
-                <td id="act_driver" name="act_driver">
+                <td id="act_driver" name="act_driver" colspan="2">
                 </td>
             </tr>
             <tr>
                 <td>Механик<span class="required_field_mark">*</span></td>
-                <td id="act_mechanic" name="act_mechanic">
+                <td id="act_mechanic" name="act_mechanic" colspan="2">
                 </td>
             </tr>
             <tr>
                 <td>Причина ремонта</td>
-                <td>
+                <td colspan="2">
                     <input id="reason_for_repair" type="text">
                 </td>
             </tr>
             <tr>
                 <td>Выполненные работы</td>
-                <td>
+                <td colspan="2">
                     <textarea id="work_performed" cols="50" rows="2" type="text"></textarea>
                 </td>
             </tr>
             <tr>
+                <td>Показание одометра</td>
+                <td colspan="2">
+                    <input id="act_odometer" type="text">
+                </td>
+            </tr>
+            <tr>
+                <td class = "col1">Период ожидания (с-по)</td>
+                <td class = "col2"><input id="act_wait_start_date" type="text"></td>
+                <td class = "col4"><input id="act_wait_end_date" type="text"></td>
+            </tr>
+            <tr>
+                <td class = "col1">Период факт. ремонта (с-по)</td>
+                <td class = "col2"><input id="act_repair_start_date" type="text"></td>
+                <td class = "col4"><input id="act_repair_end_date" type="text"></td>
+            </tr>
+            <tr>
                 <td>Израсходованные материалы</td>
-                <td id="act_expended" name="act_expended">
+                <td id="act_expended" name="act_expended" colspan="2">
                     <select size="4" id="act_expended_list" multiple name="act_expended_list"></select>
                 </td>
             </tr>
             <tr>
                 <td></td>
-                <td id="act_expended_buttons">
+                <td id="act_expended_buttons" colspan="2">
                     <input type="button" id="insert_expended" name="insert_expended" value="Добавить материал">
                     <input type="button" id="delete_expended" name="delete_expended" value="Удалить материал">
                 </td>

@@ -34,11 +34,11 @@ class RepairActsClass
     ///////////////////////////////////////////////////////////////////////////
 
     public function Columns() {
-        return array('edit_lbl','id_repair','car','respondent','act_date','status');
+        return array('edit_lbl','repair_act_number','car','respondent','act_date','status');
     }
 
     public function Table() {
-        return "(SELECT CONCAT('<img src=\'img/details_open.png\' value=\'',id_repair,'\'>') AS edit_lbl, cra.id_repair, CONCAT(c.model,' г/н ',c.number) AS car,  r.name AS respondent, DATE(cra.act_date) AS act_date, IF(cra.deleted = 0, 'Действительный', 'Удаленный') AS `status`
+        return "(SELECT CONCAT('<img src=\'img/details_open.png\' value=\'',id_repair,'\'>') AS edit_lbl, cra.repair_act_number, CONCAT(c.model,' г/н ',c.number) AS car,  r.name AS respondent, DATE(cra.act_date) AS act_date, IF(cra.deleted = 0, 'Действительный', 'Удаленный') AS `status`
           FROM cars_repair_acts cra
             LEFT JOIN respondents r ON (cra.id_respondent = r.id_respondent)
             LEFT JOIN cars c ON (cra.id_car = c.id)) t";
@@ -49,7 +49,7 @@ class RepairActsClass
     }
 
     public function IndexColumn() {
-        return "id_repair";
+        return "repair_act_number";
     }
 
     public function DisplayColumnNames()

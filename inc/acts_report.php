@@ -48,7 +48,7 @@ if ($con)
     mysqli_close($con);
 
 $date = formatDate($row['act_date']);
-$act_num = $row['id_repair'];
+$act_num = $row['repair_act_number'];
 $responsible = formatName($row['respondent']);
 $car = $row['model'];
 $car_num = $row['number'];
@@ -56,6 +56,11 @@ $reason = $row['reason_for_repairs'];
 $work_performed = $row['work_performed'];
 $driver = formatName($row['driver']);
 $mechanic = formatName($row['mechanic']);
+$odometer = $row['odometer'];
+$wait_start_date = formatDate($row['wait_start_date']);
+$wait_end_date = formatDate($row['wait_end_date']);
+$rep_start_date = formatDate($row['repair_start_date']);
+$rep_end_date = formatDate($row['repair_end_date']);
 $array = $row["expended"];
 $expended_materials = '';
 for ($i = 0; $i < sizeof($array); $i++)
@@ -70,6 +75,8 @@ $TBS->Show(OPENTBS_DOWNLOAD);
 
 function formatDate($date)
 {
+    if (empty($date))
+        return "";
     $date_time_parts = explode(' ', $date);
     $date_parts = $date_time_parts[0];
     $date_arr = explode('-', $date_parts);

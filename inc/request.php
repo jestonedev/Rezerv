@@ -1130,18 +1130,56 @@ class Request {
     {
         if (!Auth::hasPrivilege(AUTH_MODIFY_REPAIR_ACTS))
             $this->fatal_error('У вас нет прав на изменение акта выполненных работ');
-        $query = "UPDATE cars_repair_acts SET id_car = ?, id_performer = ?, id_driver = ?, id_respondent = ?, reason_for_repairs = ?, work_performed = ?, act_date = ? WHERE id_repair = ?";
+        $query = "UPDATE cars_repair_acts SET id_car = ?, id_performer = ?, id_driver = ?, id_respondent = ?, repair_act_number = ?, act_date = ?, reason_for_repairs = ?, work_performed = ?,
+          odometer = ?, wait_start_date = ?, wait_end_date = ?, repair_start_date = ?, repair_end_date = ? WHERE id_repair = ?";
         $pq = mysqli_prepare($this->con, $query);
         $car_id = $args['car_id'];
+        $act_number = (trim($args['act_number']) == "") ? null : trim($args['act_number']);
         $performer_id = $args['mechanic_id'];
         $driver_id = $args['driver_id'];
         $respondent_id = $args['responded_id'];
         $reason_for_repairs = $args['reason_for_repair'];
         $work_performed = $args['work_performed'];
-        $act_date_parts = explode('.', $args['act_date']);
-        $act_date = $act_date_parts[2].'-'.$act_date_parts[1].'-'.$act_date_parts[0];
+        $odometer = (trim($args['act_odometer']) == "") ? null: trim($args['act_odometer']);
+        if (trim($args['act_date']) == "")
+            $act_date = null;
+        else
+        {
+            $act_date_parts = explode('.', $args['act_date']);
+            $act_date = $act_date_parts[2].'-'.$act_date_parts[1].'-'.$act_date_parts[0];
+        }
+        if (trim($args['act_wait_start_date']) == "")
+            $act_wait_start_date = null;
+        else
+        {
+            $act_wait_start_date_parts = explode('.', $args['act_wait_start_date']);
+            $act_wait_start_date = $act_wait_start_date_parts[2].'-'.$act_wait_start_date_parts[1].'-'.$act_wait_start_date_parts[0];
+        }
+        if (trim($args['act_wait_end_date']) == "")
+            $act_wait_end_date = null;
+        else
+        {
+            $act_wait_end_date_parts = explode('.', $args['act_wait_end_date']);
+            $act_wait_end_date = $act_wait_end_date_parts[2].'-'.$act_wait_end_date_parts[1].'-'.$act_wait_end_date_parts[0];
+        }
+        if (trim($args['act_repair_start_date']) == "")
+            $act_repair_start_date = null;
+        else
+        {
+            $act_repair_start_date_parts = explode('.', $args['act_repair_start_date']);
+            $act_repair_start_date = $act_repair_start_date_parts[2].'-'.$act_repair_start_date_parts[1].'-'.$act_repair_start_date_parts[0];
+        }
+        if (trim($args['act_repair_end_date']) == "")
+            $act_repair_end_date = null;
+        else
+        {
+            $act_repair_end_date_parts = explode('.', $args['act_repair_end_date']);
+            $act_repair_end_date = $act_repair_end_date_parts[2].'-'.$act_repair_end_date_parts[1].'-'.$act_repair_end_date_parts[0];
+        }
         $repair_id = $args['repair_id'];
-        mysqli_bind_param($pq,'iiiisssi',$car_id, $performer_id, $driver_id, $respondent_id, $reason_for_repairs, $work_performed, $act_date, $repair_id);
+        mysqli_bind_param($pq,'iiiiisssissssi',$car_id, $performer_id, $driver_id, $respondent_id, $act_number, $act_date,
+            $reason_for_repairs, $work_performed, $odometer, $act_wait_start_date, $act_wait_end_date,
+            $act_repair_start_date, $act_repair_end_date, $repair_id);
         mysqli_execute($pq);
         if (mysqli_errno($this->con)!=0)
         {
@@ -1188,17 +1226,56 @@ class Request {
     {
         if (!Auth::hasPrivilege(AUTH_MODIFY_REPAIR_ACTS))
             $this->fatal_error('У вас нет прав на создание акта выполненных работ');
-        $query = "INSERT INTO cars_repair_acts(id_car, id_performer, id_driver, id_respondent, reason_for_repairs, work_performed, act_date) VALUES (?,?,?,?,?,?,?)";
+        $query = "INSERT INTO cars_repair_acts(id_car, id_performer, id_driver, id_respondent, repair_act_number, act_date,
+        reason_for_repairs, work_performed, odometer, wait_start_date, wait_end_date, repair_start_date, repair_end_date)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $pq = mysqli_prepare($this->con, $query);
         $car_id = $args['car_id'];
+        $act_number = (trim($args['act_number']) == "") ? null : trim($args['act_number']);
         $performer_id = $args['mechanic_id'];
         $driver_id = $args['driver_id'];
         $respondent_id = $args['responded_id'];
         $reason_for_repairs = $args['reason_for_repair'];
         $work_performed = $args['work_performed'];
-        $act_date_parts = explode('.', $args['act_date']);
-        $act_date = $act_date_parts[2].'-'.$act_date_parts[1].'-'.$act_date_parts[0];
-        mysqli_bind_param($pq,'iiiisss',$car_id, $performer_id, $driver_id, $respondent_id, $reason_for_repairs, $work_performed, $act_date);
+        $odometer = (trim($args['act_odometer']) == "") ? null: trim($args['act_odometer']);
+        if (trim($args['act_date']) == "")
+            $act_date = null;
+        else
+        {
+            $act_date_parts = explode('.', $args['act_date']);
+            $act_date = $act_date_parts[2].'-'.$act_date_parts[1].'-'.$act_date_parts[0];
+        }
+        if (trim($args['act_wait_start_date']) == "")
+            $act_wait_start_date = null;
+        else
+        {
+            $act_wait_start_date_parts = explode('.', $args['act_wait_start_date']);
+            $act_wait_start_date = $act_wait_start_date_parts[2].'-'.$act_wait_start_date_parts[1].'-'.$act_wait_start_date_parts[0];
+        }
+        if (trim($args['act_wait_end_date']) == "")
+            $act_wait_end_date = null;
+        else
+        {
+            $act_wait_end_date_parts = explode('.', $args['act_wait_end_date']);
+            $act_wait_end_date = $act_wait_end_date_parts[2].'-'.$act_wait_end_date_parts[1].'-'.$act_wait_end_date_parts[0];
+        }
+        if (trim($args['act_repair_start_date']) == "")
+            $act_repair_start_date = null;
+        else
+        {
+            $act_repair_start_date_parts = explode('.', $args['act_repair_start_date']);
+            $act_repair_start_date = $act_repair_start_date_parts[2].'-'.$act_repair_start_date_parts[1].'-'.$act_repair_start_date_parts[0];
+        }
+        if (trim($args['act_repair_end_date']) == "")
+            $act_repair_end_date = null;
+        else
+        {
+            $act_repair_end_date_parts = explode('.', $args['act_repair_end_date']);
+            $act_repair_end_date = $act_repair_end_date_parts[2].'-'.$act_repair_end_date_parts[1].'-'.$act_repair_end_date_parts[0];
+        }
+        mysqli_bind_param($pq,'iiiiisssissss',$car_id, $performer_id, $driver_id, $respondent_id, $act_number, $act_date,
+            $reason_for_repairs, $work_performed, $odometer, $act_wait_start_date, $act_wait_end_date,
+            $act_repair_start_date, $act_repair_end_date);
         mysqli_execute($pq);
         if (mysqli_errno($this->con)!=0)
         {
@@ -1251,7 +1328,9 @@ class Request {
 
     public function GetActDetails($id_repair)
     {
-        $query = "SELECT cra.reason_for_repairs, cra.work_performed, m.name AS mechanic, d.name AS driver, cra.deleted
+        $query = "SELECT cra.reason_for_repairs, cra.work_performed, m.name AS mechanic, d.name AS driver,
+                     cra.odometer, cra.wait_start_date, cra.wait_end_date, cra.repair_start_date, cra.repair_end_date,
+                     cra.deleted
                     FROM cars_repair_acts cra
                       LEFT JOIN mechanics m ON (cra.id_performer = m.id_mechanic)
                       LEFT JOIN cars c ON (cra.id_car = c.id)
@@ -1269,6 +1348,21 @@ class Request {
         $work_performed = $row['work_performed'];
         $mechanic = $row['mechanic'];
         $driver = $row['driver'];
+        $odometer = $row['odometer'];
+        $wait_start_date = $row['wait_start_date'];
+        $wait_end_date = $row['wait_end_date'];
+        $wait_period = "";
+        if (!empty($wait_start_date))
+            $wait_period .= "с ".date('d.m.Y',strtotime($wait_start_date))." ";
+        if (!empty($wait_end_date))
+            $wait_period .= "по ".date('d.m.Y',strtotime($wait_end_date));
+        $repair_start_date = $row['repair_start_date'];
+        $repair_end_date = $row['repair_end_date'];
+        $repair_period = "";
+        if (!empty($repair_start_date))
+            $repair_period .= "с ".date('d.m.Y',strtotime($repair_start_date))." ";
+        if (!empty($repair_end_date))
+            $repair_period .= "по ".date('d.m.Y',strtotime($repair_end_date));
         $deleted = $row['deleted'];
         mysqli_free_result($result);
 
@@ -1303,6 +1397,21 @@ class Request {
         {
             $class = ($class == 'odd')?'even':'odd';
             $result .= '<tr class="'.$class.'"><td id="detail_header" width="30%">Выполненные работы:</td><td>'.htmlspecialchars(stripslashes($work_performed)).'</td></tr>';
+        }
+        if (!empty($odometer))
+        {
+            $class = ($class == 'odd')?'even':'odd';
+            $result .= '<tr class="'.$class.'"><td id="detail_header" width="30%">Показание одометра:</td><td>'.htmlspecialchars(stripslashes($odometer)).'</td></tr>';
+        }
+        if (!empty($wait_period))
+        {
+            $class = ($class == 'odd')?'even':'odd';
+            $result .= '<tr class="'.$class.'"><td id="detail_header" width="30%">Время ожидания:</td><td>'.htmlspecialchars(stripslashes($wait_period)).'</td></tr>';
+        }
+        if (!empty($repair_period))
+        {
+            $class = ($class == 'odd')?'even':'odd';
+            $result .= '<tr class="'.$class.'"><td id="detail_header" width="30%">Время факт. ремонта:</td><td>'.htmlspecialchars(stripslashes($repair_period)).'</td></tr>';
         }
         if ($has_expended)
         {

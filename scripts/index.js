@@ -377,9 +377,15 @@ $(document).ready(function(){
     //Обработчик события нажатия на кнопку "Создать акт"
     $('#btnCreateAct').button().click(function() {
         $("#error_act_create").hide();
+        $("#act_create_form #act_number").attr("value","");
         $("#act_create_form #act_date").attr("value","");
         $("#act_create_form #reason_for_repair").attr("value","");
         $("#act_create_form #work_performed").attr("value","");
+        $("#act_create_form #act_odometer").attr("value","");
+        $("#act_create_form #act_wait_start_date").attr("value","");
+        $("#act_create_form #act_wait_end_date").attr("value","");
+        $("#act_create_form #act_repair_start_date").attr("value","");
+        $("#act_create_form #act_repair_end_date").attr("value","");
         $("#act_expended_list option").remove();
         $('#act_create_form').dialog( {
                 autoOpen: true,
@@ -742,19 +748,23 @@ $(document).ready(function(){
                     success: function(msg)
                     {
                         var info = JSON.parse(msg);
-                        var date_str = info["act_date"].split(' ')[0];
-                        var date_arr = date_str.split('-');
-                        var date = new Date(date_arr[0],date_arr[1] - 1,date_arr[2]);
-                        var day = date.getDate()<10?"0"+date.getDate():date.getDate();
-                        var month = (date.getMonth()+1)<10?"0"+(date.getMonth()+1):(date.getMonth()+1);
-                        var year = date.getFullYear();
-                        $("#act_create_form #act_date").attr("value",day+"."+month+"."+year);
+                        $("#act_create_form #act_number").attr("value", info["repair_act_number"]);
+                        $("#act_create_form #act_date").attr("value", convert_date(info["act_date"]));
+                        if (info["wait_start_date"])
+                            $("#act_create_form #act_wait_start_date").attr("value", convert_date(info["wait_start_date"]));
+                        if (info["wait_end_date"])
+                            $("#act_create_form #act_wait_end_date").attr("value", convert_date(info["wait_end_date"]));
+                        if (info["repair_start_date"])
+                            $("#act_create_form #act_repair_start_date").attr("value", convert_date(info["repair_start_date"]));
+                        if (info["repair_end_date"])
+                            $("#act_create_form #act_repair_end_date").attr("value", convert_date(info["repair_end_date"]));
                         $("#act_create_form select[name='act_respondent_id']").attr("value",info["id_respondent"]);
                         $("#act_create_form select[name='car_id']").attr("value", info["id_car"]);
                         $("#act_create_form select[name='driver_id']").attr("value", info["id_driver"]);
                         $("#act_create_form select[name='mechanic_id']").attr("value", info["id_mechanic"]);
                         $("#act_create_form #reason_for_repair").attr("value", info["reason_for_repairs"]);
                         $("#act_create_form #work_performed").attr("value", info["work_performed"]);
+                        $("#act_create_form #act_odometer").attr("value", info["odometer"]);
 
                         var expended_array = info["expended"];
                         $("#act_expended_list option").remove();
@@ -1215,7 +1225,7 @@ $(document).ready(function(){
     {
         var msga = "";
         var aData = oTable.fnGetData( nTr );
-        var id_repair = aData[1];
+        var id_repair = $(aData[0]).attr('value');
         $.ajax({
             type: "POST",
             url: "inc/details_by_id.php",
@@ -1636,23 +1646,23 @@ $(document).ready(function(){
         $("#car_row").hide();
         $("#fuel_row").hide();
         $("#report_id").bind("change", function() {
-            if ($("#report_id").attr("value").inList(rep_with_car_id)) {
-                $("#car_row").show();
-            } else
-                $("#car_row").hide();
-            if ($("#report_id").attr("value").inList(rep_with_fuel_type)) {
-                $("#fuel_row").show();
-            } else
-                $("#fuel_row").hide();
-            if ($("#report_id").attr("value").inList(rep_without_dep_and_date_type)) {
-                $("#department_row").hide();
-                $("#date_row").hide();
-            } else
-            {
-                $("#department_row").show();
-                $("#date_row").show();
-            }
-        });
+        if ($("#report_id").attr("value").inList(rep_with_car_id)) {
+            $("#car_row").show();
+        } else
+            $("#car_row").hide();
+        if ($("#report_id").attr("value").inList(rep_with_fuel_type)) {
+            $("#fuel_row").show();
+        } else
+            $("#fuel_row").hide();
+        if ($("#report_id").attr("value").inList(rep_without_dep_and_date_type)) {
+            $("#department_row").hide();
+            $("#date_row").hide();
+        } else
+        {
+            $("#department_row").show();
+            $("#date_row").show();
+        }
+    });
     }
 
     //Функция инициализации формы выбора автомобиля
@@ -1678,9 +1688,14 @@ $(document).ready(function(){
     function initActCreateForm()
     {
         $("#act_date").mask("99.99.9999");
+        $("#act_wait_start_date").mask("99.99.9999");
+        $("#act_wait_end_date").mask("99.99.9999");
+        $("#act_repair_start_date").mask("99.99.9999");
+        $("#act_repair_end_date").mask("99.99.9999");
         Now = new Date();
         //календарь
-        $("#act_date").datepicker({
+        $("#act_date, #act_wait_start_date, #act_wait_end_date, #act_repair_start_date, #act_repair_end_date").
+        datepicker({
             monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
             dayNames:	["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
             dayNamesMin:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
@@ -2105,6 +2120,18 @@ $(document).ready(function(){
         }
     }
 
+    //Функция конвертации представления даты из формата MySQL в формат формы данных
+    function convert_date(date_param)
+    {
+        var date_str = date_param.split(' ')[0];
+        var date_arr = date_str.split('-');
+        var date = new Date(date_arr[0],date_arr[1] - 1,date_arr[2]);
+        var day = date.getDate()<10?"0"+date.getDate():date.getDate();
+        var month = (date.getMonth()+1)<10?"0"+(date.getMonth()+1):(date.getMonth()+1);
+        var year = date.getFullYear();
+        return day+"."+month+"."+year;
+    }
+
     //Получить массив "машина - топливо по умолчанию"
     function get_cars_default_fuel()
     {
@@ -2265,6 +2292,7 @@ $(document).ready(function(){
     //Создание/изменение акта выполненных работ
     function ProcessAct(id_repair)
     {
+        var act_number = $("#act_create_form #act_number").attr("value");
         var act_date = $("#act_create_form #act_date").attr("value");
         var respondent_id = $("#act_create_form select[name='act_respondent_id']").attr("value");
         var car_id = $("#act_create_form select[name='car_id']").attr("value");
@@ -2272,6 +2300,11 @@ $(document).ready(function(){
         var mechanic_id = $("#act_create_form select[name='mechanic_id']").attr("value");
         var reason_for_repair = $("#act_create_form #reason_for_repair").attr("value");
         var work_performed = $("#act_create_form #work_performed").attr("value");
+        var act_odometer = $("#act_create_form #act_odometer").attr("value");
+        var act_wait_start_date = $("#act_create_form #act_wait_start_date").attr("value");
+        var act_wait_end_date = $("#act_create_form #act_wait_end_date").attr("value");
+        var act_repair_start_date = $("#act_create_form #act_repair_start_date").attr("value");
+        var act_repair_end_date = $("#act_create_form #act_repair_end_date").attr("value");
         var expended_list = "";
         if (($.trim(act_date) == "") || ($.trim(respondent_id) == "") ||
             ($.trim(car_id) == "") || ($.trim(driver_id) == "") ||
@@ -2289,6 +2322,41 @@ $(document).ready(function(){
             $("#error_act_create").show();
             return;
         }
+        if (($.trim(act_odometer) != "") && (!intCorrect(act_odometer)))
+        {
+            var div = document.getElementById("error_act_create");
+            div.innerHTML = "Показание одометра заполнено некорректно";
+            $("#error_act_create").show();
+            return;
+        }
+        if (($.trim(act_wait_start_date) != "") && (!dateCorrect(act_wait_start_date)))
+        {
+            var div = document.getElementById("error_act_create");
+            div.innerHTML = "Начальная дата ожидания ремонта заполнена некорректно";
+            $("#error_act_create").show();
+            return;
+        }
+        if (($.trim(act_wait_end_date) != "") && (!dateCorrect(act_wait_end_date)))
+        {
+            var div = document.getElementById("error_act_create");
+            div.innerHTML = "Конечная дата ожидания ремонта заполнена некорректно";
+            $("#error_act_create").show();
+            return;
+        }
+        if (($.trim(act_repair_start_date) != "") && (!dateCorrect(act_repair_start_date)))
+        {
+            var div = document.getElementById("error_act_create");
+            div.innerHTML = "Начальная дата фактического ремонта заполнена некорректно";
+            $("#error_act_create").show();
+            return;
+        }
+        if (($.trim(act_repair_end_date) != "") && (!dateCorrect(act_repair_end_date)))
+        {
+            var div = document.getElementById("error_act_create");
+            div.innerHTML = "Конечная дата фактического ремонта заполнена некорректно";
+            $("#error_act_create").show();
+            return;
+        }
         var array = new Array();
         $("#act_expended_list option").each(function() {
             expended_list += $(this).attr("value")+"@@";
@@ -2298,9 +2366,11 @@ $(document).ready(function(){
             action = "action=insert_act";
         else
             action = "action=update_act&repair_id="+id_repair;
-        var data = action+"&act_date="+act_date+"&responded_id="+respondent_id+"&car_id="+car_id+
+        var data = action+"&act_number="+act_number+"&act_date="+act_date+"&responded_id="+respondent_id+"&car_id="+car_id+
             "&driver_id="+driver_id+"&mechanic_id="+mechanic_id+"&reason_for_repair="+reason_for_repair+
-            "&work_performed="+work_performed+"&expended_list="+expended_list;
+            "&work_performed="+work_performed+"&act_odometer="+act_odometer+"&act_wait_start_date="+act_wait_start_date+
+            "&act_wait_end_date="+act_wait_end_date+"&act_repair_start_date="+act_repair_start_date+
+            "&act_repair_end_date="+act_repair_end_date+"&expended_list="+expended_list;
         $.ajax({
             type: "POST",
             url: "inc/acts_modify.php",
