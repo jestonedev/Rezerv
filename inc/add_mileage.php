@@ -15,17 +15,17 @@ if ($_SERVER["REQUEST_METHOD"]==="POST") {
     else
         die('Отсутствует переменная id_car');
     if (isset($_POST['milage_date']))
-        $id_car = addslashes($_POST['milage_date']);
+        $milage_date = addslashes($_POST['milage_date']);
     else
         die('Отсутствует переменная milage_date');
     if (isset($_POST['milage_value']))
-        $id_car = addslashes($_POST['milage_value']);
+        $milage_value = addslashes($_POST['milage_value']);
     else
         die('Отсутствует переменная milage_value');
     if (isset($_POST['mileage_type']))
-        $id_car = addslashes($_POST['mileage_type']);
+        $mileage_type = addslashes($_POST['mileage_type']);
     else
         die('Отсутствует переменная mileage_type');
     $mil = new CarsInfoClass();
-    echo $mil->AddMileAge($_POST['id_car'], $_POST['milage_date'], $_POST['milage_value'], $_POST['mileage_type']);
+    echo $mil->AddMileAge($id_car, $milage_date, $milage_value, $mileage_type);
 }

@@ -148,6 +148,7 @@ header("Cache-Control: no-cache, must-revalidate");
                 <td>Вид пробега:</td><td>
                 <select id="mileage_type" name="mileage_type">
                     <option value="0">Фактический пробег</option>
+                    <option value="2">Фактический пробег (командировка)</option>
                     <option value="1">Лимит по пробегу</option>
                 </select>
                 </td>

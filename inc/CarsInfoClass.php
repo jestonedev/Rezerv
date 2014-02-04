@@ -110,7 +110,7 @@ class CarsInfoClass
          FROM
            mileages
          WHERE
-           (mileage_type = 0)
+           ((mileage_type = 0) OR (mileage_type = 2))
            AND (`date` BETWEEN str_to_date('".$start_date."', '%d.%m.%Y') AND str_to_date('".$end_date."', '%d.%m.%Y'))
          GROUP BY
            id_car) m
