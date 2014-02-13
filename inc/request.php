@@ -345,7 +345,7 @@ class Request {
     //
     //Изменение запроса. $request_array - массив с данными
     public function UpdateRequest($request_array, $id_request_number){
-        $query="update request_number set department = ?, stage = ? where id_request_number = ?";
+        $query='update request_number set department = ?, stage = ? where id_request_number = ?';
         $pq=mysqli_prepare($this->con,$query);
         $organization = explode(":",$request_array['department']);
         $department = stripslashes($organization[0]);

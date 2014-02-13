@@ -10,7 +10,7 @@
 // Сейчас остался только Бог
 
 $(document).ready(function(){
-
+    "use strict";
     //Переменные настройки отчетов
     var rep_with_car_id = [15,35,36];                  //идентификаторы отчетов со списком выбора автомобилей
     var rep_without_dep_and_date_type = [17,35,36,37]; //идентификаторы отчетов без списка выбора департамента и типа даты
@@ -32,8 +32,8 @@ $(document).ready(function(){
     var allowRefreshCalendar = 0;
 
     //Установка Cookie и настройка начального представления формы
-    if (!getCookie("id_request"))
-        setCookie("id_request",1);
+    if (!getCookie("id_request")) {
+        setCookie("id_request",1); }
     if (!getCookie("menu_code"))
     {
         setCookie("menu_code", 0);
@@ -41,17 +41,18 @@ $(document).ready(function(){
     }
     else
     {
-        if (!getCookie("report_id"))
-            setCookie("report_id",1);
+        if (!getCookie("report_id")) {
+            setCookie("report_id",1); }
     }
-    if (!getCookie("only_my_requests"))
-        setCookie("only_my_requests",0);
-    if (!getCookie("header"))
-        setCookie("header","Заявки на транспорт");
+    if (!getCookie("only_my_requests")) {
+        setCookie("only_my_requests",0); }
+    if (!getCookie("header")) {
+        setCookie("header","Заявки на транспорт"); }
     $("#header").text(getCookie("header"));
 
     //Добавление прототипа функции вхождения в массив
     String.prototype.inList=function(list){
+        var i = 0;
         for(i in list){
             if(this==list[i]){
                 return true;
@@ -97,7 +98,7 @@ $(document).ready(function(){
         $.ajax({
             type: "POST",
             url: "processor.php",
-            data: params="action=display_calendar_settings_form",
+            data: "action=display_calendar_settings_form",
             async: false,
             success: function(msg)
             {
@@ -109,8 +110,8 @@ $(document).ready(function(){
                 alert('Ошибка при обращении к серверу. Код 19');
             }
         });
-        if (!has_form_data)
-            return;
+        if (!has_form_data) {
+            return; }
         $('#calendarSettings').dialog({
             autoOpen: true,
             modal: true,
@@ -123,8 +124,8 @@ $(document).ready(function(){
                     click: function() {
                         var checked = false;
                         $('#calendarSettings input[type=checkbox]').each( function() {
-                            if ($(this).attr("checked"))
-                                checked = true;
+                            if ($(this).attr("checked")) {
+                                checked = true; }
                         });
                         if (!checked)
                         {
@@ -133,12 +134,12 @@ $(document).ready(function(){
                         }
                         $( this ).dialog( "close" );
                         var title = "";
-                        if (getCookie('id_request') == 1)
-                            title = "Календарь заявок на транспорт";
-                        else if (getCookie('id_request') == 2)
-                            title = "Календарь заявок на большой зал";
-                        else if (getCookie('id_request') == 3)
-                            title = "Календарь заявок на малый зал";
+                        if (getCookie('id_request') == 1) {
+                            title = "Календарь заявок на транспорт"; }
+                        else if (getCookie('id_request') == 2) {
+                            title = "Календарь заявок на большой зал"; }
+                        else if (getCookie('id_request') == 3) {
+                            title = "Календарь заявок на малый зал"; }
                         $('#calendar').dialog({
                             autoOpen: true,
                             modal: true,
@@ -221,8 +222,8 @@ $(document).ready(function(){
         {
             setCookie("menu_code",0);
             initDataTable();
-        } else
-            $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
+        } else {
+            $('#example').dataTable().fnReloadAjax("inc/jsonp.php"); }
         initButtonsState();
         allowRefreshCounter = 0;
         forceRefreshCounter = 0;
@@ -235,8 +236,8 @@ $(document).ready(function(){
         {
             setCookie("menu_code",0);
             initDataTable();
-        } else
-            $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
+        } else {
+            $('#example').dataTable().fnReloadAjax("inc/jsonp.php"); }
         initButtonsState();
         allowRefreshCounter = 0;
         forceRefreshCounter = 0;
@@ -249,8 +250,8 @@ $(document).ready(function(){
         {
             setCookie("menu_code",0);
             initDataTable();
-        } else
-            $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
+        } else {
+            $('#example').dataTable().fnReloadAjax("inc/jsonp.php"); }
         initButtonsState();
         allowRefreshCounter = 0;
         forceRefreshCounter = 0;
@@ -289,17 +290,17 @@ $(document).ready(function(){
                         {
                             setCookie("fuel_type_id",$("#reportSettings select[name='fuel_type_id']").attr("value"));
                             var fuel_type = $("#reportSettings select[name='fuel_type_id'] option[value='"+getCookie("fuel_type_id")+"']").text();
-                            if ($.trim(fuel_type) != "Все марки горючего")
-                                title = title + " ("+fuel_type+")";
+                            if ($.trim(fuel_type) != "Все марки горючего") {
+                                title = title + " ("+fuel_type+")"; }
                         }
                         if ($("#report_id").attr("value").inList(rep_with_car_id))
                         {
                             setCookie("car_id",$("#reportSettings select[name='car_id']").attr("value"));
                             var car = $("#reportSettings select[name='car_id'] option[value='"+getCookie("car_id")+"']").text();
                             var car_arr = car.split('|');
-                            if (car_arr.length == 4)
+                            if (car_arr.length == 4) {
                                 title = title + " "+
-                                    car_arr[2]+" номер "+car_arr[0];
+                                    car_arr[2]+" номер "+car_arr[0]; }
                         }
                         title = $.trim(title);
                         setCookie("header",title+" с "+$("#start_date").attr("value")+" по "+$("#end_date").attr("value"));
@@ -325,13 +326,13 @@ $(document).ready(function(){
         $.ajax({
             type: "POST",
             url: "processor.php",
-            data: params="action=display_request_form",
+            data: "action=display_request_form",
             success: function(msg)
             {
                 $('body').append(msg);
                 $(".time_field").mask("99:99");
                 $(".date_field").mask("99.99.9999");
-                Now = new Date();
+                var Now = new Date();
                 //календарь
                 $(".date_field").datepicker({
                     monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
@@ -371,7 +372,7 @@ $(document).ready(function(){
             error: function(msg) {
                 alert('Ошибка при обращении к серверу. Код 18');
             }
-        })
+        });
     });
 
     //Обработчик события нажатия на кнопку "Создать акт"
@@ -475,15 +476,15 @@ $(document).ready(function(){
             this.src = "img/details_close.png";
 
             //Если это акты выполненных работ
-            if (getCookie("menu_code") == 3)
-                show_act_details(oTable, nTr);
+            if (getCookie("menu_code") == 3) {
+                show_act_details(oTable, nTr); }
             else
             //Если это путевые листы
-            if (getCookie("menu_code") == 4)
-                show_waybill_details(oTable, nTr);
-            else
+            if (getCookie("menu_code") == 4) {
+                show_waybill_details(oTable, nTr); }
+            else {
             //Если это заявки
-                show_request_details(oTable, nTr);
+                show_request_details(oTable, nTr); }
         }
     } );
 
@@ -516,7 +517,7 @@ $(document).ready(function(){
                                     $.ajax( {
                                             type: "POST",
                                             url: "inc/moderation_request.php",
-                                            data: params="action=accept&id_request_number="+id_request_number+"&id_car="+id_car,
+                                            data: "action=accept&id_request_number="+id_request_number+"&id_car="+id_car,
                                             success: function(msg)
                                             {
                                                 $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
@@ -542,7 +543,7 @@ $(document).ready(function(){
                         $.ajax( {
                                 type: "POST",
                                 url: "inc/moderation_request.php",
-                                data: params="action=accept&id_request_number="+id_request_number,
+                                data: "action=accept&id_request_number="+id_request_number,
                                 success: function(msg)
                                 {
                                     $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
@@ -566,7 +567,7 @@ $(document).ready(function(){
                     $.ajax( {
                             type: "POST",
                             url: "inc/moderation_request.php",
-                            data: params="action=reject&id_request_number="+id_request_number,
+                            data: "action=reject&id_request_number="+id_request_number,
                             success: function(msg)
                             {
                                 $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
@@ -589,7 +590,7 @@ $(document).ready(function(){
                     $.ajax( {
                             type: "POST",
                             url: "inc/moderation_request.php",
-                            data: params="action=cancel&id_request_number="+id_request_number,
+                            data: "action=cancel&id_request_number="+id_request_number,
                             success: function(msg)
                             {
                                 $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
@@ -612,7 +613,7 @@ $(document).ready(function(){
                     $.ajax( {
                             type: "POST",
                             url: "inc/moderation_request.php",
-                            data: params="action=complete&id_request_number="+id_request_number,
+                            data: "action=complete&id_request_number="+id_request_number,
                             success: function(msg)
                             {
                                 $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
@@ -635,7 +636,7 @@ $(document).ready(function(){
                     $.ajax( {
                             type: "POST",
                             url: "inc/moderation_request.php",
-                            data: params="action=uncomplete&id_request_number="+id_request_number,
+                            data: "action=uncomplete&id_request_number="+id_request_number,
                             success: function(msg)
                             {
                                 $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
@@ -658,13 +659,13 @@ $(document).ready(function(){
                 $.ajax({
                     type: "POST",
                     url: "processor.php",
-                    data: params="action=modify_request_form&id_request_number="+id_request_number,
+                    data: "action=modify_request_form&id_request_number="+id_request_number,
                     success: function(msg)
                     {
                         $('body').append(msg);
                         $(".time_field").mask("99:99");
                         $(".date_field").mask("99.99.9999");
-                        Now = new Date();
+                        var Now = new Date();
                         //календарь
                         $(".date_field").datepicker({
                             monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
@@ -705,7 +706,7 @@ $(document).ready(function(){
                     error: function(msg) {
                         alert('Ошибка при обращении к серверу. Код 11');
                     }
-                })
+                });
             }
         );
     }
@@ -725,7 +726,7 @@ $(document).ready(function(){
                 $.ajax( {
                         type: "POST",
                         url: "inc/acts_modify.php",
-                        data: params="action=delete_act&id_repair="+id_repair,
+                        data: "action=delete_act&id_repair="+id_repair,
                         success: function(msg)
                         {
                             $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
@@ -743,21 +744,21 @@ $(document).ready(function(){
             $.ajax( {
                     type: "POST",
                     url: "inc/acts_modify.php",
-                    data: params="action=get_act_info&id_repair="+id_repair,
+                    data: "action=get_act_info&id_repair="+id_repair,
                     async: false,
                     success: function(msg)
                     {
                         var info = JSON.parse(msg);
                         $("#act_create_form #act_number").attr("value", info["repair_act_number"]);
                         $("#act_create_form #act_date").attr("value", convert_date(info["act_date"]));
-                        if (info["wait_start_date"])
-                            $("#act_create_form #act_wait_start_date").attr("value", convert_date(info["wait_start_date"]));
-                        if (info["wait_end_date"])
-                            $("#act_create_form #act_wait_end_date").attr("value", convert_date(info["wait_end_date"]));
-                        if (info["repair_start_date"])
-                            $("#act_create_form #act_repair_start_date").attr("value", convert_date(info["repair_start_date"]));
-                        if (info["repair_end_date"])
-                            $("#act_create_form #act_repair_end_date").attr("value", convert_date(info["repair_end_date"]));
+                        if (info["wait_start_date"]) {
+                            $("#act_create_form #act_wait_start_date").attr("value", convert_date(info["wait_start_date"])); }
+                        if (info["wait_end_date"]) {
+                            $("#act_create_form #act_wait_end_date").attr("value", convert_date(info["wait_end_date"])); }
+                        if (info["repair_start_date"]) {
+                            $("#act_create_form #act_repair_start_date").attr("value", convert_date(info["repair_start_date"])); }
+                        if (info["repair_end_date"]) {
+                            $("#act_create_form #act_repair_end_date").attr("value", convert_date(info["repair_end_date"])); }
                         $("#act_create_form select[name='act_respondent_id']").attr("value",info["id_respondent"]);
                         $("#act_create_form select[name='car_id']").attr("value", info["id_car"]);
                         $("#act_create_form select[name='driver_id']").attr("value", info["id_driver"]);
@@ -768,7 +769,8 @@ $(document).ready(function(){
 
                         var expended_array = info["expended"];
                         $("#act_expended_list option").remove();
-                        for (var i =0; i < expended_array.length; i++)
+                        var i = 0;
+                        for (i = 0; i < expended_array.length; i++)
                         {
                             var expended_material = expended_array[i]["material"];
                             var expended_count = expended_array[i]["count"];
@@ -832,7 +834,7 @@ $(document).ready(function(){
                 $.ajax( {
                         type: "POST",
                         url: "inc/waybills_modify.php",
-                        data: params="action=delete_waybill&id_waybill="+id_waybill,
+                        data: "action=delete_waybill&id_waybill="+id_waybill,
                         success: function(msg)
                         {
                             $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
@@ -850,7 +852,7 @@ $(document).ready(function(){
             $.ajax( {
                     type: "POST",
                     url: "inc/waybills_modify.php",
-                    data: params="action=get_waybill_info&id_waybill="+id_waybill,
+                    data: "action=get_waybill_info&id_waybill="+id_waybill,
                     async: false,
                     success: function(msg)
                     {
@@ -884,7 +886,8 @@ $(document).ready(function(){
 
                         var ways_array = info["ways"];
                         $("#ways_list option").remove();
-                        for (var i =0; i < ways_array.length; i++)
+                        var i = 0;
+                        for (i =0; i < ways_array.length; i++)
                         {
                             var way = ways_array[i]["way"];
                             var start_time = ways_array[i]["start_time"];
@@ -988,7 +991,7 @@ $(document).ready(function(){
                         $.ajax( {
                                 type: "POST",
                                 url: "inc/add_mileage.php",
-                                data: params="id_car="+id_car+"&milage_date="+milage_date+"&milage_value="+milage_value+
+                                data: "id_car="+id_car+"&milage_date="+milage_date+"&milage_value="+milage_value+
                                     "&mileage_type="+mileage_type,
                                 success: function(msg)
                                 {
@@ -1039,36 +1042,36 @@ $(document).ready(function(){
                     req_mask -= 1;
                     $('#rqlb1').hide();
                 }
-                if ((msg & 2) == 2)
-                    $('#rqlb3').show();
+                if ((msg & 2) == 2) {
+                    $('#rqlb3').show(); }
                 else
                 {
                     req_mask -= 2;
                     $('#rqlb3').hide();
                 }
-                if ((msg & 4) == 4)
-                    $('#rqlb2').show();
+                if ((msg & 4) == 4) {
+                    $('#rqlb2').show(); }
                 else
                 {
                     req_mask -= 4;
                     $('#rqlb2').hide();
                 }
-                if ((msg & 8) == 8)
-                    $('#rqlb4').show();
+                if ((msg & 8) == 8) {
+                    $('#rqlb4').show(); }
                 else
                 {
                     req_mask -= 8;
                     $('#rqlb4').hide();
                 }
-                if ((msg & 16) == 16)
-                    $('#rqlb5').show();
+                if ((msg & 16) == 16) {
+                    $('#rqlb5').show(); }
                 else
                 {
                     req_mask -= 16;
                     $('#rqlb5').hide();
                 }
-                if ((msg & 32) == 32)
-                    $('#rqlb6').show();
+                if ((msg & 32) == 32) {
+                    $('#rqlb6').show(); }
                 else
                 {
                     req_mask -= 32;
@@ -1104,7 +1107,7 @@ $(document).ready(function(){
             {
                 alert('Ошибка при обращении к серверу. Код 10');
             }
-        })
+        });
     }
 
     //Функция инициализации состояния кнопок главной формы
@@ -1183,10 +1186,10 @@ $(document).ready(function(){
             $('#btnCreateWaybill').hide();
             $('#ShowMyRequestsOnly').show();
             $('#ShowMyRequestsOnlyLabel').show();
-            if (hasCreateRequestPrivilege())
-                $('#btnCreateRequest').show();
-            else
-                $('#btnCreateRequest').hide();
+            if (hasCreateRequestPrivilege()) {
+                $('#btnCreateRequest').show(); }
+            else {
+                $('#btnCreateRequest').hide(); }
             $('#btnShowCalendar').show();
             if (getCookie("only_my_requests") == 1)
             {
@@ -1206,7 +1209,7 @@ $(document).ready(function(){
         $.ajax({
             type: "POST",
             url: "inc/details_by_id.php",
-            data: params='action=request&id_request_number='+id_request_number,
+            data: 'action=request&id_request_number='+id_request_number,
             async: false,
             success: function(msg)
             {
@@ -1216,7 +1219,7 @@ $(document).ready(function(){
             {
                 alert('Ошибка при обращении к серверу. Код 9');
             }
-        })
+        });
         return msga;
     }
 
@@ -1229,7 +1232,7 @@ $(document).ready(function(){
         $.ajax({
             type: "POST",
             url: "inc/details_by_id.php",
-            data: params='action=act&id_repair='+id_repair,
+            data: 'action=act&id_repair='+id_repair,
             async: false,
             success: function(msg)
             {
@@ -1239,7 +1242,7 @@ $(document).ready(function(){
             {
                 alert('Ошибка при обращении к серверу. Код 9');
             }
-        })
+        });
         return msga;
     }
 
@@ -1248,11 +1251,11 @@ $(document).ready(function(){
     {
         var msga = "";
         var aData = oTable.fnGetData( nTr );
-        var id_waybill = $(aData[0]).attr('value')
+        var id_waybill = $(aData[0]).attr('value');
         $.ajax({
             type: "POST",
             url: "inc/details_by_id.php",
-            data: params='action=waybill&id_waybill='+id_waybill,
+            data: 'action=waybill&id_waybill='+id_waybill,
             async: false,
             success: function(msg)
             {
@@ -1262,7 +1265,7 @@ $(document).ready(function(){
             {
                 alert('Ошибка при обращении к серверу. Код 9');
             }
-        })
+        });
         return msga;
     }
 
@@ -1284,10 +1287,11 @@ $(document).ready(function(){
                 {
                     var rep_id = getCookie("report_id");
                     $("#example tfoot").hide();
-                    for (var i = 0; i < rep_with_summary.length; i++)
+                    var i = 0;
+                    for (i = 0; i < rep_with_summary.length; i++)
                     {
-                        if (rep_id == rep_with_summary[i][0])
-                            $("#example tfoot").show();
+                        if (rep_id == rep_with_summary[i][0]) {
+                            $("#example tfoot").show(); }
                     }
                 }
             },
@@ -1350,32 +1354,34 @@ $(document).ready(function(){
                 $('td', nRow).addClass('alignCenter');
             },
             "fnFooterCallback": function ( nRow, aaData, iStart, iEnd, aiDisplay ) {
-                if (getCookie('menu_code') != 1)
-                    return;
+                if (getCookie('menu_code') != 1) {
+                    return; }
                 var report_id = getCookie('report_id');
                 var rep_cfg = "";
-                for (var i = 0; i < rep_with_summary.length; i++)
+                var i = 0, j = 0;
+                for (i = 0; i < rep_with_summary.length; i++)
                 {
                     if (rep_with_summary[i][0] == report_id)
                     {
                         rep_cfg = rep_with_summary[i];
                         break;
                     }
-                    if (i == (rep_with_summary.length - 1))
-                        return;
+                    if (i == (rep_with_summary.length - 1)) {
+                        return; }
                 }
-                var sum_array = new Array(rep_cfg[2]);
-                for (var i = 0; i < rep_cfg[2]; i++)
-                    sum_array[i] = 0;
-                for ( var i=0 ; i<aaData.length ; i++ )
-                    for (var j = 0; j < rep_cfg[2]; j++)
-                        sum_array[j] += aaData[i][rep_cfg[1]+j]*1;
+                var sum_array = [rep_cfg[2]];
+                for (i = 0; i < rep_cfg[2]; i++) {
+                    sum_array[i] = 0; }
+                for (i=0 ; i<aaData.length ; i++ ) {
+                    for (j = 0; j < rep_cfg[2]; j++) {
+                        sum_array[j] += aaData[i][rep_cfg[1]+j]*Number(1); }
+                }
                 var nCells = nRow.getElementsByTagName('th');
                 nCells[0].innerHTML = 'Итого';
-                for (var i = 1; i < nCells.length; i++)
-                    nCells[i].innerHTML = '-';
-                for (var i = 0; i < rep_cfg[2]; i++)
-                    nCells[rep_cfg[1]+i].innerHTML = sum_array[i];
+                for (i = 1; i < nCells.length; i++) {
+                    nCells[i].innerHTML = '-'; }
+                for (i = 0; i < rep_cfg[2]; i++) {
+                    nCells[rep_cfg[1]+i].innerHTML = sum_array[i]; }
             }
         } );
 
@@ -1383,10 +1389,10 @@ $(document).ready(function(){
         //Обработчик событий нажатия на кнопку "Мои заявки"
         $('#ShowMyRequestsOnly').click(function()
         {
-            if ($(this).attr("checked"))
-                setCookie("only_my_requests",1);
-            else
-                setCookie("only_my_requests",0);
+            if ($(this).attr("checked")) {
+                setCookie("only_my_requests",1); }
+            else {
+                setCookie("only_my_requests",0); }
             $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
             initButtonsState();
         });
@@ -1439,30 +1445,31 @@ $(document).ready(function(){
             events: function(start, end, callback) {
                 //Формируем данные для фильтрации
                 var department = $('#calendarSettings select[name=department]').attr("value");
-                if (department == undefined)
-                    return;
-                if (getCookie('id_request') == 1)
-                    var transport = $('#calendarSettings select[name=car_id]').attr("value");
-                var requestStates = new Array();
+                if (department == undefined) {
+                    return; }
+                if (getCookie('id_request') == 1) {
+                    var transport = $('#calendarSettings select[name=car_id]').attr("value"); }
+                var requestStates = [];
                 $("#calendarSettings .requestState").each(
                     function() {
-                        if ($(this).attr("checked"))
-                            requestStates.push($(this).attr("value"));
+                        if ($(this).attr("checked")) {
+                            requestStates.push($(this).attr("value")); }
                     }
                 );
                 //Преобразуем полученные данные в строку запроса
                 var paramstr = "";
                 var startStr = dateToString(start);
                 var endStr = dateToString(end);
-                for (var i = 0; i < requestStates.length; i++)
-                    paramstr += 'requestStates[]='+requestStates[i]+'&';
-                if (getCookie('id_request') == 1)
-                    paramstr += 'transport='+transport+'&';
+                var i = 0;
+                for (i = 0; i < requestStates.length; i++) {
+                    paramstr += 'requestStates[]='+requestStates[i]+'&'; }
+                if (getCookie('id_request') == 1) {
+                    paramstr += 'transport='+transport+'&'; }
                 paramstr += 'department='+department+'&start='+startStr+'&end='+endStr;
                 $.ajax({
                     url: "inc/calendar_source.php",
                     type: "POST",
-                    data: params=paramstr,
+                    data: paramstr,
                     success: function(msg) {
                         var events = [];
                         var xmlDoc = $.parseXML(msg);
@@ -1496,7 +1503,7 @@ $(document).ready(function(){
                 $.ajax({
                     type: "POST",
                     url: "inc/details_by_id.php",
-                    data: params='action=request&id_request_number='+id_request_number+'&from_calendar=1',
+                    data: 'action=request&id_request_number='+id_request_number+'&from_calendar=1',
                     async: false,
                     success: function(msg)
                     {
@@ -1507,9 +1514,9 @@ $(document).ready(function(){
                     {
                         alert('Ошибка при обращении к серверу. Код 6');
                     }
-                })
-                if (!has_msge)
-                    return;
+                });
+                if (!has_msge) {
+                    return; }
                 $('#calendar_details table').remove();
                 $('#calendar_details').append(msge);
                 $('#calendar_details').attr('title',calEvent.title);
@@ -1544,7 +1551,7 @@ $(document).ready(function(){
     function initMileagesEditor()
     {
         $("#mileage_date").mask("99.99.9999");
-        Now = new Date();
+        var Now = new Date();
         //календарь
         $("#mileage_date").datepicker({
             monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
@@ -1565,7 +1572,7 @@ $(document).ready(function(){
     {
         $("#start_date").mask("99.99.9999");
         $("#end_date").mask("99.99.9999");
-        Now = new Date();
+        var Now = new Date();
         //календарь
         $("#start_date").datepicker({
             monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
@@ -1618,7 +1625,7 @@ $(document).ready(function(){
         $.ajax({
             type: "POST",
             url: "processor.php",
-            data: params="action=display_all_transport_combobox",
+            data: "action=display_all_transport_combobox",
             async: false,
             success: function(msg)
             {
@@ -1632,7 +1639,7 @@ $(document).ready(function(){
         $.ajax({
             type: "POST",
             url: "processor.php",
-            data: params="action=display_all_fuel_type_combobox",
+            data: "action=display_all_fuel_type_combobox",
             async: false,
             success: function(msg)
             {
@@ -1648,12 +1655,12 @@ $(document).ready(function(){
         $("#report_id").bind("change", function() {
         if ($("#report_id").attr("value").inList(rep_with_car_id)) {
             $("#car_row").show();
-        } else
-            $("#car_row").hide();
+        } else {
+            $("#car_row").hide(); }
         if ($("#report_id").attr("value").inList(rep_with_fuel_type)) {
             $("#fuel_row").show();
-        } else
-            $("#fuel_row").hide();
+        } else {
+            $("#fuel_row").hide(); }
         if ($("#report_id").attr("value").inList(rep_without_dep_and_date_type)) {
             $("#department_row").hide();
             $("#date_row").hide();
@@ -1692,7 +1699,7 @@ $(document).ready(function(){
         $("#act_wait_end_date").mask("99.99.9999");
         $("#act_repair_start_date").mask("99.99.9999");
         $("#act_repair_end_date").mask("99.99.9999");
-        Now = new Date();
+        var Now = new Date();
         //календарь
         $("#act_date, #act_wait_start_date, #act_wait_end_date, #act_repair_start_date, #act_repair_end_date").
         datepicker({
@@ -1825,7 +1832,7 @@ $(document).ready(function(){
                         }
                     }
                 ]
-            }).height('auto')
+            }).height('auto');
         });
         $("#delete_expended").click(function() {
             $("#act_expended_list option:selected").remove();
@@ -1837,7 +1844,7 @@ $(document).ready(function(){
     {
         $("#waybill_start_date").mask("99.99.9999");
         $("#waybill_end_date").mask("99.99.9999");
-        Now = new Date();
+        var Now = new Date();
         //календарь
         $("#waybill_start_date").datepicker({
             monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
@@ -2032,7 +2039,7 @@ $(document).ready(function(){
                         }
                     }
                 ]
-            }).height('auto')
+            }).height('auto');
         });
         $("#delete_way").click(function() {
             $("#ways_list option:selected").remove();
@@ -2056,34 +2063,28 @@ $(document).ready(function(){
     function intCorrect(int_val)
     {
         var reg = /^[0-9]+$/i;
-        if (reg.test(int_val)) return true;
-        else return false;
+        return reg.test(int_val);
     }
 
     function floatCorrect(float_val)
     {
         var reg = /^[0-9]+[.]{0,1}[0-9]{0,3}$/i;
-        if (!reg.test(float_val)) return false;
-        else return true;
+        return reg.test(float_val);
     }
 
     function timeCorrect(time)
     {
         var reg = /^([0-1][0-9]|[2][0-3])(:([0-5][0-9])){1,2}$/i;
-        if(reg.test(time)) return true;
-        else return false;
+        return reg.test(time);
     }
 
     function dateCorrect(date)
     {
         var date_params = date.split('.');
         var dateObj = new Date(date_params[2], date_params[1] - 1, date_params[0]);
-        if ((date_params[2] == dateObj.getFullYear()) &&
+        return ((date_params[2] == dateObj.getFullYear()) &&
             (date_params[1] == dateObj.getMonth()+1) &&
-            (date_params[0] == dateObj.getDate()))
-            return true;
-        else
-            return false;
+            (date_params[0] == dateObj.getDate()));
     }
 
     function checkReportSettings()
@@ -2113,10 +2114,11 @@ $(document).ready(function(){
     function change_fuel_type()
     {
         var id_car = $("#waybill_create_form select[name='car_id']").attr("value");
-        for (var i = 0; i < cars_default_fuel.length; i++)
+        var i = 0;
+        for (i = 0; i < cars_default_fuel.length; i++)
         {
-            if (cars_default_fuel[i]["id"] == id_car)
-                $("#waybill_create_form select[name='fuel_type_id']").attr("value", cars_default_fuel[i]["id_fuel_default"]);
+            if (cars_default_fuel[i]["id"] == id_car) {
+                $("#waybill_create_form select[name='fuel_type_id']").attr("value", cars_default_fuel[i]["id_fuel_default"]); }
         }
     }
 
@@ -2183,15 +2185,15 @@ $(document).ready(function(){
     //Есть привелегия на создание заявок
     function hasCreateRequestPrivilege()
     {
-        hasCRP = false;
+        var hasCRP = false;
         $.ajax({
             type: "POST",
             url: "inc/can_create_request.php",
             async: false,
             success: function(msg)
             {
-                if (msg == '1')
-                    hasCRP = true;
+                if (msg == '1') {
+                    hasCRP = true; }
             },
             error: function(msg)
             {
@@ -2204,15 +2206,15 @@ $(document).ready(function(){
     //Есть привелегия на создание актов обслуживания
     function hasCreateActsPrivilege()
     {
-        hasCRP = false;
+        var hasCRP = false;
         $.ajax({
             type: "POST",
             url: "inc/can_create_acts.php",
             async: false,
             success: function(msg)
             {
-                if (msg == '1')
-                    hasCRP = true;
+                if (msg == '1') {
+                    hasCRP = true; }
             },
             error: function(msg)
             {
@@ -2225,15 +2227,15 @@ $(document).ready(function(){
     //Есть привелегия на создание путевых листов
     function hasCreateWaybillsPrivilege()
     {
-        hasCRP = false;
+        var hasCRP = false;
         $.ajax({
             type: "POST",
             url: "inc/can_create_waybills.php",
             async: false,
             success: function(msg)
             {
-                if (msg == '1')
-                    hasCRP = true;
+                if (msg == '1') {
+                    hasCRP = true; }
             },
             error: function(msg)
             {
@@ -2248,22 +2250,26 @@ $(document).ready(function(){
         var frm = document.getElementById('ParamTable');
         var elems = frm.getElementsByTagName('*');
         var params='';
-        for(var i=0;i<elems.length;i++) {
+        var i = 0;
+        for(i=0;i<elems.length;i++) {
             if ((elems[i].name!=null)&&((elems[i].name.indexOf("param")==0) || (elems[i].name == "department")))
+            {
                 if (elems[i].type == "checkbox")
                 {
-                    if (elems[i].checked)
+                    if (elems[i].checked) {
                         params=params+elems[i].name+'='+elems[i].value+'&'; }
+                }
                 else
-                if ((elems[i].value!=null) && (elems[i].value!=""))
-                    params=params+elems[i].name+'='+elems[i].value+'&';
+                if ((elems[i].value!=null) && (elems[i].value!="")) {
+                    params=params+elems[i].name+'='+elems[i].value+'&'; }
+            }
         }
         var data = params+'action=process_request&id_request_number='+id_request_number;
         if (getCookie('id_request') == 1)
         {
             var id_car = $("#ParamTable select[name='car_id']").attr("value");
-            if (!isNaN(id_car))
-                data = data + '&id_car='+id_car;
+            if (!isNaN(id_car)) {
+                data = data + '&id_car='+id_car; }
         }
         $.ajax({
             type: "POST",
@@ -2286,7 +2292,7 @@ $(document).ready(function(){
             {
                 alert('Ошибка при обращении к серверу. Код 5');
             }
-        })
+        });
     }
 
     //Создание/изменение акта выполненных работ
@@ -2306,66 +2312,67 @@ $(document).ready(function(){
         var act_repair_start_date = $("#act_create_form #act_repair_start_date").attr("value");
         var act_repair_end_date = $("#act_create_form #act_repair_end_date").attr("value");
         var expended_list = "";
+        var div = null;
         if (($.trim(act_date) == "") || ($.trim(respondent_id) == "") ||
             ($.trim(car_id) == "") || ($.trim(driver_id) == "") ||
             ($.trim(mechanic_id) == ""))
         {
-            var div = document.getElementById("error_act_create");
+            div = document.getElementById("error_act_create");
             div.innerHTML = "Не все обязательные поля заполнены";
             $("#error_act_create").show();
             return;
         }
         if (!dateCorrect(act_date))
         {
-            var div = document.getElementById("error_act_create");
+            div = document.getElementById("error_act_create");
             div.innerHTML = "Дата создания акта заполнена некорректно";
             $("#error_act_create").show();
             return;
         }
         if (($.trim(act_odometer) != "") && (!intCorrect(act_odometer)))
         {
-            var div = document.getElementById("error_act_create");
+            div = document.getElementById("error_act_create");
             div.innerHTML = "Показание одометра заполнено некорректно";
             $("#error_act_create").show();
             return;
         }
         if (($.trim(act_wait_start_date) != "") && (!dateCorrect(act_wait_start_date)))
         {
-            var div = document.getElementById("error_act_create");
+            div = document.getElementById("error_act_create");
             div.innerHTML = "Начальная дата ожидания ремонта заполнена некорректно";
             $("#error_act_create").show();
             return;
         }
         if (($.trim(act_wait_end_date) != "") && (!dateCorrect(act_wait_end_date)))
         {
-            var div = document.getElementById("error_act_create");
+            div = document.getElementById("error_act_create");
             div.innerHTML = "Конечная дата ожидания ремонта заполнена некорректно";
             $("#error_act_create").show();
             return;
         }
         if (($.trim(act_repair_start_date) != "") && (!dateCorrect(act_repair_start_date)))
         {
-            var div = document.getElementById("error_act_create");
+            div = document.getElementById("error_act_create");
             div.innerHTML = "Начальная дата фактического ремонта заполнена некорректно";
             $("#error_act_create").show();
             return;
         }
         if (($.trim(act_repair_end_date) != "") && (!dateCorrect(act_repair_end_date)))
         {
-            var div = document.getElementById("error_act_create");
+            div = document.getElementById("error_act_create");
             div.innerHTML = "Конечная дата фактического ремонта заполнена некорректно";
             $("#error_act_create").show();
             return;
         }
-        var array = new Array();
+        var array = [];
         $("#act_expended_list option").each(function() {
             expended_list += $(this).attr("value")+"@@";
-        })
+        });
         var action = "";
-        if (id_repair == 0)
-            action = "action=insert_act";
-        else
-            action = "action=update_act&repair_id="+id_repair;
+        if (id_repair == 0) {
+            action = "action=insert_act"; }
+        else {
+            action = "action=update_act&repair_id="+id_repair; }
         var data = action+"&act_number="+act_number+"&act_date="+act_date+"&responded_id="+respondent_id+"&car_id="+car_id+
             "&driver_id="+driver_id+"&mechanic_id="+mechanic_id+"&reason_for_repair="+reason_for_repair+
             "&work_performed="+work_performed+"&act_odometer="+act_odometer+"&act_wait_start_date="+act_wait_start_date+
@@ -2381,7 +2388,7 @@ $(document).ready(function(){
                 if ($.trim(msg).length == 0)
                 {
                     //Если акт успешно подан, закрываем диалог
-                    $( '#act_create_form' ).dialog( "close" )
+                    $( '#act_create_form' ).dialog( "close" );
                     $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
                 } else
                 {
@@ -2394,7 +2401,7 @@ $(document).ready(function(){
             {
                 alert('Ошибка при обращении к серверу. Код 5.1');
             }
-        })
+        });
     }
 
     //Функция изменения акта в базе данных
@@ -2473,15 +2480,15 @@ $(document).ready(function(){
             return;
         }
 
-        var array = new Array();
+        var array = [];
         $("#ways_list option").each(function() {
             ways_list += $(this).attr("value")+"$";
-        })
+        });
         var action = "";
-        if (id_waybill == 0)
-            action = "action=insert_waybill";
-        else
-            action = "action=update_waybill&waybill_id="+id_waybill;
+        if (id_waybill == 0) {
+            action = "action=insert_waybill"; }
+        else {
+            action = "action=update_waybill&waybill_id="+id_waybill; }
         var data = action+"&number="+waybill_number+"&start_date="+waybill_start_date+"&end_date="+waybill_end_date+"&car_id="+car_id+
             "&driver_id="+driver_id+"&mechanic_id="+mechanic_id+"&dispatcher_id="+dispatcher_id+"&department="+department+
             "&address_supply="+address_supply+"&mileage_before="+waybill_mileage_before+
@@ -2498,7 +2505,7 @@ $(document).ready(function(){
                 if ($.trim(msg).length == 0)
                 {
                     //Если путевой лист успешно подан, закрываем диалог
-                    $( '#waybill_create_form' ).dialog( "close" )
+                    $( '#waybill_create_form' ).dialog( "close" );
                     $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
                 } else
                 {
@@ -2510,7 +2517,7 @@ $(document).ready(function(){
             {
                 alert('Ошибка при обращении к серверу. Код 5.2');
             }
-        })
+        });
     }
 
     //Функция добавления путевого листа в базу данных
@@ -2521,7 +2528,7 @@ $(document).ready(function(){
 
     function UpdateWaybill(id_waybill)
     {
-        ProcessWaybill(id_waybill)
+        ProcessWaybill(id_waybill);
     }
 
     function closeRequestDialog()
@@ -2534,17 +2541,17 @@ $(document).ready(function(){
         var year, month, day, hour, minute;
         year = date.getFullYear();
         month = date.getMonth() + 1;
-        if (month < 10)
-            month = '0'+month;
+        if (month < 10) {
+            month = '0'+month; }
         day = date.getDate();
-        if (day < 10)
-            day = '0'+day;
+        if (day < 10) {
+            day = '0'+day; }
         hour = date.getHours();
-        if (hour < 10)
-            hour = '0'+hour;
+        if (hour < 10) {
+            hour = '0'+hour; }
         minute = date.getMinutes();
-        if (minute < 10)
-            minute = '0'+minute;
+        if (minute < 10) {
+            minute = '0'+minute; }
         return year+'-'+month+'-'+day+' '+hour+':'+minute;
     }
 	
@@ -2575,8 +2582,8 @@ $(document).ready(function(){
             /* Got the data - add it to the table */
             var aData =  (oSettings.sAjaxDataProp !== "") ?
                 that.oApi._fnGetObjectDataFn( oSettings.sAjaxDataProp )( json ) : json;
-
-            for ( var i=0 ; i<aData.length ; i++ )
+            var i = 0;
+            for ( i=0 ; i<aData.length ; i++ )
             {
                 that.oApi._fnAddData( oSettings, aData[i] );
             }
@@ -2608,33 +2615,34 @@ $(document).ready(function(){
     //Возвращает cookie если есть или undefined
     function getCookie(name) {
         var matches = document.cookie.match(new RegExp(
-            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-        ))
-        return matches ? decodeURIComponent(matches[1]) : undefined
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+\^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
     }
 
     //Уcтанавливает cookie
     function setCookie(name, value, props) {
-        props = props || {}
-        var exp = props.expires
+        props = props || {};
+        var exp = props.expires;
         if (typeof exp == "number" && exp) {
-            var d = new Date()
-            d.setTime(d.getTime() + exp*1000)
-            exp = props.expires = d
+            var d = new Date();
+            d.setTime(d.getTime() + exp*1000);
+            exp = props.expires = d;
         }
-        if(exp && exp.toUTCString) { props.expires = exp.toUTCString() }
-        value = encodeURIComponent(value)
-        var updatedCookie = name + "=" + value
-        for(var propName in props) {
-            updatedCookie += "; " + propName
-            var propValue = props[propName]
-            if(propValue !== true){ updatedCookie += "=" + propValue }
+        if(exp && exp.toUTCString) { props.expires = exp.toUTCString(); }
+        value = encodeURIComponent(value);
+        var updatedCookie = name + "=" + value;
+        var propName = null;
+        for(propName in props) {
+            updatedCookie += "; " + propName;
+            var propValue = props[propName];
+            if(propValue !== true){ updatedCookie += "=" + propValue; }
         }
-        document.cookie = updatedCookie
+        document.cookie = updatedCookie;
     }
 
     //Удаляет cookie
     function deleteCookie(name) {
-        setCookie(name, null, { expires: -1 })
+        setCookie(name, null, { expires: -1 });
     }
 });
