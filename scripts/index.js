@@ -1029,7 +1029,6 @@ $(document).ready(function(){
         $.ajax({
             type: "POST",
             url: "inc/req_permissions.php",
-            async: false,
             success: function(msg)
             {
                 var req_mask = 63;
@@ -1626,7 +1625,6 @@ $(document).ready(function(){
             type: "POST",
             url: "processor.php",
             data: "action=display_all_transport_combobox",
-            async: false,
             success: function(msg)
             {
                 $("#car").append(msg);
@@ -1640,7 +1638,6 @@ $(document).ready(function(){
             type: "POST",
             url: "processor.php",
             data: "action=display_all_fuel_type_combobox",
-            async: false,
             success: function(msg)
             {
                 $("#fuel").append(msg);
@@ -1678,7 +1675,6 @@ $(document).ready(function(){
         $.ajax( {
                 type: "POST",
                 url: "inc/cars_list.php",
-                async: false,
                 success: function(msg)
                 {
                     $('#select_car_form').append(msg);
@@ -1718,7 +1714,6 @@ $(document).ready(function(){
         $.ajax( {
                 type: "POST",
                 url: "inc/cars_list.php",
-                async: false,
                 success: function(msg)
                 {
                     $('#act_car select').remove();
@@ -1733,7 +1728,6 @@ $(document).ready(function(){
         $.ajax( {
                 type: "POST",
                 url: "inc/respondents_list.php",
-                async: false,
                 success: function(msg)
                 {
                     $('#act_respondent select').remove();
@@ -1748,7 +1742,6 @@ $(document).ready(function(){
         $.ajax( {
                 type: "POST",
                 url: "inc/drivers_list.php",
-                async: false,
                 success: function(msg)
                 {
                     $('#act_driver select').remove();
@@ -1763,7 +1756,6 @@ $(document).ready(function(){
         $.ajax( {
                 type: "POST",
                 url: "inc/mechanics_list.php",
-                async: false,
                 success: function(msg)
                 {
                     $('#act_mechanic select').remove();
@@ -1874,7 +1866,6 @@ $(document).ready(function(){
         $.ajax( {
                 type: "POST",
                 url: "inc/cars_list.php",
-                async: false,
                 success: function(msg)
                 {
                     $('#waybill_car select').remove();
@@ -1889,7 +1880,6 @@ $(document).ready(function(){
         $.ajax( {
                 type: "POST",
                 url: "inc/drivers_list.php",
-                async: false,
                 success: function(msg)
                 {
                     $('#waybill_driver select').remove();
@@ -1904,7 +1894,6 @@ $(document).ready(function(){
         $.ajax( {
                 type: "POST",
                 url: "inc/mechanics_list.php",
-                async: false,
                 success: function(msg)
                 {
                     $('#waybill_mechanic select').remove();
@@ -1919,7 +1908,6 @@ $(document).ready(function(){
         $.ajax( {
                 type: "POST",
                 url: "inc/dispatchers_list.php",
-                async: false,
                 success: function(msg)
                 {
                     $('#waybill_dispatcher select').remove();
@@ -1934,7 +1922,6 @@ $(document).ready(function(){
         $.ajax( {
                 type: "POST",
                 url: "inc/departments_without_stage_list.php",
-                async: false,
                 success: function(msg)
                 {
                     $('#waybill_department select').remove();
@@ -1949,7 +1936,6 @@ $(document).ready(function(){
         $.ajax( {
                 type: "POST",
                 url: "inc/fuel_types_list.php",
-                async: false,
                 success: function(msg)
                 {
                     $('#waybill_fuel_type select').remove();

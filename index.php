@@ -32,7 +32,7 @@ header("Cache-Control: no-cache, must-revalidate");
 		define("DEVELOP_MODE","ON");
 	}
 	
-	if(defined("DEVELOP_MODE")){ 
+	if(defined("DEVELOP_MODE")){
 		//die("Сервис временно недоступен!!!");
 	}
 	?>
