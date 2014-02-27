@@ -140,7 +140,15 @@ class Request {
             {
                 $maxReqCount = $row['MaxReq'];
                 //Вычисляем текущее число поданых заявок
-                $query = "SELECT COUNT(*) AS CountReq, MONTH(field_value) AS ReqMonth FROM request_data RIGHT JOIN calendar_fields ON (request_data.id_field = calendar_fields.start_date_field) RIGHT JOIN request_number rn USING (id_request_number) WHERE MONTH(str_to_date(field_value, '%d.%m.%Y')) = MONTH(STR_TO_DATE('".$event_date."','%d.%m.%Y')) AND (rn.department = '".$department."') AND (rn.stage = '".$stage."') AND (request_state <> 2) AND (request_state <> 4) AND (alien_department=0) GROUP BY (ReqMonth)";
+                $query = "SELECT COUNT(*) AS CountReq, MONTH(field_value) AS ReqMonth
+                        FROM request_data RIGHT JOIN calendar_fields
+                            ON (request_data.id_field = calendar_fields.start_date_field)
+                            RIGHT JOIN request_number rn USING (id_request_number)
+                        WHERE YEAR(str_to_date(field_value, '%d.%m.%Y')) = YEAR(STR_TO_DATE('".$event_date."','%d.%m.%Y'))
+                        AND MONTH(str_to_date(field_value, '%d.%m.%Y')) = MONTH(STR_TO_DATE('".$event_date."','%d.%m.%Y'))
+                        AND (rn.department = '".$department."')
+                        AND (rn.stage = '".$stage."') AND (request_state <> 2) AND (request_state <> 4)
+                        AND (alien_department=0) GROUP BY (ReqMonth)";
                 $res=mysqli_query($this->con,$query);
                 if (!$res)
                     $this->fatal_error("Не удалось выполнить запрос к базе данных");
@@ -161,7 +169,18 @@ class Request {
                 if ($row)
                     $maxReqCount = $row['MaxReq'];
                 //Вычисляем текущее число поданых заявок
-                $query = "SELECT COUNT(*) AS CountReq, MONTH(field_value) AS ReqMonth FROM request_data RIGHT JOIN calendar_fields ON (request_data.id_field = calendar_fields.start_date_field) RIGHT JOIN request_number rn USING (id_request_number) WHERE MONTH(str_to_date(field_value, '%d.%m.%Y')) = MONTH(STR_TO_DATE('".$event_date."','%d.%m.%Y')) AND (rn.department = '".$department."') AND (rn.stage IS NULL OR rn.stage NOT IN (SELECT lred.Stage FROM limite_req_except_dep lred WHERE lred.department = '".$department."' AND lred.Stage IS NOT NULL )) AND (request_state <> 2) AND (request_state <> 4) AND (alien_department=0) GROUP BY (ReqMonth)";
+                $query = "SELECT COUNT(*) AS CountReq, MONTH(field_value) AS ReqMonth
+                        FROM request_data RIGHT JOIN calendar_fields
+                            ON (request_data.id_field = calendar_fields.start_date_field)
+                            RIGHT JOIN request_number rn USING (id_request_number)
+                        WHERE YEAR(str_to_date(field_value, '%d.%m.%Y')) = YEAR(STR_TO_DATE('".$event_date."','%d.%m.%Y'))
+                        AND MONTH(str_to_date(field_value, '%d.%m.%Y')) = MONTH(STR_TO_DATE('".$event_date."','%d.%m.%Y'))
+                        AND (rn.department = '".$department."')
+                        AND (rn.stage IS NULL OR rn.stage NOT IN
+                            (SELECT lred.Stage FROM limite_req_except_dep lred
+                            WHERE lred.department = '".$department."' AND lred.Stage IS NOT NULL ))
+                        AND (request_state <> 2) AND (request_state <> 4)
+                        AND (alien_department=0) GROUP BY (ReqMonth)";
                 $res=mysqli_query($this->con,$query);
                 if (!$res)
                     $this->fatal_error("Не удалось выполнить запрос к базе данных");
@@ -182,7 +201,19 @@ class Request {
             if ($row)
                 $maxReqCount = $row['MaxReq'];
             //Вычисляем текущее число поданых заявок
-            $query = "SELECT COUNT(*) AS CountReq, MONTH(field_value) AS ReqMonth FROM request_data RIGHT JOIN calendar_fields ON (request_data.id_field = calendar_fields.start_date_field) RIGHT JOIN request_number rn USING (id_request_number) WHERE MONTH(str_to_date(field_value, '%d.%m.%Y')) = MONTH(STR_TO_DATE('".$event_date."','%d.%m.%Y')) AND (rn.department = '".$department."') AND (rn.stage IS NULL OR rn.stage NOT IN (SELECT lred.Stage FROM limite_req_except_dep lred WHERE lred.department = '".$department."' AND lred.Stage IS NOT NULL )) AND (request_state <> 2) AND (request_state <> 4) AND (alien_department=0) GROUP BY (ReqMonth)";
+            $query = "SELECT COUNT(*) AS CountReq, MONTH(field_value) AS ReqMonth
+                    FROM request_data RIGHT JOIN calendar_fields
+                        ON (request_data.id_field = calendar_fields.start_date_field)
+                        RIGHT JOIN request_number rn USING (id_request_number)
+                    WHERE YEAR(str_to_date(field_value, '%d.%m.%Y')) = YEAR(STR_TO_DATE('".$event_date."','%d.%m.%Y'))
+                    AND MONTH(str_to_date(field_value, '%d.%m.%Y')) = MONTH(STR_TO_DATE('".$event_date."','%d.%m.%Y'))
+                    AND (rn.department = '".$department."')
+                    AND (rn.stage IS NULL OR rn.stage NOT IN
+                        (SELECT lred.Stage
+                        FROM limite_req_except_dep lred
+                        WHERE lred.department = '".$department."' AND lred.Stage IS NOT NULL ))
+                    AND (request_state <> 2) AND (request_state <> 4)
+                    AND (alien_department=0) GROUP BY (ReqMonth)";
             $res=mysqli_query($this->con,$query);
             if (!$res)
                 $this->fatal_error("Не удалось выполнить запрос к базе данных");
