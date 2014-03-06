@@ -19,9 +19,9 @@ class ReportClass
     var $sIndexColumn = "";
     var $report_id;
     var $users_buffer;
-    var $rep_with_car_id = array(15, 35, 36);                   //Отчеты с идентификатором автомобиля
+    var $rep_with_car_id = array(15, 35, 36, 37, 38);           //Отчеты с идентификатором автомобиля
     var $rep_with_fuel_type_id = array(35, 36);                 //Отчеты с идентификатором типа горючего
-    var $rep_witout_dep_and_date_type = array(17,35,36,37);    //идентификаторы отчетов без списка выбора департамента и типа даты
+    var $rep_witout_dep_and_date_type = array(17,35,36,37,38);  //идентификаторы отчетов без списка выбора департамента и типа даты
     //Отчеты, в которых присутствует логин пользователя (оптимизация числа запросов к AD на резолвинг имен пользователей)
     var $rep_with_user_info = array(2,8,9,10,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34);
 
@@ -82,11 +82,15 @@ class ReportClass
         }
         if (!Auth::hasPrivilege(AUTH_READ_TRANSPORT_MILEAGE))
         {
-            $ids .= ', 17, 37';
+            $ids .= ', 17';
         }
         if (!Auth::hasPrivilege(AUTH_READ_WAYBILLS))
         {
             $ids .= ', 35, 36';
+        }
+        if (!Auth::hasPrivilege(AUTH_READ_REPAIR_ACTS))
+        {
+            $ids .= ', 37, 38';
         }
         $query = 'SELECT id, name, id_request FROM reports_info WHERE id_request IN ('.$id_requests.') AND id NOT IN ('.$ids.') ORDER BY id_request, id';
         $result = mysqli_query($this->link, $query) or
