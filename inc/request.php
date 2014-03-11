@@ -1183,29 +1183,33 @@ class Request {
             $act_wait_start_date = null;
         else
         {
-            $act_wait_start_date_parts = explode('.', $args['act_wait_start_date']);
-            $act_wait_start_date = $act_wait_start_date_parts[2].'-'.$act_wait_start_date_parts[1].'-'.$act_wait_start_date_parts[0];
+            $act_wait_start_datetime_parts = explode(' ', $args['act_wait_start_date']);
+            $act_wait_start_date_parts = explode('.', $act_wait_start_datetime_parts[0]);
+            $act_wait_start_date = $act_wait_start_date_parts[2].'-'.$act_wait_start_date_parts[1].'-'.$act_wait_start_date_parts[0].' '.$act_wait_start_datetime_parts[1];
         }
         if (trim($args['act_wait_end_date']) == "")
             $act_wait_end_date = null;
         else
         {
-            $act_wait_end_date_parts = explode('.', $args['act_wait_end_date']);
-            $act_wait_end_date = $act_wait_end_date_parts[2].'-'.$act_wait_end_date_parts[1].'-'.$act_wait_end_date_parts[0];
+            $act_wait_end_datetime_parts = explode(' ', $args['act_wait_end_date']);
+            $act_wait_end_date_parts = explode('.', $act_wait_end_datetime_parts[0]);
+            $act_wait_end_date = $act_wait_end_date_parts[2].'-'.$act_wait_end_date_parts[1].'-'.$act_wait_end_date_parts[0].' '.$act_wait_end_datetime_parts[1];
         }
         if (trim($args['act_repair_start_date']) == "")
             $act_repair_start_date = null;
         else
         {
-            $act_repair_start_date_parts = explode('.', $args['act_repair_start_date']);
-            $act_repair_start_date = $act_repair_start_date_parts[2].'-'.$act_repair_start_date_parts[1].'-'.$act_repair_start_date_parts[0];
+            $act_repair_start_datetime_parts = explode(' ', $args['act_repair_start_date']);
+            $act_repair_start_date_parts = explode('.', $act_repair_start_datetime_parts[0]);
+            $act_repair_start_date = $act_repair_start_date_parts[2].'-'.$act_repair_start_date_parts[1].'-'.$act_repair_start_date_parts[0].' '.$act_repair_start_datetime_parts[1];
         }
         if (trim($args['act_repair_end_date']) == "")
             $act_repair_end_date = null;
         else
         {
-            $act_repair_end_date_parts = explode('.', $args['act_repair_end_date']);
-            $act_repair_end_date = $act_repair_end_date_parts[2].'-'.$act_repair_end_date_parts[1].'-'.$act_repair_end_date_parts[0];
+            $act_repair_end_datetime_parts = explode(' ', $args['act_repair_end_date']);
+            $act_repair_end_date_parts = explode('.', $act_repair_end_datetime_parts[0]);
+            $act_repair_end_date = $act_repair_end_date_parts[2].'-'.$act_repair_end_date_parts[1].'-'.$act_repair_end_date_parts[0].' '.$act_repair_end_datetime_parts[1];
         }
         $repair_id = $args['repair_id'];
         mysqli_bind_param($pq,'iiiiisssissssi',$car_id, $performer_id, $driver_id, $respondent_id, $act_number, $act_date,
@@ -1280,29 +1284,33 @@ class Request {
             $act_wait_start_date = null;
         else
         {
-            $act_wait_start_date_parts = explode('.', $args['act_wait_start_date']);
-            $act_wait_start_date = $act_wait_start_date_parts[2].'-'.$act_wait_start_date_parts[1].'-'.$act_wait_start_date_parts[0];
+            $act_wait_start_datetime_parts = explode(' ', $args['act_wait_start_date']);
+            $act_wait_start_date_parts = explode('.', $act_wait_start_datetime_parts[0]);
+            $act_wait_start_date = $act_wait_start_date_parts[2].'-'.$act_wait_start_date_parts[1].'-'.$act_wait_start_date_parts[0].' '.$act_wait_start_datetime_parts[1];
         }
         if (trim($args['act_wait_end_date']) == "")
             $act_wait_end_date = null;
         else
         {
-            $act_wait_end_date_parts = explode('.', $args['act_wait_end_date']);
-            $act_wait_end_date = $act_wait_end_date_parts[2].'-'.$act_wait_end_date_parts[1].'-'.$act_wait_end_date_parts[0];
+            $act_wait_end_datetime_parts = explode(' ', $args['act_wait_end_date']);
+            $act_wait_end_date_parts = explode('.', $act_wait_end_datetime_parts[0]);
+            $act_wait_end_date = $act_wait_end_date_parts[2].'-'.$act_wait_end_date_parts[1].'-'.$act_wait_end_date_parts[0].' '.$act_wait_end_datetime_parts[1];
         }
         if (trim($args['act_repair_start_date']) == "")
             $act_repair_start_date = null;
         else
         {
-            $act_repair_start_date_parts = explode('.', $args['act_repair_start_date']);
-            $act_repair_start_date = $act_repair_start_date_parts[2].'-'.$act_repair_start_date_parts[1].'-'.$act_repair_start_date_parts[0];
+            $act_repair_start_datetime_parts = explode(' ', $args['act_repair_start_date']);
+            $act_repair_start_date_parts = explode('.', $act_repair_start_datetime_parts[0]);
+            $act_repair_start_date = $act_repair_start_date_parts[2].'-'.$act_repair_start_date_parts[1].'-'.$act_repair_start_date_parts[0].' '.$act_repair_start_datetime_parts[1];
         }
         if (trim($args['act_repair_end_date']) == "")
             $act_repair_end_date = null;
         else
         {
-            $act_repair_end_date_parts = explode('.', $args['act_repair_end_date']);
-            $act_repair_end_date = $act_repair_end_date_parts[2].'-'.$act_repair_end_date_parts[1].'-'.$act_repair_end_date_parts[0];
+            $act_repair_end_datetime_parts = explode(' ', $args['act_repair_end_date']);
+            $act_repair_end_date_parts = explode('.', $act_repair_end_datetime_parts[0]);
+            $act_repair_end_date = $act_repair_end_date_parts[2].'-'.$act_repair_end_date_parts[1].'-'.$act_repair_end_date_parts[0].' '.$act_repair_end_datetime_parts[1];
         }
         mysqli_bind_param($pq,'iiiiisssissss',$car_id, $performer_id, $driver_id, $respondent_id, $act_number, $act_date,
             $reason_for_repairs, $work_performed, $odometer, $act_wait_start_date, $act_wait_end_date,
@@ -1322,7 +1330,7 @@ class Request {
             $args = explode('@',$expended_str);
             if (count($args) != 2)
             {
-                die('Некорректный формат параметра "Расходные материалы"');
+                $this->fatal_error('Некорректный формат параметра "Расходные материалы"');
             }
             $query = "insert into expended (id_repair, material, `count`) values (?,?,?)";
             $pq = mysqli_prepare($this->con, $query);
@@ -1384,16 +1392,16 @@ class Request {
         $wait_end_date = $row['wait_end_date'];
         $wait_period = "";
         if (!empty($wait_start_date))
-            $wait_period .= "с ".date('d.m.Y',strtotime($wait_start_date))." ";
+            $wait_period .= "с ".date('d.m.Y H:i',strtotime($wait_start_date))." ";
         if (!empty($wait_end_date))
-            $wait_period .= "по ".date('d.m.Y',strtotime($wait_end_date));
+            $wait_period .= "по ".date('d.m.Y H:i',strtotime($wait_end_date));
         $repair_start_date = $row['repair_start_date'];
         $repair_end_date = $row['repair_end_date'];
         $repair_period = "";
         if (!empty($repair_start_date))
-            $repair_period .= "с ".date('d.m.Y',strtotime($repair_start_date))." ";
+            $repair_period .= "с ".date('d.m.Y H:i',strtotime($repair_start_date))." ";
         if (!empty($repair_end_date))
-            $repair_period .= "по ".date('d.m.Y',strtotime($repair_end_date));
+            $repair_period .= "по ".date('d.m.Y H:i',strtotime($repair_end_date));
         $deleted = $row['deleted'];
         mysqli_free_result($result);
 

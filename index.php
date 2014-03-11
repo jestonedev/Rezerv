@@ -13,6 +13,7 @@ header("Cache-Control: no-cache, must-revalidate");
         <link href="css/index.css" rel="stylesheet">
         <link href='css/fullcalendar.css' rel='stylesheet' type='text/css'  />
         <link href='css/fullcalendar.print.css' rel='stylesheet' type='text/css'  media='print' />
+        <link href='css/jquery-ui-timepicker-addon.css' rel='stylesheet' type='text/css' />
 
         <script src="scripts/jquery-1.7.2.js" type='text/javascript'></script>
         <script src="scripts/jquery-ui-1.9.2.custom.min.js" type='text/javascript'></script>
@@ -22,10 +23,8 @@ header("Cache-Control: no-cache, must-revalidate");
         <script src="scripts/TableTools.js" type="text/javascript"></script>
 		<script src="scripts/json2.js" type='text/javascript'></script>
         <script src="scripts/jquery.fileDownload.js" type='text/javascript'></script>
-
-        <!--<script src="scripts/dataTables.scroller.min.js" type="text/javascript"></script>-->
-		
         <script src='scripts/fullcalendar.min.js' type='text/javascript' ></script>
+        <script src='scripts/jquery-ui-timepicker-addon.js' type='text/javascript' ></script>
     </head>
     <body>
 	<?php if(!in_array(mb_strtoupper($_SERVER['REMOTE_USER']),array('PWR\KONAS','PWR\IGNVV'))){

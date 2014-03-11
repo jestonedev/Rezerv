@@ -346,6 +346,7 @@ $(document).ready(function(){
                     firstDay: 1,
                     defaultDate: Now
                 });
+
                 $('#frmRequest').dialog({
                     autoOpen: true,
                     modal:true,
@@ -752,13 +753,21 @@ $(document).ready(function(){
                         $("#act_create_form #act_number").attr("value", info["repair_act_number"]);
                         $("#act_create_form #act_date").attr("value", convert_date(info["act_date"]));
                         if (info["wait_start_date"]) {
-                            $("#act_create_form #act_wait_start_date").attr("value", convert_date(info["wait_start_date"])); }
+                            $("#act_create_form #act_wait_start_date").attr("value", convert_datetime(info["wait_start_date"])); }
+                        else {
+                            $("#act_create_form #act_wait_start_date").attr("value", ""); }
                         if (info["wait_end_date"]) {
-                            $("#act_create_form #act_wait_end_date").attr("value", convert_date(info["wait_end_date"])); }
+                            $("#act_create_form #act_wait_end_date").attr("value", convert_datetime(info["wait_end_date"])); }
+                        else {
+                            $("#act_create_form #act_wait_end_date").attr("value", ""); }
                         if (info["repair_start_date"]) {
-                            $("#act_create_form #act_repair_start_date").attr("value", convert_date(info["repair_start_date"])); }
+                            $("#act_create_form #act_repair_start_date").attr("value", convert_datetime(info["repair_start_date"])); }
+                        else {
+                            $("#act_create_form #act_repair_start_date").attr("value", ""); }
                         if (info["repair_end_date"]) {
-                            $("#act_create_form #act_repair_end_date").attr("value", convert_date(info["repair_end_date"])); }
+                            $("#act_create_form #act_repair_end_date").attr("value", convert_datetime(info["repair_end_date"])); }
+                        else {
+                            $("#act_create_form #act_repair_end_date").attr("value", ""); }
                         $("#act_create_form select[name='act_respondent_id']").attr("value",info["id_respondent"]);
                         $("#act_create_form select[name='car_id']").attr("value", info["id_car"]);
                         $("#act_create_form select[name='driver_id']").attr("value", info["id_driver"]);
@@ -1691,14 +1700,12 @@ $(document).ready(function(){
     function initActCreateForm()
     {
         $("#act_date").mask("99.99.9999");
-        $("#act_wait_start_date").mask("99.99.9999");
-        $("#act_wait_end_date").mask("99.99.9999");
-        $("#act_repair_start_date").mask("99.99.9999");
-        $("#act_repair_end_date").mask("99.99.9999");
+        $("#act_wait_start_date").mask("99.99.9999 99:99");
+        $("#act_wait_end_date").mask("99.99.9999 99:99");
+        $("#act_repair_start_date").mask("99.99.9999 99:99");
+        $("#act_repair_end_date").mask("99.99.9999 99:99");
         var Now = new Date();
-        //календарь
-        $("#act_date, #act_wait_start_date, #act_wait_end_date, #act_repair_start_date, #act_repair_end_date").
-        datepicker({
+        $("#act_date").datepicker({
             monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
             dayNames:	["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
             dayNamesMin:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
@@ -1710,6 +1717,67 @@ $(document).ready(function(){
             firstDay: 1,
             defaultDate: Now
         });
+        $("#act_wait_start_date").datetimepicker({
+            monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
+            dayNames:	["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
+            dayNamesMin:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
+            buttonImageOnly: true,
+            buttonImage: "./img/SelCalendar.gif",
+            buttonText: "Календарь",
+            showOn: "button",
+            dateFormat:"dd.mm.yy",
+            firstDay: 1,
+            defaultDate: Now,
+            timeFormat: "HH:mm",
+            currentText: "Сейчас",
+            closeText: "Принять"
+        });
+        $("#act_wait_end_date").datetimepicker({
+            monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
+            dayNames:	["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
+            dayNamesMin:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
+            buttonImageOnly: true,
+            buttonImage: "./img/SelCalendar.gif",
+            buttonText: "Календарь",
+            showOn: "button",
+            dateFormat:"dd.mm.yy",
+            firstDay: 1,
+            defaultDate: Now,
+            timeFormat: "HH:mm",
+            currentText: "Сейчас",
+            closeText: "Принять"
+        });
+        $("#act_repair_start_date").datetimepicker({
+            monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
+            dayNames:	["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
+            dayNamesMin:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
+            buttonImageOnly: true,
+            buttonImage: "./img/SelCalendar.gif",
+            buttonText: "Календарь",
+            showOn: "button",
+            dateFormat:"dd.mm.yy",
+            firstDay: 1,
+            defaultDate: Now,
+            timeFormat: "HH:mm",
+            currentText: "Сейчас",
+            closeText: "Принять"
+        });
+        $("#act_repair_end_date").datetimepicker({
+            monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
+            dayNames:	["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
+            dayNamesMin:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
+            buttonImageOnly: true,
+            buttonImage: "./img/SelCalendar.gif",
+            buttonText: "Календарь",
+            showOn: "button",
+            dateFormat:"dd.mm.yy",
+            firstDay: 1,
+            defaultDate: Now,
+            timeFormat: "HH:mm",
+            currentText: "Сейчас",
+            closeText: "Принять"
+        });
+
         $("#insert_expended, #delete_expended").button();
         $.ajax( {
                 type: "POST",
@@ -2120,6 +2188,22 @@ $(document).ready(function(){
         return day+"."+month+"."+year;
     }
 
+    //Функция конвертации представления даты и времени из формата MySQL в формат формы данных
+    function convert_datetime(datetime_param)
+    {
+        var date_str = datetime_param.split(' ')[0];
+        var time_str = datetime_param.split(' ')[1];
+        var date_arr = date_str.split('-');
+        var time_arr = time_str.split(':');
+        var date = new Date(date_arr[0],date_arr[1] - 1,date_arr[2],time_arr[0], time_arr[1]);
+        var day = date.getDate()<10?"0"+date.getDate():date.getDate();
+        var month = (date.getMonth()+1)<10?"0"+(date.getMonth()+1):(date.getMonth()+1);
+        var year = date.getFullYear();
+        var hours = date.getHours()<10?"0"+date.getHours():date.getHours();
+        var minutes = date.getMinutes()<10?"0"+date.getMinutes():date.getMinutes();
+        return day+"."+month+"."+year+" "+hours+":"+minutes;
+    }
+
     //Получить массив "машина - топливо по умолчанию"
     function get_cars_default_fuel()
     {
@@ -2322,34 +2406,59 @@ $(document).ready(function(){
             $("#error_act_create").show();
             return;
         }
-        if (($.trim(act_wait_start_date) != "") && (!dateCorrect(act_wait_start_date)))
+
+        if (($.trim(act_wait_start_date) != "") && ($.trim(act_wait_start_date) != "__.__.____ __:__") &&
+            ((!dateCorrect(act_wait_start_date.split(' ')[0])) || (!timeCorrect(act_wait_start_date.split(' ')[1]))))
         {
             div = document.getElementById("error_act_create");
             div.innerHTML = "Начальная дата ожидания ремонта заполнена некорректно";
             $("#error_act_create").show();
             return;
         }
-        if (($.trim(act_wait_end_date) != "") && (!dateCorrect(act_wait_end_date)))
+        if ($.trim(act_wait_start_date) == "__.__.____ __:__")
+        {
+            act_wait_start_date = "";
+        }
+
+        if (($.trim(act_wait_end_date) != "") && ($.trim(act_wait_end_date) != "__.__.____ __:__") &&
+            ((!dateCorrect(act_wait_end_date.split(' ')[0])) || (!timeCorrect(act_wait_end_date.split(' ')[1]))))
         {
             div = document.getElementById("error_act_create");
             div.innerHTML = "Конечная дата ожидания ремонта заполнена некорректно";
             $("#error_act_create").show();
             return;
         }
-        if (($.trim(act_repair_start_date) != "") && (!dateCorrect(act_repair_start_date)))
+        if ($.trim(act_wait_end_date) == "__.__.____ __:__")
+        {
+            act_wait_end_date = "";
+        }
+
+        if (($.trim(act_repair_start_date) != "") && ($.trim(act_repair_start_date) != "__.__.____ __:__") &&
+            ((!dateCorrect(act_repair_start_date.split(' ')[0])) || (!timeCorrect(act_repair_start_date.split(' ')[1]))))
         {
             div = document.getElementById("error_act_create");
             div.innerHTML = "Начальная дата фактического ремонта заполнена некорректно";
             $("#error_act_create").show();
             return;
         }
-        if (($.trim(act_repair_end_date) != "") && (!dateCorrect(act_repair_end_date)))
+        if ($.trim(act_repair_start_date) == "__.__.____ __:__")
+        {
+            act_repair_start_date = "";
+        }
+
+        if (($.trim(act_repair_end_date) != "") && ($.trim(act_repair_end_date) != "__.__.____ __:__") &&
+            ((!dateCorrect(act_repair_end_date.split(' ')[0])) || (!timeCorrect(act_repair_end_date.split(' ')[1]))))
         {
             div = document.getElementById("error_act_create");
             div.innerHTML = "Конечная дата фактического ремонта заполнена некорректно";
             $("#error_act_create").show();
             return;
         }
+        if ($.trim(act_repair_end_date) == "__.__.____ __:__")
+        {
+            act_repair_end_date = "";
+        }
+
         var array = [];
         $("#act_expended_list option").each(function() {
             expended_list += $(this).attr("value")+"@@";

@@ -57,10 +57,10 @@ $work_performed = $row['work_performed'];
 $driver = formatName($row['driver']);
 $mechanic = formatName($row['mechanic']);
 $odometer = $row['odometer'];
-$wait_start_date = formatDate($row['wait_start_date']);
-$wait_end_date = formatDate($row['wait_end_date']);
-$rep_start_date = formatDate($row['repair_start_date']);
-$rep_end_date = formatDate($row['repair_end_date']);
+$wait_start_date = formatDateTime($row['wait_start_date']);
+$wait_end_date = formatDateTime($row['wait_end_date']);
+$rep_start_date = formatDateTime($row['repair_start_date']);
+$rep_end_date = formatDateTime($row['repair_end_date']);
 $array = $row["expended"];
 $expended_materials = '';
 for ($i = 0; $i < sizeof($array); $i++)
@@ -108,6 +108,18 @@ function formatDate($date)
             break;
     }
     return "«".$date_arr[2]."» ".$date_arr[1]." ".$date_arr[0]." г. ";
+}
+
+function formatDateTime($datetime)
+{
+    if (empty($datetime))
+        return "";
+    $date_time_parts = explode(' ', $datetime);
+    $date_parts = $date_time_parts[0];
+    $time_parts = $date_time_parts[1];
+    $date_arr = explode('-', $date_parts);
+    $time_arr = explode(':', $time_parts);
+    return $date_arr[2].".".$date_arr[1].".".$date_arr[0]." ".$time_arr[0].":".$time_arr[1];
 }
 
 function formatName($name)
