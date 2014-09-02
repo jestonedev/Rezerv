@@ -574,15 +574,17 @@ class Request {
         //Добавляем поле департамента (ключевое и обязательное)
         $department = mysqli_fetch_array($result_department, MYSQLI_ASSOC);
         $result .= '<tr class="'.$class.'"><td id="detail_header" width="30%">Департамент:</td><td>'.htmlspecialchars($department['department']).'</td></tr>';
-        $class = "odd";
         //Добавляем поле отдела, если отдел имеется
         if (!empty($department['stage']))
+        {
+            $class = ($class == "even")?"odd":"even";
             $result .= '<tr class="'.$class.'"><td id="detail_header" width="30%">Отдел:</td><td>'.htmlspecialchars($department['stage']).'</td></tr>';
+        }
 
         //Если заявка транспортная, выводим транспортное поле, если оно необходимо
         if ($id_request == 1)
         {
-            $class = "even";
+            $class = ($class == "even")?"odd":"even";
             $query_transport = "SELECT * FROM cars_for_transport_requests INNER JOIN cars ON (cars.id = cars_for_transport_requests.id_car)
                                WHERE id_request_number = $id_request_number";
             $result_transport = mysqli_query($this->con, $query_transport);

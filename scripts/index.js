@@ -19,7 +19,7 @@ $(document).ready(function(){
         [1,1,5],[2,1,5],[3,1,5],[4,1,5],[5,1,5],
         [6,1,5],[7,1,5],[8,1,5],[9,1,5],[10,1,5],
         [11,1,5],[12,1,5],[13,1,5],[14,1,4],[35,4,3],
-        [36,3,5]];
+        [36,3,5],[38,7,1]];
     var cars_default_fuel = get_cars_default_fuel();    //Тип топлива, выбираемый по умолчанию, при выборе автотранспорта
 
     //Указывает, разрешено ли обновление таблицы с данными (разрешено, только если значение равно 0)
@@ -285,6 +285,7 @@ $(document).ready(function(){
                         setCookie("end_date",$("#end_date").attr("value"));
                         setCookie("department",$("#departments select[name='department']").attr("value"));
                         setCookie("date_id",$("#filter_criteria select[name='date_id']").attr("value"));
+                        
                         var title = $('#report_id option[value="'+$("#report_id").attr("value")+'"]').text();
                         if ($("#report_id").attr("value").inList(rep_with_fuel_type))
                         {
@@ -1389,7 +1390,7 @@ $(document).ready(function(){
                 for (i = 1; i < nCells.length; i++) {
                     nCells[i].innerHTML = '-'; }
                 for (i = 0; i < rep_cfg[2]; i++) {
-                    nCells[rep_cfg[1]+i].innerHTML = sum_array[i]; }
+                    nCells[rep_cfg[1]+i].innerHTML = Math.round(sum_array[i]); }
             }
         } );
 
