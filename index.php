@@ -27,7 +27,8 @@ header("Cache-Control: no-cache, must-revalidate");
         <script src='scripts/jquery-ui-timepicker-addon.js' type='text/javascript' ></script>
     </head>
     <body>
-	<?php if(!in_array(mb_strtoupper($_SERVER['REMOTE_USER']),array('PWR\KONAS','PWR\IGNVV'))){
+	<?php
+    if(!in_array(mb_strtoupper($_SERVER['REMOTE_USER']),array('PWR\KONAS','PWR\IGNVV'))){
 		define("DEVELOP_MODE","ON");
 	}
 	

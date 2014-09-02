@@ -53,7 +53,7 @@ class CarsInfoClass
         } else
             $query = "INSERT INTO mileages (id_car, mileage, `date`, mileage_type) VALUES (".$id_car.", ".$mileage.", str_to_date('".$date."','%d.%m.%Y'), ".$mileage_type.")";
         $pq = mysqli_prepare($this->link, $query);
-        mysqli_execute($pq);
+        mysqli_stmt_execute($pq);
         if (mysqli_errno($this->con)!=0)
         {
             $this->fatal_error('Ошибка при выполнении запроса к базе данных');

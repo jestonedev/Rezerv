@@ -396,7 +396,7 @@ class Request {
         $delete_query = "delete from request_data where id_request_number = ?";
         $pq=mysqli_prepare($this->con,$delete_query);
         mysqli_stmt_bind_param($pq,'i',$id_request_number);
-        mysqli_execute($pq);
+        mysqli_stmt_execute($pq);
         if (mysqli_errno($this->con)!=0)
         {
             mysqli_rollback($this->con);
@@ -791,8 +791,8 @@ class Request {
     {
         $query = 'UPDATE cars_for_transport_requests SET id_car= ? WHERE id_request_number= ?';
         $pq = mysqli_prepare($this->con, $query);
-        mysqli_bind_param($pq, 'ii', $id_car, $id_request_number);
-        mysqli_execute($pq);
+        mysqli_stmt_bind_param($pq, 'ii', $id_car, $id_request_number);
+        mysqli_stmt_execute($pq);
         if (mysqli_errno($this->con) != 0)
         {
             mysqli_rollback($this->con);
@@ -840,8 +840,8 @@ class Request {
                 $pq = mysqli_prepare($this->con, $query);
                 if (!$pq)
                     $this->fatal_error("Не удалось произвести разбор запроса SQL");
-                mysqli_bind_param($pq, 'ii', $id_request_number, $car_id);
-                if (!mysqli_execute($pq))
+                mysqli_stmt_bind_param($pq, 'ii', $id_request_number, $car_id);
+                if (!mysqli_stmt_execute($pq))
                     $this->fatal_error("Ошибка при исполнении запроса к базе данных");
                 mysqli_stmt_free_result($pq);
             }
@@ -1214,10 +1214,10 @@ class Request {
             $act_repair_end_date = $act_repair_end_date_parts[2].'-'.$act_repair_end_date_parts[1].'-'.$act_repair_end_date_parts[0].' '.$act_repair_end_datetime_parts[1];
         }
         $repair_id = $args['repair_id'];
-        mysqli_bind_param($pq,'iiiiisssissssi',$car_id, $performer_id, $driver_id, $respondent_id, $act_number, $act_date,
+        mysqli_stmt_bind_param($pq,'iiiiisssissssi',$car_id, $performer_id, $driver_id, $respondent_id, $act_number, $act_date,
             $reason_for_repairs, $work_performed, $odometer, $act_wait_start_date, $act_wait_end_date,
             $act_repair_start_date, $act_repair_end_date, $repair_id);
-        mysqli_execute($pq);
+        mysqli_stmt_execute($pq);
         if (mysqli_errno($this->con)!=0)
         {
             mysqli_rollback($this->con);
@@ -1226,8 +1226,8 @@ class Request {
 
         $query = "delete from expended where id_repair = ?";
         $pq = mysqli_prepare($this->con, $query);
-        mysqli_bind_param($pq, 'i', $repair_id);
-        mysqli_execute($pq);
+        mysqli_stmt_bind_param($pq, 'i', $repair_id);
+        mysqli_stmt_execute($pq);
         if (mysqli_errno($this->con)!=0)
         {
             mysqli_rollback($this->con);
@@ -1245,8 +1245,8 @@ class Request {
             }
             $query = "insert into expended (id_repair, material, count) values (?,?,?)";
             $pq = mysqli_prepare($this->con, $query);
-            mysqli_bind_param($pq, 'isd', $repair_id, $args[0], $args[1]);
-            mysqli_execute($pq);
+            mysqli_stmt_bind_param($pq, 'isd', $repair_id, $args[0], $args[1]);
+            mysqli_stmt_execute($pq);
             if (mysqli_errno($this->con)!=0)
             {
                 mysqli_rollback($this->con);
@@ -1314,10 +1314,10 @@ class Request {
             $act_repair_end_date_parts = explode('.', $act_repair_end_datetime_parts[0]);
             $act_repair_end_date = $act_repair_end_date_parts[2].'-'.$act_repair_end_date_parts[1].'-'.$act_repair_end_date_parts[0].' '.$act_repair_end_datetime_parts[1];
         }
-        mysqli_bind_param($pq,'iiiiisssissss',$car_id, $performer_id, $driver_id, $respondent_id, $act_number, $act_date,
+        mysqli_stmt_bind_param($pq,'iiiiisssissss',$car_id, $performer_id, $driver_id, $respondent_id, $act_number, $act_date,
             $reason_for_repairs, $work_performed, $odometer, $act_wait_start_date, $act_wait_end_date,
             $act_repair_start_date, $act_repair_end_date);
-        mysqli_execute($pq);
+        mysqli_stmt_execute($pq);
         if (mysqli_errno($this->con)!=0)
         {
             mysqli_rollback($this->con);
@@ -1336,8 +1336,8 @@ class Request {
             }
             $query = "insert into expended (id_repair, material, `count`) values (?,?,?)";
             $pq = mysqli_prepare($this->con, $query);
-            mysqli_bind_param($pq, 'isd', $repair_id, trim($args[0]), trim($args[1]));
-            mysqli_execute($pq);
+            mysqli_stmt_bind_param($pq, 'isd', $repair_id, trim($args[0]), trim($args[1]));
+            mysqli_stmt_execute($pq);
             if (mysqli_errno($this->con)!=0)
             {
                 mysqli_rollback($this->con);
@@ -1356,8 +1356,8 @@ class Request {
             $this->fatal_error('У вас нет прав на удаление акта выполненных работ');
         $query = "UPDATE cars_repair_acts SET deleted = 1 WHERE id_repair = ?";
         $pq = mysqli_prepare($this->con, $query);
-        mysqli_bind_param($pq,'i', $id_repair);
-        mysqli_execute($pq);
+        mysqli_stmt_bind_param($pq,'i', $id_repair);
+        mysqli_stmt_execute($pq);
         if (mysqli_errno($this->con)!=0)
         {
             mysqli_rollback($this->con);
@@ -1649,10 +1649,10 @@ class Request {
         $start_date = $start_date_parts[2].'-'.$start_date_parts[1].'-'.$start_date_parts[0];
         $end_date_parts = explode('.', $args['end_date']);
         $end_date = $end_date_parts[2].'-'.$end_date_parts[1].'-'.$end_date_parts[0];
-        mysqli_bind_param($pq,'iiiiissssiiddi',$car_id, $driver_id, $mechanic_id, $dispatcher_id, $number, $start_date,
+        mysqli_stmt_bind_param($pq,'iiiiissssiiddi',$car_id, $driver_id, $mechanic_id, $dispatcher_id, $number, $start_date,
             $end_date, $address_supply, $department,
             $mileage_before, $mileage_after, $fuel_before, $given_fuel, $fuel_type_id);
-        mysqli_execute($pq);
+        mysqli_stmt_execute($pq);
         if (mysqli_errno($this->con)!=0)
         {
             mysqli_rollback($this->con);
@@ -1672,8 +1672,8 @@ class Request {
             $query = "insert into ways (id_waybill, way, start_time, end_time, distance) values (?,?,?,?,?)";
             $pq = mysqli_prepare($this->con, $query);
             $distance = (trim($args[3]) == "") ? null : trim($args[3]);
-            mysqli_bind_param($pq, 'isssi', $waybill_id, trim($args[0]), trim($args[1]), trim($args[2]), $distance);
-            mysqli_execute($pq);
+            mysqli_stmt_bind_param($pq, 'isssi', $waybill_id, trim($args[0]), trim($args[1]), trim($args[2]), $distance);
+            mysqli_stmt_execute($pq);
             if (mysqli_errno($this->con)!=0)
             {
                 mysqli_rollback($this->con);
@@ -1691,8 +1691,8 @@ class Request {
             $this->fatal_error('У вас нет прав на удаление акта выполненных работ');
         $query = "UPDATE waybills SET deleted = 1 WHERE id_waybill = ?";
         $pq = mysqli_prepare($this->con, $query);
-        mysqli_bind_param($pq,'i', $id_waybill);
-        mysqli_execute($pq);
+        mysqli_stmt_bind_param($pq,'i', $id_waybill);
+        mysqli_stmt_execute($pq);
         if (mysqli_errno($this->con)!=0)
         {
             mysqli_rollback($this->con);
@@ -1732,10 +1732,10 @@ class Request {
         $end_date_parts = explode('.', $args['end_date']);
         $end_date = $end_date_parts[2].'-'.$end_date_parts[1].'-'.$end_date_parts[0];
         $waybill_id = $args['waybill_id'];
-        mysqli_bind_param($pq,'iiiiissssiiddii',$car_id, $driver_id, $mechanic_id, $dispatcher_id, $number, $start_date, $end_date, $address_supply,
+        mysqli_stmt_bind_param($pq,'iiiiissssiiddii',$car_id, $driver_id, $mechanic_id, $dispatcher_id, $number, $start_date, $end_date, $address_supply,
             $department, $mileage_before, $mileage_after, $fuel_before, $given_fuel,
             $fuel_type_id, $waybill_id);
-        mysqli_execute($pq);
+        mysqli_stmt_execute($pq);
         if (mysqli_errno($this->con)!=0)
         {
             mysqli_rollback($this->con);
@@ -1744,8 +1744,8 @@ class Request {
 
         $query = "delete from ways where id_waybill = ?";
         $pq = mysqli_prepare($this->con, $query);
-        mysqli_bind_param($pq, 'i', $waybill_id);
-        mysqli_execute($pq);
+        mysqli_stmt_bind_param($pq, 'i', $waybill_id);
+        mysqli_stmt_execute($pq);
         if (mysqli_errno($this->con)!=0)
         {
             mysqli_rollback($this->con);
@@ -1764,8 +1764,8 @@ class Request {
             $query = "insert into ways (id_waybill, way, start_time, end_time, distance) values (?,?,?,?,?)";
             $pq = mysqli_prepare($this->con, $query);
             $distance = (trim($args[3]) == "") ? null : trim($args[3]);
-            mysqli_bind_param($pq, 'isssi', $waybill_id, trim($args[0]), trim($args[1]), trim($args[2]), $distance);
-            mysqli_execute($pq);
+            mysqli_stmt_bind_param($pq, 'isssi', $waybill_id, trim($args[0]), trim($args[1]), trim($args[2]), $distance);
+            mysqli_stmt_execute($pq);
             if (mysqli_errno($this->con)!=0)
             {
                 mysqli_rollback($this->con);
