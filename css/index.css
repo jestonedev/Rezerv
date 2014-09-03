@@ -12,15 +12,22 @@ body {
 #header {
     text-align: center;
     text-decoration: underline;
-    color: #6e736e;
+    color: #2e6e9e;
     font-size: 24pt;
     font-family: serif;
     padding-right: 10pt;
+    height: 30pt;
 }
 
 #struct_table {
     margin-top: 0;
     padding-top: 0;
+    height: 100%;
+}
+
+td#footer
+{
+    vertical-align: bottom;
 }
 
 #calendar {
@@ -51,7 +58,7 @@ body {
     width: 30%;
 }
 
-#waybill_create_form .col2, #waybill_create_form .col4 {
+#waybill_create_form .col2, #waybill_create_form .col4, #act_create_form .col2, #act_create_form .col4 {
     white-space: nowrap;
     width: 35%;
 }
@@ -78,6 +85,12 @@ body {
 	display:block;
 	width: 170pt;
     font-size: 12pt;
+}
+
+#left_menu_requests_title {
+    color: #2e6e9e;
+    font-weight: bold;
+    padding-top: 10pt;
 }
 
 .btnAcceptRequest, .btnRejectRequest, .btnCancelRequest, .btnCompleteRequest, .btnUnCompleteRequest, .btnChangeRequest,
@@ -118,6 +131,7 @@ body {
 
 td#body {
     vertical-align: top;
+    height: 75%;
 }
 
 #request_result_success {
@@ -231,11 +245,11 @@ td#body {
 }
 
 .dispetcher_car {
-    background-color: #1ffbf6;
+    background-color: #90d4ff;
 }
 
 .owner_car {
-    background-color: #f3ff63;
+    background-color: #f9ff9b;
 }
 
 .taxi_car {
@@ -243,17 +257,19 @@ td#body {
 }
 
 .department {
-    background-color: #dcdcdc;
-    font-weight: bold;
+    background-color: #7abee8;
+    color: #ffffff;
 }
 
 .report_group {
-    background-color: #dcdcdc;
-    font-weight: bold;
+    background-color: #7abee8;
+    font-weight: 500;
+    color: #ffffff;
 }
 
 .report {
     background-color: #ffffff;
+    color: #000000;
 }
 
 .req_count {

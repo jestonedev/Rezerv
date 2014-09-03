@@ -331,8 +331,8 @@ $(document).ready(function(){
             success: function(msg)
             {
                 $('body').append(msg);
-                $(".time_field").mask("99:99");
-                $(".date_field").mask("99.99.9999");
+                $(".time_field").inputmask("99:99");
+                $(".date_field").inputmask("99.99.9999");
                 var Now = new Date();
                 //календарь
                 $(".date_field").datepicker({
@@ -665,8 +665,8 @@ $(document).ready(function(){
                     success: function(msg)
                     {
                         $('body').append(msg);
-                        $(".time_field").mask("99:99");
-                        $(".date_field").mask("99.99.9999");
+                        $(".time_field").inputmask("99:99");
+                        $(".date_field").inputmask("99.99.9999");
                         var Now = new Date();
                         //календарь
                         $(".date_field").datepicker({
@@ -1559,7 +1559,7 @@ $(document).ready(function(){
     //Функция инициализации формы редактирования пробега по транспорту
     function initMileagesEditor()
     {
-        $("#mileage_date").mask("99.99.9999");
+        $("#mileage_date").inputmask("99.99.9999");
         var Now = new Date();
         //календарь
         $("#mileage_date").datepicker({
@@ -1579,8 +1579,8 @@ $(document).ready(function(){
     //Функция инициализации формы отчета
     function initReportForm()
     {
-        $("#start_date").mask("99.99.9999");
-        $("#end_date").mask("99.99.9999");
+        $("#start_date").inputmask("99.99.9999");
+        $("#end_date").inputmask("99.99.9999");
         var Now = new Date();
         //календарь
         $("#start_date").datepicker({
@@ -1700,11 +1700,11 @@ $(document).ready(function(){
     //Функция инициализации формы создания акта выполненных работ
     function initActCreateForm()
     {
-        $("#act_date").mask("99.99.9999");
-        $("#act_wait_start_date").mask("99.99.9999 99:99");
-        $("#act_wait_end_date").mask("99.99.9999 99:99");
-        $("#act_repair_start_date").mask("99.99.9999 99:99");
-        $("#act_repair_end_date").mask("99.99.9999 99:99");
+        $("#act_date").inputmask("99.99.9999");
+        $("#act_wait_start_date").inputmask("99.99.9999 99:99");
+        $("#act_wait_end_date").inputmask("99.99.9999 99:99");
+        $("#act_repair_start_date").inputmask("99.99.9999 99:99");
+        $("#act_repair_end_date").inputmask("99.99.9999 99:99");
         var Now = new Date();
         $("#act_date").datepicker({
             monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
@@ -1903,8 +1903,8 @@ $(document).ready(function(){
     //Функция инициализации формы создания путевых листов
     function initWaybillCreateForm()
     {
-        $("#waybill_start_date").mask("99.99.9999");
-        $("#waybill_end_date").mask("99.99.9999");
+        $("#waybill_start_date").inputmask("99.99.9999");
+        $("#waybill_end_date").inputmask("99.99.9999");
         var Now = new Date();
         //календарь
         $("#waybill_start_date").datepicker({
@@ -2023,8 +2023,8 @@ $(document).ready(function(){
             $("#way_return_time").attr("value","");
             $("#way_distance").attr("value","");
 
-            $("#way_out_time").mask("99:99");
-            $("#way_return_time").mask("99:99");
+            $("#way_out_time").inputmask("99:99");
+            $("#way_return_time").inputmask("99:99");
 
             $('#add_way').dialog({
                 autoOpen: true,

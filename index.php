@@ -7,24 +7,25 @@ header("Cache-Control: no-cache, must-revalidate");
         <meta charset="utf-8">
         <title>Заявки</title>
 
-        <link href="css/smoothness/jquery-ui-1.9.1.custom.css" rel="stylesheet">
+        <link href="css/redmond/jquery-ui-1.9.2.css" rel="stylesheet">
+        <link href="css/redmond/jquery-ui-1.9.2.theme.css" rel="stylesheet">
         <link href="css/jquery.dataTables_themeroller.css" rel="stylesheet">
+        <link href='css/jquery-ui-timepicker-addon.css' rel='stylesheet' type='text/css' />
         <link href="css/TableTools_JUI.css" rel="stylesheet">
         <link href="css/index.css" rel="stylesheet">
         <link href='css/fullcalendar.css' rel='stylesheet' type='text/css'  />
         <link href='css/fullcalendar.print.css' rel='stylesheet' type='text/css'  media='print' />
-        <link href='css/jquery-ui-timepicker-addon.css' rel='stylesheet' type='text/css' />
 
         <script src="scripts/jquery-1.7.2.js" type='text/javascript'></script>
         <script src="scripts/jquery-ui-1.9.2.custom.min.js" type='text/javascript'></script>
-        <script src="scripts/jquery.maskedinput.js" type="text/javascript"></script>
+        <script src="scripts/jquery.inputmask-3.1.0.js" type="text/javascript"></script>
         <script src="scripts/jquery.dataTables.js" type="text/javascript"></script>
+        <script src='scripts/jquery-ui-timepicker-addon.js' type='text/javascript' ></script>
         <script src="scripts/ZeroClipboard.js" type="text/javascript"></script>
         <script src="scripts/TableTools.js" type="text/javascript"></script>
 		<script src="scripts/json2.js" type='text/javascript'></script>
         <script src="scripts/jquery.fileDownload.js" type='text/javascript'></script>
         <script src='scripts/fullcalendar.min.js' type='text/javascript' ></script>
-        <script src='scripts/jquery-ui-timepicker-addon.js' type='text/javascript' ></script>
     </head>
     <body>
 	<?php
