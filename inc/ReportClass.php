@@ -36,9 +36,9 @@ class ReportClass
         $this->link = mysqli_connect(MYSQL_SERVER, MYSQL_USER, MYSQL_PASSWORD, MYSQL_BASE) or
             $this->fatal_error("Ошибка подключения к базе данных");
         mysqli_query($this->link,"SET NAMES 'utf8'");
-        if (!isset($_COOKIE['report_id']))
+        if (!isset($_POST['report_id']))
             $this->fatal_error("Вы пытаетесь сгенерировать отчет, но на сервер не был передан идентификатор отчета");
-        $this->report_id = $_COOKIE['report_id'];
+        $this->report_id = $_POST['report_id'];
         if (in_array($this->report_id, $this->rep_with_user_info))
         {
             $ldap = new LDAP();
@@ -152,14 +152,14 @@ class ReportClass
         //Используем подзапрос, хранящийся в таблице, как виртуальную таблицу (вложенный запрос)
         $this->sTable = '('.$row['query'].') t';
         //Установка периода выборки
-        if (!isset($_COOKIE['start_date']) || !isset($_COOKIE['end_date']))
+        if (!isset($_POST['start_date']) || !isset($_POST['end_date']))
             $this->fatal_error("Не задан обязательный параметр");
-        $this->sTable = str_replace('%start_date%',$_COOKIE['start_date'], $this->sTable);
-        $this->sTable = str_replace('%end_date%',$_COOKIE['end_date'], $this->sTable);
+        $this->sTable = str_replace('%start_date%',$_POST['start_date'], $this->sTable);
+        $this->sTable = str_replace('%end_date%',$_POST['end_date'], $this->sTable);
         //Если в отчете есть тип даты
         if (!in_array($this->report_id, $this->rep_witout_dep_and_date_type))
         {
-            if ($_COOKIE['date_id'] == 1)
+            if ($_POST['date_id'] == 1)
                 $date_id = 'event_date';
             else
                 $date_id = 'request_date';
@@ -168,18 +168,18 @@ class ReportClass
         //Если в отчете есть идентификатор автомобиля
         if (in_array($this->report_id, $this->rep_with_car_id))
         {
-            if ($_COOKIE['car_id'] == 'Весь транспорт')
+            if ($_POST['car_id'] == 'Весь транспорт')
                 $this->sTable = str_replace('%car_id%','', $this->sTable);
             else
-                $this->sTable = str_replace('%car_id%','AND (id_car = '.$_COOKIE['car_id'].')', $this->sTable);
+                $this->sTable = str_replace('%car_id%','AND (id_car = '.$_POST['car_id'].')', $this->sTable);
         }
         //Если в отчете есть идентификатор марки горючего
         if (in_array($this->report_id, $this->rep_with_fuel_type_id))
         {
-            if ($_COOKIE['fuel_type_id'] == 'Все марки горючего')
+            if ($_POST['fuel_type_id'] == 'Все марки горючего')
                 $this->sTable = str_replace('%fuel_type_id%','', $this->sTable);
             else
-                $this->sTable = str_replace('%fuel_type_id%','AND (id_fuel_type = '.$_COOKIE['fuel_type_id'].')', $this->sTable);
+                $this->sTable = str_replace('%fuel_type_id%','AND (id_fuel_type = '.$_POST['fuel_type_id'].')', $this->sTable);
         }
         //Если в отчете есть department_filter
         //Строим department_filter в соответствии с правами пользователя и переданными значениями
@@ -187,9 +187,9 @@ class ReportClass
         {
             $ldap = new LDAP();
             $user_department = $ldap->GetLoginParam("COMPANY");
-            if (!isset($_COOKIE['department']))
+            if (!isset($_POST['department']))
                 $this->fatal_error("Переданы некорректные параметры в Cookie");
-            $cook_department = stripslashes($_COOKIE['department']);
+            $cook_department = stripslashes($_POST['department']);
             $organization = explode(":",$cook_department);
             $department = stripslashes($organization[0]);
             $stage = stripslashes($organization[1]);

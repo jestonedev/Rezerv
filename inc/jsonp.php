@@ -24,16 +24,16 @@
                 $this->fatal_error( 'Could not open connection to server' );
             }
             mysqli_query($this->link, "SET NAMES 'utf8'");
-            if (isset($_COOKIE["menu_code"]) && ($_COOKIE["menu_code"] == 1))
+            if (isset($_POST["menu_code"]) && ($_POST["menu_code"] == 1))
                 $this->IQueryClass = new ReportClass();
             else
-            if (isset($_COOKIE["menu_code"]) && ($_COOKIE["menu_code"] == 2))
+            if (isset($_POST["menu_code"]) && ($_POST["menu_code"] == 2))
                 $this->IQueryClass = new CarsInfoClass();
             else
-            if (isset($_COOKIE["menu_code"]) && ($_COOKIE["menu_code"] == 3))
+            if (isset($_POST["menu_code"]) && ($_POST["menu_code"] == 3))
                 $this->IQueryClass = new RepairActsClass();
             else
-            if (isset($_COOKIE["menu_code"]) && ($_COOKIE["menu_code"] == 4))
+            if (isset($_POST["menu_code"]) && ($_POST["menu_code"] == 4))
                 $this->IQueryClass = new WaybillsClass();
             else
                 $this->IQueryClass = new Request();

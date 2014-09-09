@@ -31,24 +31,52 @@ $(document).ready(function(){
     //Указывает, разрешено ли обновление календаря, разрешено, если 1, запрещено, если 0
     var allowRefreshCalendar = 0;
 
+    //Параметры для ajax-запросов на сервер
+    var menu_code, report_id, start_date, end_date, date_id, car_id, fuel_type_id, department, only_my_requests, id_request;
+
+    //Заголовок
+    var header = "";
+
     //Установка Cookie и настройка начального представления формы
     if (!getCookie("id_request")) {
-        setCookie("id_request",1); }
-    if (!getCookie("menu_code"))
+        id_request = 1;
+        setCookie("id_request",1);
+    } else
     {
+        id_request = getCookie("id_request");
+    }
+    if (!getCookie("menu_code")) {
+        menu_code = 0;
+        report_id = 1;
         setCookie("menu_code", 0);
         setCookie("report_id",1);
     }
     else
     {
         if (!getCookie("report_id")) {
-            setCookie("report_id",1); }
+            report_id = 1;
+            setCookie("report_id",1);
+        } else
+        {
+            report_id = getCookie("report_id");
+        }
+        menu_code = getCookie("menu_code");
     }
     if (!getCookie("only_my_requests")) {
-        setCookie("only_my_requests",0); }
+        only_my_requests = 0;
+        setCookie("only_my_requests",0);
+    } else
+    {
+        only_my_requests = getCookie("only_my_requests");
+    }
     if (!getCookie("header")) {
-        setCookie("header","Заявки на транспорт"); }
-    $("#header").text(getCookie("header"));
+        header = "Заявки на транспорт";
+        setCookie("header",header);
+    } else
+    {
+        header = getCookie("header");
+    }
+    $("#header").text(header);
 
     //Добавление прототипа функции вхождения в массив
     String.prototype.inList=function(list){
@@ -134,11 +162,11 @@ $(document).ready(function(){
                         }
                         $( this ).dialog( "close" );
                         var title = "";
-                        if (getCookie('id_request') == 1) {
+                        if (id_request == 1) {
                             title = "Календарь заявок на транспорт"; }
-                        else if (getCookie('id_request') == 2) {
+                        else if (id_request == 2) {
                             title = "Календарь заявок на большой зал"; }
-                        else if (getCookie('id_request') == 3) {
+                        else if (id_request == 3) {
                             title = "Календарь заявок на малый зал"; }
                         $('#calendar').dialog({
                             autoOpen: true,
@@ -169,9 +197,10 @@ $(document).ready(function(){
     //Обработчик события нажатия на кнопку "Пробег автомобилей"
     $('#btnCarsInfo').button().click(function()
     {
-        if (getCookie("menu_code") != 2)
+        if (menu_code != 2)
         {
             setCookie("menu_code", 2);
+            menu_code = 2;
             initDataTable();
         } else
         {
@@ -185,9 +214,10 @@ $(document).ready(function(){
     //Обработчик события нажатия на кнопку "Акты обслуживания"
     $('#btnRepairActs').button().click(function()
     {
-        if (getCookie("menu_code") != 3)
+        if (menu_code != 3)
         {
             setCookie("menu_code", 3);
+            menu_code = 3;
             initDataTable();
         } else
         {
@@ -201,9 +231,10 @@ $(document).ready(function(){
     //Обработчик события нажатия на кнопку "Путевые листы"
     $('#btnWaybills').button().click(function()
     {
-        if (getCookie("menu_code") != 4)
+        if (menu_code != 4)
         {
             setCookie("menu_code", 4);
+            menu_code = 4;
             initDataTable();
         } else
         {
@@ -218,9 +249,11 @@ $(document).ready(function(){
     $('#btnTransportRequests').button().click(function()
     {
         setCookie("id_request",1);
-        if (getCookie("menu_code") > 0)
+        id_request = 1;
+        if (menu_code > 0)
         {
             setCookie("menu_code",0);
+            menu_code = 0;
             initDataTable();
         } else {
             $('#example').dataTable().fnReloadAjax("inc/jsonp.php"); }
@@ -232,9 +265,11 @@ $(document).ready(function(){
     $('#btnGreatHallRequests').button().click(function()
     {
         setCookie("id_request",2);
-        if (getCookie("menu_code") > 0)
+        id_request = 2;
+        if (menu_code > 0)
         {
             setCookie("menu_code",0);
+            menu_code = 0;
             initDataTable();
         } else {
             $('#example').dataTable().fnReloadAjax("inc/jsonp.php"); }
@@ -246,9 +281,11 @@ $(document).ready(function(){
     $('#btnSmallHallRequests').button().click(function()
     {
         setCookie("id_request",3);
-        if (getCookie("menu_code") > 0)
+        id_request = 3;
+        if (menu_code > 0)
         {
             setCookie("menu_code",0);
+            menu_code = 0;
             initDataTable();
         } else {
             $('#example').dataTable().fnReloadAjax("inc/jsonp.php"); }
@@ -279,32 +316,41 @@ $(document).ready(function(){
                             return;
                         }
                         $( this ).dialog( "close" );
-                        setCookie("menu_code", 1);
-                        setCookie("report_id", $("#report_id").attr("value"));
-                        setCookie("start_date",$("#start_date").attr("value"));
-                        setCookie("end_date",$("#end_date").attr("value"));
-                        setCookie("department",$("#departments select[name='department']").attr("value"));
-                        setCookie("date_id",$("#filter_criteria select[name='date_id']").attr("value"));
+                        menu_code = 1;
+                        setCookie("menu_code", menu_code);
+                        report_id = $("#report_id").attr("value");
+                        setCookie("report_id", report_id);
+                        start_date = $("#start_date").attr("value");
+                        setCookie("start_date", start_date);
+                        end_date = $("#end_date").attr("value");
+                        setCookie("end_date", end_date);
+                        department = $("#departments select[name='department']").attr("value");
+                        setCookie("department",department);
+                        date_id = $("#filter_criteria select[name='date_id']").attr("value");
+                        setCookie("date_id",date_id);
                         
                         var title = $('#report_id option[value="'+$("#report_id").attr("value")+'"]').text();
                         if ($("#report_id").attr("value").inList(rep_with_fuel_type))
                         {
-                            setCookie("fuel_type_id",$("#reportSettings select[name='fuel_type_id']").attr("value"));
-                            var fuel_type = $("#reportSettings select[name='fuel_type_id'] option[value='"+getCookie("fuel_type_id")+"']").text();
+                            fuel_type_id = $("#reportSettings select[name='fuel_type_id']").attr("value");
+                            setCookie("fuel_type_id",fuel_type_id);
+                            var fuel_type = $("#reportSettings select[name='fuel_type_id'] option[value='"+fuel_type_id+"']").text();
                             if ($.trim(fuel_type) != "Все марки горючего") {
                                 title = title + " ("+fuel_type+")"; }
                         }
                         if ($("#report_id").attr("value").inList(rep_with_car_id))
                         {
-                            setCookie("car_id",$("#reportSettings select[name='car_id']").attr("value"));
-                            var car = $("#reportSettings select[name='car_id'] option[value='"+getCookie("car_id")+"']").text();
+                            car_id = $("#reportSettings select[name='car_id']").attr("value");
+                            setCookie("car_id",car_id);
+                            var car = $("#reportSettings select[name='car_id'] option[value='"+car_id+"']").text();
                             var car_arr = car.split('|');
                             if (car_arr.length == 4) {
                                 title = title + " "+
                                     car_arr[2]+" номер "+car_arr[0]; }
                         }
                         title = $.trim(title);
-                        setCookie("header",title+" с "+$("#start_date").attr("value")+" по "+$("#end_date").attr("value"));
+                        header = title+" с "+$("#start_date").attr("value")+" по "+$("#end_date").attr("value");
+                        setCookie("header",header);
                         initDataTable();
                         initButtonsState();
                         allowRefreshCounter = 0;
@@ -459,7 +505,7 @@ $(document).ready(function(){
     //Обработчик события нажатия на кнопку "Подробнее"
     $('#example tbody td img').live('click', function () {
         //Если это пробег
-        if (getCookie("menu_code") == 2)
+        if (menu_code == 2)
         {
             show_mileage_details(this);
             return;
@@ -478,11 +524,11 @@ $(document).ready(function(){
             this.src = "img/details_close.png";
 
             //Если это акты выполненных работ
-            if (getCookie("menu_code") == 3) {
+            if (menu_code == 3) {
                 show_act_details(oTable, nTr); }
             else
             //Если это путевые листы
-            if (getCookie("menu_code") == 4) {
+            if (menu_code == 4) {
                 show_waybill_details(oTable, nTr); }
             else {
             //Если это заявки
@@ -504,7 +550,7 @@ $(document).ready(function(){
             function()
             {
                 var id_request_number = $(this).attr("value");
-                if (getCookie("id_request") == 1)
+                if (id_request == 1)
                 {
                     $('#select_car_form').dialog({
                         autoOpen: true,
@@ -519,7 +565,8 @@ $(document).ready(function(){
                                     $.ajax( {
                                             type: "POST",
                                             url: "inc/moderation_request.php",
-                                            data: "action=accept&id_request_number="+id_request_number+"&id_car="+id_car,
+                                            data: "action=accept&id_request_number="+id_request_number+"&id_car="+id_car+
+                                                "&id_request="+id_request,
                                             success: function(msg)
                                             {
                                                 $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
@@ -545,7 +592,7 @@ $(document).ready(function(){
                         $.ajax( {
                                 type: "POST",
                                 url: "inc/moderation_request.php",
-                                data: "action=accept&id_request_number="+id_request_number,
+                                data: "action=accept&id_request_number="+id_request_number+"&id_request="+id_request,
                                 success: function(msg)
                                 {
                                     $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
@@ -569,7 +616,7 @@ $(document).ready(function(){
                     $.ajax( {
                             type: "POST",
                             url: "inc/moderation_request.php",
-                            data: "action=reject&id_request_number="+id_request_number,
+                            data: "action=reject&id_request_number="+id_request_number+"&id_request="+id_request,
                             success: function(msg)
                             {
                                 $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
@@ -592,7 +639,7 @@ $(document).ready(function(){
                     $.ajax( {
                             type: "POST",
                             url: "inc/moderation_request.php",
-                            data: "action=cancel&id_request_number="+id_request_number,
+                            data: "action=cancel&id_request_number="+id_request_number+"&id_request="+id_request,
                             success: function(msg)
                             {
                                 $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
@@ -615,7 +662,7 @@ $(document).ready(function(){
                     $.ajax( {
                             type: "POST",
                             url: "inc/moderation_request.php",
-                            data: "action=complete&id_request_number="+id_request_number,
+                            data: "action=complete&id_request_number="+id_request_number+"&id_request="+id_request,
                             success: function(msg)
                             {
                                 $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
@@ -638,7 +685,7 @@ $(document).ready(function(){
                     $.ajax( {
                             type: "POST",
                             url: "inc/moderation_request.php",
-                            data: "action=uncomplete&id_request_number="+id_request_number,
+                            data: "action=uncomplete&id_request_number="+id_request_number+"&id_request="+id_request,
                             success: function(msg)
                             {
                                 $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
@@ -1086,30 +1133,37 @@ $(document).ready(function(){
                     req_mask -= 32;
                     $('#rqlb6').hide();
                 }
-                if (((req_mask & 1) != 1) && (getCookie('id_request') == 1))
+                if (((req_mask & 1) != 1) && (id_request == 1))
                 {
                     setCookie('id_request',2);
+                    id_request = 2;
                 }
-                if (((req_mask & 4) != 4) && (getCookie('id_request') == 2))
+                if (((req_mask & 4) != 4) && (id_request == 2))
                 {
                     setCookie('id_request',3);
+                    id_request = 3;
                 }
-                if (((req_mask & 2) != 2) && (getCookie('id_request') == 3))
+                if (((req_mask & 2) != 2) && (id_request == 3))
                 {
                     setCookie('menu_code',2);
+                    menu_code = 2;
                 }
-                if (((req_mask & 8) != 8) && (getCookie('menu_code') == 2))
+                if (((req_mask & 8) != 8) && (menu_code == 2))
                 {
                     setCookie('menu_code',3);
+                    menu_code = 3;
                 }
-                if (((req_mask & 16) != 16) && (getCookie('menu_code') == 3))
+                if (((req_mask & 16) != 16) && (menu_code == 3))
                 {
                     setCookie('menu_code',4);
+                    menu_code = 4;
                 }
-                if (((req_mask & 32) != 32) && (getCookie('menu_code') == 4))
+                if (((req_mask & 32) != 32) && (menu_code == 4))
                 {
                     setCookie('menu_code',0);
+                    menu_code = 0;
                     setCookie('id_request',0);
+                    id_request = 0;
                 }
             },
             error: function(msg)
@@ -1122,7 +1176,7 @@ $(document).ready(function(){
     //Функция инициализации состояния кнопок главной формы
     function initButtonsState()
     {
-        if (getCookie("menu_code") && (getCookie("menu_code") == 1))
+        if (menu_code == 1)
         {
             document.getElementById('btnReports').checked = true;
             $('#ShowMyRequestsOnly').hide();
@@ -1132,7 +1186,7 @@ $(document).ready(function(){
             $('#btnCreateWaybill').hide();
             $('#btnShowCalendar').hide();
         } else
-        if (getCookie("menu_code") && (getCookie("menu_code") == 2))
+        if (menu_code == 2)
         {
             document.getElementById('btnCarsInfo').checked = true;
             $('#ShowMyRequestsOnly').hide();
@@ -1141,9 +1195,10 @@ $(document).ready(function(){
             $('#btnCreateAct').hide();
             $('#btnCreateWaybill').hide();
             $('#btnShowCalendar').hide();
-            setCookie("header","Информация по пробегу транспортных средств администрации");
+            header = "Информация по пробегу транспортных средств администрации";
+            setCookie("header",header);
         } else
-        if (getCookie("menu_code") && (getCookie("menu_code") == 3))
+        if (menu_code == 3)
         {
             document.getElementById('btnRepairActs').checked = true;
             $('#ShowMyRequestsOnly').hide();
@@ -1155,9 +1210,10 @@ $(document).ready(function(){
                 $('#btnCreateAct').show();
             }
             $('#btnShowCalendar').hide();
-            setCookie("header","Акты выполненных работ по обслуживанию автотранспорта");
+            header = "Акты выполненных работ по обслуживанию автотранспорта";
+            setCookie("header",header);
         } else
-        if (getCookie("menu_code") && (getCookie("menu_code") == 4))
+        if (menu_code == 4)
         {
             document.getElementById('btnWaybills').checked = true;
             $('#ShowMyRequestsOnly').hide();
@@ -1169,26 +1225,31 @@ $(document).ready(function(){
                 $('#btnCreateWaybill').show();
             }
             $('#btnShowCalendar').hide();
-            setCookie("header","Путевые листы");
+            header = "Путевые листы";
+            setCookie("header",header);
         }
         else
         {
-            switch(getCookie("id_request"))
+            switch(id_request.toString())
             {
                 case "0":
-                    setCookie('header','Вид группы заявок не указан');
+                    header = 'Вид группы заявок не указан';
+                    setCookie('header',header);
                     break;
                 case "1":
                     document.getElementById('btnTransportRequests').checked = true;
-                    setCookie('header','Заявки на транспорт');
+                    header = 'Заявки на транспорт';
+                    setCookie('header',header);
                     break;
                 case "2":
                     document.getElementById('btnGreatHallRequests').checked = true;
-                    setCookie('header','Заявки на конферец-зал');
+                    header = 'Заявки на конферец-зал';
+                    setCookie('header',header);
                     break;
                 case "3":
                     document.getElementById('btnSmallHallRequests').checked = true;
-                    setCookie('header','Заявки на зал заседания думы');
+                    header = 'Заявки на зал заседания думы';
+                    setCookie('header',header);
                     break;
             }
             $('#btnCreateAct').hide();
@@ -1200,13 +1261,13 @@ $(document).ready(function(){
             else {
                 $('#btnCreateRequest').hide(); }
             $('#btnShowCalendar').show();
-            if (getCookie("only_my_requests") == 1)
+            if (only_my_requests == 1)
             {
                 document.getElementById('ShowMyRequestsOnly').checked = true;
             }
         }
         $("#requests_group").buttonset();
-        $("#header").text(getCookie("header"));
+        $("#header").text(header);
     }
 
     //Функция инициализации формы детальной информации о заявке
@@ -1218,7 +1279,7 @@ $(document).ready(function(){
         $.ajax({
             type: "POST",
             url: "inc/details_by_id.php",
-            data: 'action=request&id_request_number='+id_request_number,
+            data: 'action=request&id_request_number='+id_request_number+'&id_request='+id_request,
             async: false,
             success: function(msg)
             {
@@ -1281,10 +1342,21 @@ $(document).ready(function(){
     //Функция инициализации колонок DataTable
     function initColumns()
     {
+        var data = "action=init_columns&menu_code="+menu_code;
+        if (menu_code == 1)
+        {
+            data += "&report_id=" + report_id;
+            data += "&start_date=" + start_date;
+            data += "&end_date=" + end_date;
+            data += "&date_id=" + date_id;
+            data += "&car_id=" + car_id;
+            data += "&fuel_type_id=" + fuel_type_id;
+            data += "&department=" + department;
+        }
         $.ajax({
             type: "POST",
             url: "inc/jsonp.php",
-            data: "action=init_columns",
+            data: data,
             async: false,
             success: function(msg) {
                 $("#example thead tr").remove();
@@ -1292,9 +1364,9 @@ $(document).ready(function(){
                 var headers = JSON.parse(msg);
                 $("#example thead").append(headers["head"]);
                 $("#example tfoot").append(headers["foot"]);
-                if (getCookie("menu_code") == 1)
+                if (menu_code == 1)
                 {
-                    var rep_id = getCookie("report_id");
+                    var rep_id = report_id;
                     $("#example tfoot").hide();
                     var i = 0;
                     for (i = 0; i < rep_with_summary.length; i++)
@@ -1330,6 +1402,24 @@ $(document).ready(function(){
             "bFilter": true,
             "iDisplayLength": 25,
             "sAjaxSource": "inc/jsonp.php",
+            "fnServerParams": function ( aoData ) {
+                aoData.push( { "name": "menu_code", "value": menu_code } );
+                if (menu_code == 1)
+                {
+                    aoData.push( { "name": "report_id", "value": report_id } );
+                    aoData.push( { "name": "start_date", "value": start_date } );
+                    aoData.push( { "name": "end_date", "value": end_date } );
+                    aoData.push( { "name": "date_id", "value": date_id } );
+                    aoData.push( { "name": "car_id", "value": car_id } );
+                    aoData.push( { "name": "fuel_type_id", "value": fuel_type_id } );
+                    aoData.push( { "name": "department", "value": department } );
+                } else
+                if (menu_code == 0)
+                {
+                    aoData.push( { "name": "only_my_requests", "value": only_my_requests } );
+                    aoData.push( { "name": "id_request", "value": id_request } );
+                }
+            },
             "sServerMethod": "POST",
             "sPaginationType": "full_numbers",
             "sDom": '<"H"lTfr>t<"F"ip>',
@@ -1363,9 +1453,8 @@ $(document).ready(function(){
                 $('td', nRow).addClass('alignCenter');
             },
             "fnFooterCallback": function ( nRow, aaData, iStart, iEnd, aiDisplay ) {
-                if (getCookie('menu_code') != 1) {
+                if (menu_code != 1) {
                     return; }
-                var report_id = getCookie('report_id');
                 var rep_cfg = "";
                 var i = 0, j = 0;
                 for (i = 0; i < rep_with_summary.length; i++)
@@ -1399,19 +1488,15 @@ $(document).ready(function(){
         $('#ShowMyRequestsOnly').click(function()
         {
             if ($(this).attr("checked")) {
-                setCookie("only_my_requests",1); }
+                only_my_requests = 1;
+                setCookie("only_my_requests",1);
+            }
             else {
+                only_my_requests = 0;
                 setCookie("only_my_requests",0); }
             $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
             initButtonsState();
         });
-        //В браузере Chrome некорректно просчитывается ширина datatable, из-за чего едет разметка колонок.
-        //Костыль позволяет немного сгладить этот кошмар. Надеюсь в будущем поправят либо datatable, либо chrome
-        /*if ( $.browser.webkit ) {
-            setTimeout( function () {
-                oTable.fnAdjustColumnSizing();
-            }, 10 );
-        }*/
     }
 
     //Функция инициализации календаря
@@ -1456,7 +1541,7 @@ $(document).ready(function(){
                 var department = $('#calendarSettings select[name=department]').attr("value");
                 if (department == undefined) {
                     return; }
-                if (getCookie('id_request') == 1) {
+                if (id_request == 1) {
                     var transport = $('#calendarSettings select[name=car_id]').attr("value"); }
                 var requestStates = [];
                 $("#calendarSettings .requestState").each(
@@ -1472,7 +1557,7 @@ $(document).ready(function(){
                 var i = 0;
                 for (i = 0; i < requestStates.length; i++) {
                     paramstr += 'requestStates[]='+requestStates[i]+'&'; }
-                if (getCookie('id_request') == 1) {
+                if (id_request == 1) {
                     paramstr += 'transport='+transport+'&'; }
                 paramstr += 'department='+department+'&start='+startStr+'&end='+endStr;
                 $.ajax({
@@ -1610,6 +1695,7 @@ $(document).ready(function(){
         $.ajax({
             type: "POST",
             url: "inc/report_names.php",
+            data: "report_id=0",
             success: function(msg)
             {
                 $("#report_id").append(msg);
@@ -2335,8 +2421,8 @@ $(document).ready(function(){
                     params=params+elems[i].name+'='+elems[i].value+'&'; }
             }
         }
-        var data = params+'action=process_request&id_request_number='+id_request_number;
-        if (getCookie('id_request') == 1)
+        var data = params+'action=process_request&id_request_number='+id_request_number+"&id_request="+id_request;
+        if (id_request == 1)
         {
             var id_car = $("#ParamTable select[name='car_id']").attr("value");
             if (!isNaN(id_car)) {
@@ -2705,7 +2791,6 @@ $(document).ready(function(){
                 fnCallback( oSettings );
             }
         }, oSettings );
-
     };
 
     //Возвращает cookie если есть или undefined

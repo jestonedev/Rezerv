@@ -238,8 +238,8 @@ class Request {
             $this->fatal_error("У вас нет прав на изменение наименования департамента");
         if (!is_array($request_array))
             $this->fatal_error("Переданные данные некорректного формата");
-        if (isset($_COOKIE['id_request']))
-			$id_request=$_COOKIE['id_request'];
+        if (isset($_POST['id_request']))
+			$id_request=$_POST['id_request'];
         else
             $this->fatal_error("Не удалось найти идентификатор группы запросов");
         $html="";
@@ -276,7 +276,7 @@ class Request {
 
         //Проверка корректности заполнения полей на стороне сервера
         foreach($request_array as $field_key => $field_value) {
-            if (($field_key!='action') && ($field_key!='department') && ($field_key != 'id_request_number') && ($field_key != 'id_car'))
+            if (($field_key!='action') && ($field_key!='department') && ($field_key != 'id_request_number') && ($field_key != 'id_car') && ($field_key != 'id_request'))
             {
                 $html .= Helper::Check($fields_param[$field_key]['name'], $field_value,
                     $fields_param[$field_key]['type'], $fields_param[$field_key]['required']);
@@ -307,7 +307,7 @@ class Request {
     public function AddRequest($request_array){
         $query="insert into request_number(id_request,user,department,stage,request_state, alien_department) values (?,?,?,?,?,?)";
         $pq=mysqli_prepare($this->con,$query);
-        $id_request=$_COOKIE["id_request"];
+        $id_request=$_POST["id_request"];
         $user=$_SERVER['REMOTE_USER'];
         $organization = explode(":",$request_array['department']);
         $department = stripslashes($organization[0]);
@@ -407,7 +407,8 @@ class Request {
         $query="insert into request_data(id_request_number,id_field,field_value) values (?,?,?)";
         $pq=mysqli_prepare($this->con,$query);
         foreach($request_array as $field=>$field_value){
-            if (($field == 'action') || ($field == 'department') || ($field == 'id_request_number') || ($field == 'id_car'))
+            if (($field == 'action') || ($field == 'department') || ($field == 'id_request_number') ||
+                ($field == 'id_car') || ($field == 'id_request'))
                 continue;
             if (is_array($field_value))
             {
@@ -740,7 +741,7 @@ class Request {
             //Оповестить всех broadcast-notify-пользователей о появлении новой заявки
             if ($row['id_request_status'] == 1)
             {
-                $query_bnu = 'SELECT user FROM broadcast_notify_users WHERE id_request = '.$_COOKIE['id_request'];
+                $query_bnu = 'SELECT user FROM broadcast_notify_users WHERE id_request = '.$_POST['id_request'];
 
                 $result_bnu = mysqli_query($this->con, $query_bnu);
                 if (!$result_bnu)
@@ -762,7 +763,7 @@ class Request {
             //Оповестить всех broadcast-notify-пользователей об отмене заявки пользователем
             if ($row['id_request_status'] == 2)
             {
-                $query_bnu = 'SELECT user FROM broadcast_notify_users WHERE id_request = '.$_COOKIE['id_request'];
+                $query_bnu = 'SELECT user FROM broadcast_notify_users WHERE id_request = '.$_POST['id_request'];
 
                 $result_bnu = mysqli_query($this->con, $query_bnu);
                 if (!$result_bnu)
@@ -831,7 +832,7 @@ class Request {
     {
         if (Auth::hasModifyStatusRequestsPrivileges($id_request_number) && Auth::isLookingRequest($id_request_number))
         {
-            if ($_COOKIE['id_request'] == 1)
+            if ($_POST['id_request'] == 1)
             {
                 if (!isset($_POST['id_car']))
                     $this->fatal_error("Не указан автомобиль для транспортной заявки");
@@ -1830,12 +1831,12 @@ class Request {
     public function Where()
     {
         $sWhere = "";
-        if (isset($_COOKIE['id_request'])) {
-            $sWhere = "WHERE (id_request = ".$_COOKIE['id_request'].")"; }
+        if (isset($_POST['id_request'])) {
+            $sWhere = "WHERE (id_request = ".$_POST['id_request'].")"; }
         else {
             $sWhere = "WHERE (id_request = 1)"; }
 
-        if (isset($_COOKIE['only_my_requests']) && ($_COOKIE['only_my_requests'] == 1))
+        if (isset($_POST['only_my_requests']) && ($_POST['only_my_requests'] == 1))
         {
             if ( $sWhere == "" )
             {

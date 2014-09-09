@@ -51,9 +51,9 @@ class Auth
     //Есть ли права на модификацию статуса заявок
     public static function hasModifyStatusRequestsPrivileges($id_request_number)
     {
-        if (!isset($_COOKIE["id_request"]))
+        if (!isset($_POST["id_request"]))
             die("Не удалось найти идентификатор группы запросов");
-        $id_request = $_COOKIE["id_request"];
+        $id_request = $_POST["id_request"];
         if ((($id_request == 1) && Auth::hasPrivilege(AUTH_MODIFY_STATUS_TRANSPORT_REQUEST)) ||
             (($id_request == 2) && Auth::hasPrivilege(AUTH_MODIFY_STATUS_GREAT_HALL_REQUEST)) ||
             (($id_request == 3) && Auth::hasPrivilege(AUTH_MODIFY_STATUS_SMALL_HALL_REQUEST)))
