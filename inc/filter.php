@@ -81,6 +81,7 @@ class Helper{
                     //Если нет такого права, то проверяем, нормальная ли дата и время
                     if (!empty(Helper::$requestDate))
                     {
+						date_default_timezone_set('Asia/Irkutsk');
                         $now = new DateTime();
                         $reqDate = new DateTime();
                         $dateParts = explode('.', Helper::$requestDate);

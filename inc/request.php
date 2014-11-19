@@ -585,7 +585,6 @@ class Request {
         //Если заявка транспортная, выводим транспортное поле, если оно необходимо
         if ($id_request == 1)
         {
-            $class = ($class == "even")?"odd":"even";
             $query_transport = "SELECT * FROM cars_for_transport_requests INNER JOIN cars ON (cars.id = cars_for_transport_requests.id_car)
                                WHERE id_request_number = $id_request_number";
             $result_transport = mysqli_query($this->con, $query_transport);
@@ -593,6 +592,7 @@ class Request {
                 $this->fatal_error("Ошибка при выполнении запроса к базе данных");
             if ($row = mysqli_fetch_array($result_transport, MYSQLI_ASSOC))
             {
+                $class = ($class == "even")?"odd":"even";
                 $result .= '<tr class="'.$class.'"><td id="detail_header" width="30%">Выделенный транспорт:</td><td>Регистрационный номер: "'.
                     htmlspecialchars($row['number']).'"<br>Модель: "'.htmlspecialchars($row['model']).'"<br>Ответственный: "'.
                     htmlspecialchars($row['owner']).'"</td></tr>';

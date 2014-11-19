@@ -22,6 +22,7 @@ body {
 #struct_table {
     margin-top: 0;
     padding-top: 0;
+    width: 99%;
     height: 100%;
 }
 
@@ -108,11 +109,6 @@ td#footer
     margin-top: 7pt;
 }
 
-#struct_table {
-	width: 99%;
-    height: 100%;
-}
-
 #mileage_date, #mileage_value, #mileage_type {
     width: 90%;
 }
@@ -132,6 +128,7 @@ td#footer
 td#body {
     vertical-align: top;
     height: 75%;
+    width: 100%;
 }
 
 #request_result_success {
@@ -177,6 +174,10 @@ td#body {
 }
 
 #modify_buttons_table {
+    width: 100%;
+}
+
+#example {
     width: 100%;
 }
 
@@ -277,9 +278,7 @@ td#body {
 }
 
 .expended_table, .ways_table {
-    border-width: 1px;
-    border-style: solid;
-    border-color: #9a9f9a;
+	border: 1px solid #9a9f9a;
     width:  70%;
 }
 
@@ -289,8 +288,11 @@ td#body {
 
 .expended_table td, .ways_table td {
     text-align: center;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #9a9f9a;
+	border: 1px solid #9a9f9a;
     background-color: #FDFDFD;
+	border-top: 1px solid #9a9f9a !important;
+}
+
+.expended_table th, .ways_table th {
+	background-color: #f2f2f2;
 }

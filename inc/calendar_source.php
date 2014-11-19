@@ -211,5 +211,6 @@ if ($_SERVER["REQUEST_METHOD"]==="POST") {
     else
         die('Не установлен идентификатор группы заявок');
     $cal_source = new CalendarSource();
-    echo $cal_source->GetSourceXml($id_request);
+    $var = $cal_source->GetSourceXml($id_request);
+    echo $var;
 }

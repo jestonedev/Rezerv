@@ -204,7 +204,7 @@ $(document).ready(function(){
             initDataTable();
         } else
         {
-            $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
+            $('#example').dataTable().api().ajax.reload();
         }
         initButtonsState();
         allowRefreshCounter = 0;
@@ -221,7 +221,7 @@ $(document).ready(function(){
             initDataTable();
         } else
         {
-            $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
+            $('#example').dataTable().api().ajax.reload();
         }
         initButtonsState();
         allowRefreshCounter = 0;
@@ -238,7 +238,7 @@ $(document).ready(function(){
             initDataTable();
         } else
         {
-            $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
+            $('#example').dataTable().api().ajax.reload();
         }
         initButtonsState();
         allowRefreshCounter = 0;
@@ -256,7 +256,7 @@ $(document).ready(function(){
             menu_code = 0;
             initDataTable();
         } else {
-            $('#example').dataTable().fnReloadAjax("inc/jsonp.php"); }
+            $('#example').dataTable().api().ajax.reload(); }
         initButtonsState();
         allowRefreshCounter = 0;
         forceRefreshCounter = 0;
@@ -272,7 +272,7 @@ $(document).ready(function(){
             menu_code = 0;
             initDataTable();
         } else {
-            $('#example').dataTable().fnReloadAjax("inc/jsonp.php"); }
+            $('#example').dataTable().api().ajax.reload(); }
         initButtonsState();
         allowRefreshCounter = 0;
         forceRefreshCounter = 0;
@@ -288,7 +288,7 @@ $(document).ready(function(){
             menu_code = 0;
             initDataTable();
         } else {
-            $('#example').dataTable().fnReloadAjax("inc/jsonp.php"); }
+            $('#example').dataTable().api().ajax.reload(); }
         initButtonsState();
         allowRefreshCounter = 0;
         forceRefreshCounter = 0;
@@ -569,7 +569,7 @@ $(document).ready(function(){
                                                 "&id_request="+id_request,
                                             success: function(msg)
                                             {
-                                                $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
+                                                $('#example').dataTable().api().ajax.reload();
                                                 $('#select_car_form').dialog("close");
                                             },
                                             error: function(msg)
@@ -595,7 +595,7 @@ $(document).ready(function(){
                                 data: "action=accept&id_request_number="+id_request_number+"&id_request="+id_request,
                                 success: function(msg)
                                 {
-                                    $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
+                                    $('#example').dataTable().api().ajax.reload();
                                 },
                                 error: function(msg)
                                 {
@@ -619,7 +619,7 @@ $(document).ready(function(){
                             data: "action=reject&id_request_number="+id_request_number+"&id_request="+id_request,
                             success: function(msg)
                             {
-                                $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
+                                $('#example').dataTable().api().ajax.reload();
                             },
                             error: function(msg)
                             {
@@ -642,7 +642,7 @@ $(document).ready(function(){
                             data: "action=cancel&id_request_number="+id_request_number+"&id_request="+id_request,
                             success: function(msg)
                             {
-                                $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
+                                $('#example').dataTable().api().ajax.reload();
                             },
                             error: function(msg)
                             {
@@ -665,7 +665,7 @@ $(document).ready(function(){
                             data: "action=complete&id_request_number="+id_request_number+"&id_request="+id_request,
                             success: function(msg)
                             {
-                                $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
+                                $('#example').dataTable().api().ajax.reload();
                             },
                             error: function(msg)
                             {
@@ -688,7 +688,7 @@ $(document).ready(function(){
                             data: "action=uncomplete&id_request_number="+id_request_number+"&id_request="+id_request,
                             success: function(msg)
                             {
-                                $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
+                                $('#example').dataTable().api().ajax.reload();
                             },
                             error: function(msg)
                             {
@@ -778,7 +778,7 @@ $(document).ready(function(){
                         data: "action=delete_act&id_repair="+id_repair,
                         success: function(msg)
                         {
-                            $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
+                            $('#example').dataTable().api().ajax.reload();
                         },
                         error: function(msg)
                         {
@@ -894,7 +894,7 @@ $(document).ready(function(){
                         data: "action=delete_waybill&id_waybill="+id_waybill,
                         success: function(msg)
                         {
-                            $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
+                            $('#example').dataTable().api().ajax.reload();
                         },
                         error: function(msg)
                         {
@@ -1054,7 +1054,7 @@ $(document).ready(function(){
                                 {
                                     if (msg == '')
                                     {
-                                        $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
+                                        $('#example').dataTable().api().ajax.reload();
                                         $('#mileagesEditor').dialog("close");
                                     } else
                                     {
@@ -1383,22 +1383,30 @@ $(document).ready(function(){
         });
     }
 
+    $(window).resize(
+        function() {
+            $('.dataTables_scrollBody').css('height', ($(window).height() - 300));
+            var table = $('#example').DataTable();
+            table.columns.adjust().draw();
+        }
+    );
+
     //Начальная инициализация таблицы с данными
     function initDataTable()
     {
         var ex = document.getElementById('example');
         if ( $.fn.DataTable.fnIsDataTable( ex ) ) {
-            $(ex).dataTable().fnDestroy();                      
+            $(ex).dataTable().api().clear();
+            $(ex).dataTable().fnDestroy();
         }
         initColumns();
-       // TableTools.DEFAULTS.aButtons = [ "xls" ];
         var oTable = $('#example').dataTable( {
             "bProcessing": true,
 			"bStateSave": true,
 			"bDeferRender": true,
             "bServerSide": false,
             "bJQueryUI": true,
-            "sScrollY": $(window).height() - 300,
+            "scrollY": $(window).height() - 300,
             "bFilter": true,
             "iDisplayLength": 25,
             "sAjaxSource": "inc/jsonp.php",
@@ -1494,7 +1502,7 @@ $(document).ready(function(){
             else {
                 only_my_requests = 0;
                 setCookie("only_my_requests",0); }
-            $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
+            $('#example').dataTable().api().ajax.reload();
             initButtonsState();
         });
     }
@@ -1516,14 +1524,9 @@ $(document).ready(function(){
             monthNamesShort: ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля',
                 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
             titleFormat: {
-                month: 'MMMM yyyy',
-                week: "d [ MMM] [ yyyy] { '&#8212;' [d] MMM yyyy }",
-                day: 'dddd, d MMM, yyyy' },
+                month: 'MMMM YYYY',
+                day: 'dddd, d MMM, YYYY' },
             buttonText: {
-                prev:     '&nbsp;&#9668;&nbsp;',  // left triangle
-                next:     '&nbsp;&#9658;&nbsp;',  // right triangle
-                prevYear: '&nbsp;&lt;&lt;&nbsp;', // <<
-                nextYear: '&nbsp;&gt;&gt;&nbsp;', // >>
                 today:    'Сегодня',
                 month:    'Месяц',
                 week:     'Неделя',
@@ -1536,7 +1539,8 @@ $(document).ready(function(){
             height: $(window).height() - 200,
             cache: true,
             timeFormat: 'H:mm',
-            events: function(start, end, callback) {
+            theme: true,
+            events: function(start, end, timezone, callback) {
                 //Формируем данные для фильтрации
                 var department = $('#calendarSettings select[name=department]').attr("value");
                 if (department == undefined) {
@@ -1552,8 +1556,8 @@ $(document).ready(function(){
                 );
                 //Преобразуем полученные данные в строку запроса
                 var paramstr = "";
-                var startStr = dateToString(start);
-                var endStr = dateToString(end);
+                var startStr = dateToString(start._d);
+                var endStr = dateToString(end._d);
                 var i = 0;
                 for (i = 0; i < requestStates.length; i++) {
                     paramstr += 'requestStates[]='+requestStates[i]+'&'; }
@@ -2316,7 +2320,7 @@ $(document).ready(function(){
        var refresh_time=1000*60;
 	   if (allowRefreshCounter == 0)
         {
-			$('#example').dataTable().fnReloadAjax(null,"inc/jsonp.php",true);
+			$('#example').dataTable().api().ajax.reload();
 		    setTimeout(AutoRefresh, refresh_time); //Обновлять таблицу раз в 1 минуту          
         } else
         {
@@ -2324,7 +2328,7 @@ $(document).ready(function(){
             {
                 forceRefreshCounter = 0;
                 allowRefreshCounter = 0;
-				$('#example').dataTable().fnReloadAjax(null,"inc/jsonp.php",true);
+				$('#example').dataTable().api().ajax.reload();
                 setTimeout(AutoRefresh, refresh_time);                                         
             } else
             {
@@ -2437,7 +2441,7 @@ $(document).ready(function(){
             {
                 var div = document.getElementById("div_result");
                 div.innerHTML = msg;
-                $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
+                $('#example').dataTable().api().ajax.reload();
                 if ((msg.indexOf('Заявка изменена') > -1) ||
                     (msg.indexOf('Заявка добавлена') > -1))
                 {
@@ -2571,7 +2575,7 @@ $(document).ready(function(){
                 {
                     //Если акт успешно подан, закрываем диалог
                     $( '#act_create_form' ).dialog( "close" );
-                    $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
+                    $('#example').dataTable().api().ajax.reload();
                 } else
                 {
                     var div = document.getElementById("error_act_create");
@@ -2688,7 +2692,7 @@ $(document).ready(function(){
                 {
                     //Если путевой лист успешно подан, закрываем диалог
                     $( '#waybill_create_form' ).dialog( "close" );
-                    $('#example').dataTable().fnReloadAjax("inc/jsonp.php");
+                    $('#example').dataTable().api().ajax.reload();
                 } else
                 {
                     $("#error_waybill_create").append("<div>"+msg+"</div>");
@@ -2736,62 +2740,6 @@ $(document).ready(function(){
             minute = '0'+minute; }
         return year+'-'+month+'-'+day+' '+hour+':'+minute;
     }
-	
-    //Функция перезагрузки данных в таблицу DataTable
-    $.fn.dataTableExt.oApi.fnReloadAjax = function ( oSettings, sNewSource, fnCallback, bStandingRedraw )
-    {
-        if ( sNewSource !== undefined && sNewSource !== null ) {
-            oSettings.sAjaxSource = sNewSource;
-        }
-
-        // Server-side processing should just call fnDraw
-        if ( oSettings.oFeatures.bServerSide ) {
-            this.fnDraw();
-            return;
-        }
-
-        this.oApi._fnProcessingDisplay( oSettings, true );
-        var that = this;
-        var iStart = oSettings._iDisplayStart;
-        var aData = [];
-        var pos=$('.dataTables_scrollBody').scrollTop(); //позиция полосы прокрутки
-        this.oApi._fnServerParams( oSettings, aData );
-
-        oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, aData, function(json) {
-            /* Clear the old information from the table */
-            that.oApi._fnClearTable( oSettings );
-
-            /* Got the data - add it to the table */
-            var aData =  (oSettings.sAjaxDataProp !== "") ?
-                that.oApi._fnGetObjectDataFn( oSettings.sAjaxDataProp )( json ) : json;
-            var i = 0;
-            for ( i=0 ; i<aData.length ; i++ )
-            {
-                that.oApi._fnAddData( oSettings, aData[i] );
-            }
-
-            oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
-
-            that.fnDraw ();
-
-            if ( bStandingRedraw === true )
-            {
-                //alert("sdraw");
-                oSettings._iDisplayStart = iStart;
-                that.oApi._fnCalculateEnd( oSettings );
-                that.fnDraw (false);
-                $('.dataTables_scrollBody').scrollTop(pos);
-            }
-
-            that.oApi._fnProcessingDisplay( oSettings, false );
-
-            /* Callback user function - for event handlers etc */
-            if ( typeof fnCallback == 'function' && fnCallback !== null )
-            {
-                fnCallback( oSettings );
-            }
-        }, oSettings );
-    };
 
     //Возвращает cookie если есть или undefined
     function getCookie(name) {
