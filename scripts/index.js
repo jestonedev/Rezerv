@@ -37,45 +37,8 @@ $(document).ready(function(){
     //Заголовок
     var header = "";
 
-    //Установка Cookie и настройка начального представления формы
-    if (!getCookie("id_request")) {
-        id_request = 1;
-        setCookie("id_request",1);
-    } else
-    {
-        id_request = getCookie("id_request");
-    }
-    if (!getCookie("menu_code")) {
-        menu_code = 0;
-        report_id = 1;
-        setCookie("menu_code", 0);
-        setCookie("report_id",1);
-    }
-    else
-    {
-        if (!getCookie("report_id")) {
-            report_id = 1;
-            setCookie("report_id",1);
-        } else
-        {
-            report_id = getCookie("report_id");
-        }
-        menu_code = getCookie("menu_code");
-    }
-    if (!getCookie("only_my_requests")) {
-        only_my_requests = 0;
-        setCookie("only_my_requests",0);
-    } else
-    {
-        only_my_requests = getCookie("only_my_requests");
-    }
-    if (!getCookie("header")) {
-        header = "Заявки на транспорт";
-        setCookie("header",header);
-    } else
-    {
-        header = getCookie("header");
-    }
+    initServerParams();
+
     $("#header").text(header);
 
     //Добавление прототипа функции вхождения в массив
@@ -135,7 +98,6 @@ $(document).ready(function(){
             },
             error: function(msg)
             {
-                alert('Ошибка при обращении к серверу. Код 19');
             }
         });
         if (!has_form_data) {
@@ -418,7 +380,6 @@ $(document).ready(function(){
                 });
             },
             error: function(msg) {
-                alert('Ошибка при обращении к серверу. Код 18');
             }
         });
     });
@@ -574,7 +535,6 @@ $(document).ready(function(){
                                             },
                                             error: function(msg)
                                             {
-                                                alert('Ошибка при обращении к серверу. Код 17');
                                             }
                                         }
                                     );
@@ -599,7 +559,6 @@ $(document).ready(function(){
                                 },
                                 error: function(msg)
                                 {
-                                    alert('Ошибка при обращении к серверу. Код 16');
                                 }
                             }
                         );
@@ -623,7 +582,6 @@ $(document).ready(function(){
                             },
                             error: function(msg)
                             {
-                                alert('Ошибка при обращении к серверу. Код 15');
                             }
                         }
                     );
@@ -646,7 +604,6 @@ $(document).ready(function(){
                             },
                             error: function(msg)
                             {
-                                alert('Ошибка при обращении к серверу. Код 14');
                             }
                         }
                     );
@@ -669,7 +626,6 @@ $(document).ready(function(){
                             },
                             error: function(msg)
                             {
-                                alert('Ошибка при обращении к серверу. Код 13');
                             }
                         }
                     );
@@ -692,7 +648,6 @@ $(document).ready(function(){
                             },
                             error: function(msg)
                             {
-                                alert('Ошибка при обращении к серверу. Код 12');
                             }
                         }
                     );
@@ -753,7 +708,6 @@ $(document).ready(function(){
                         });
                     },
                     error: function(msg) {
-                        alert('Ошибка при обращении к серверу. Код 11');
                     }
                 });
             }
@@ -782,7 +736,6 @@ $(document).ready(function(){
                         },
                         error: function(msg)
                         {
-                            alert('Ошибка при обращении к серверу. Код 12.1');
                         }
                     }
                 );
@@ -837,7 +790,6 @@ $(document).ready(function(){
                     },
                     error: function(msg)
                     {
-                        alert('Ошибка при обращении к серверу. Код 12.1');
                     }
                 }
             );
@@ -898,7 +850,6 @@ $(document).ready(function(){
                         },
                         error: function(msg)
                         {
-                            alert('Ошибка при обращении к серверу. Код 12.1');
                         }
                     }
                 );
@@ -963,7 +914,6 @@ $(document).ready(function(){
                     },
                     error: function(msg)
                     {
-                        alert('Ошибка при обращении к серверу. Код 12.1');
                     }
                 }
             );
@@ -1063,7 +1013,6 @@ $(document).ready(function(){
                                 },
                                 error: function(msg)
                                 {
-                                    alert('Ошибка при обращении к серверу. Код 18');
                                 }
                             }
                         );
@@ -1079,6 +1028,64 @@ $(document).ready(function(){
     /////////////////////////
     //Функции инициализации//
     /////////////////////////
+
+    //Установка Cookie и настройка начального представления формы
+    function initServerParams() {
+        if (!getCookie("id_request")) {
+            id_request = 1;
+            setCookie("id_request", 1);
+        } else {
+            id_request = getCookie("id_request");
+        }
+        if (!getCookie("menu_code")) {
+            menu_code = 0;
+            report_id = 1;
+            setCookie("menu_code", 0);
+            setCookie("report_id", 1);
+        }
+        else {
+            if (!getCookie("report_id")) {
+                report_id = 1;
+                setCookie("report_id", 1);
+            } else {
+                report_id = getCookie("report_id");
+            }
+            menu_code = getCookie("menu_code");
+        }
+        if (!getCookie("only_my_requests")) {
+            only_my_requests = 0;
+            setCookie("only_my_requests", 0);
+        } else {
+            only_my_requests = getCookie("only_my_requests");
+        }
+        if (!getCookie("header")) {
+            header = "Заявки на транспорт";
+            setCookie("header", header);
+        } else {
+            header = getCookie("header");
+        }
+        if (getCookie("start_date")) {
+            start_date = getCookie("start_date");
+        }
+        if (getCookie("end_date")) {
+            end_date = getCookie("end_date");
+        }
+        if (getCookie("date_id")) {
+            date_id = getCookie("date_id");
+        }
+        if (getCookie("car_id")) {
+            car_id = getCookie("car_id");
+        }
+        if (getCookie("fuel_type_id")) {
+            fuel_type_id = getCookie("fuel_type_id");
+        }
+        if (getCookie("department")) {
+            department = getCookie("department");
+        }
+        if (getCookie("only_my_requests")) {
+            only_my_requests = getCookie("only_my_requests");
+        }
+    }
 
     //Функция инициализация состояния внутренних переменных
     function initVariables()
@@ -1168,7 +1175,6 @@ $(document).ready(function(){
             },
             error: function(msg)
             {
-                alert('Ошибка при обращении к серверу. Код 10');
             }
         });
     }
@@ -1287,7 +1293,6 @@ $(document).ready(function(){
             },
             error: function(msg)
             {
-                alert('Ошибка при обращении к серверу. Код 9');
             }
         });
         return msga;
@@ -1310,7 +1315,6 @@ $(document).ready(function(){
             },
             error: function(msg)
             {
-                alert('Ошибка при обращении к серверу. Код 9');
             }
         });
         return msga;
@@ -1333,7 +1337,6 @@ $(document).ready(function(){
             },
             error: function(msg)
             {
-                alert('Ошибка при обращении к серверу. Код 9');
             }
         });
         return msga;
@@ -1378,7 +1381,6 @@ $(document).ready(function(){
             },
             error: function(msg)
             {
-                alert('Ошибка при обращении к серверу. Код 8');
             }
         });
     }
@@ -1396,8 +1398,9 @@ $(document).ready(function(){
     {
         var ex = document.getElementById('example');
         if ( $.fn.DataTable.fnIsDataTable( ex ) ) {
+            //$(ex).dataTable().fnClearTable();
             $(ex).dataTable().api().clear();
-            $(ex).dataTable().fnDestroy();
+            $(ex).dataTable().api().destroy();
         }
         initColumns();
         var oTable = $('#example').dataTable( {
@@ -1409,6 +1412,7 @@ $(document).ready(function(){
             "scrollY": $(window).height() - 300,
             "bFilter": true,
             "iDisplayLength": 25,
+            "destroy": $.fn.DataTable.fnIsDataTable( ex ),
             "sAjaxSource": "inc/jsonp.php",
             "fnServerParams": function ( aoData ) {
                 aoData.push( { "name": "menu_code", "value": menu_code } );
@@ -1585,7 +1589,6 @@ $(document).ready(function(){
                     },
                     error: function(msg)
                     {
-                        alert('Ошибка при обращении к серверу. Код 7');
                     }
                 });
             },
@@ -1610,7 +1613,6 @@ $(document).ready(function(){
                     },
                     error: function(msg)
                     {
-                        alert('Ошибка при обращении к серверу. Код 6');
                     }
                 });
                 if (!has_msge) {
@@ -1706,7 +1708,6 @@ $(document).ready(function(){
             },
             error: function(msg)
             {
-                alert('Ошибка при обращении к серверу. Код 1');
             }
         });
         $.ajax({
@@ -1718,7 +1719,6 @@ $(document).ready(function(){
             },
             error: function(msg)
             {
-                alert('Ошибка при обращении к серверу. Код 2');
             }
         });
         $.ajax({
@@ -1731,7 +1731,6 @@ $(document).ready(function(){
             },
             error: function(msg)
             {
-                alert('Ошибка при обращении к серверу. Код 1');
             }
         });
         $.ajax({
@@ -1744,7 +1743,6 @@ $(document).ready(function(){
             },
             error: function(msg)
             {
-                alert('Ошибка при обращении к серверу. Код 1');
             }
         });
         $("#car_row").hide();
@@ -1781,7 +1779,6 @@ $(document).ready(function(){
                 },
                 error: function(msg)
                 {
-                    alert('Ошибка при обращении к серверу. Код 3');
                 }
             }
         );
@@ -1880,7 +1877,6 @@ $(document).ready(function(){
                 },
                 error: function(msg)
                 {
-                    alert('Ошибка при обращении к серверу. Код 3.1');
                 }
             }
         );
@@ -1894,7 +1890,6 @@ $(document).ready(function(){
                 },
                 error: function(msg)
                 {
-                    alert('Ошибка при обращении к серверу. Код 3.2');
                 }
             }
         );
@@ -1908,7 +1903,6 @@ $(document).ready(function(){
                 },
                 error: function(msg)
                 {
-                    alert('Ошибка при обращении к серверу. Код 3.3');
                 }
             }
         );
@@ -1922,7 +1916,6 @@ $(document).ready(function(){
                 },
                 error: function(msg)
                 {
-                    alert('Ошибка при обращении к серверу. Код 3.4');
                 }
             }
         );
@@ -2032,7 +2025,6 @@ $(document).ready(function(){
                 },
                 error: function(msg)
                 {
-                    alert('Ошибка при обращении к серверу. Код 3.1');
                 }
             }
         );
@@ -2046,7 +2038,6 @@ $(document).ready(function(){
                 },
                 error: function(msg)
                 {
-                    alert('Ошибка при обращении к серверу. Код 3.3');
                 }
             }
         );
@@ -2060,7 +2051,6 @@ $(document).ready(function(){
                 },
                 error: function(msg)
                 {
-                    alert('Ошибка при обращении к серверу. Код 3.4');
                 }
             }
         );
@@ -2074,7 +2064,6 @@ $(document).ready(function(){
                 },
                 error: function(msg)
                 {
-                    alert('Ошибка при обращении к серверу. Код 3.5');
                 }
             }
         );
@@ -2088,7 +2077,6 @@ $(document).ready(function(){
                 },
                 error: function(msg)
                 {
-                    alert('Ошибка при обращении к серверу. Код 3.1');
                 }
             }
         );
@@ -2102,7 +2090,6 @@ $(document).ready(function(){
                 },
                 error: function(msg)
                 {
-                    alert('Ошибка при обращении к серверу. Код 3.1');
                 }
             }
         );
@@ -2309,7 +2296,6 @@ $(document).ready(function(){
             },
             error: function(msg)
             {
-                alert('Ошибка при обращении к серверу. Код 6');
             }
         });
         return array;
@@ -2358,7 +2344,6 @@ $(document).ready(function(){
             },
             error: function(msg)
             {
-                alert('Ошибка при обращении к серверу. Код 4.0');
             }
         });
         return hasCRP;
@@ -2379,7 +2364,6 @@ $(document).ready(function(){
             },
             error: function(msg)
             {
-                alert('Ошибка при обращении к серверу. Код 4.1');
             }
         });
         return hasCRP;
@@ -2400,7 +2384,6 @@ $(document).ready(function(){
             },
             error: function(msg)
             {
-                alert('Ошибка при обращении к серверу. Код 4.2');
             }
         });
         return hasCRP;
@@ -2451,7 +2434,6 @@ $(document).ready(function(){
             },
             error: function(msg)
             {
-                alert('Ошибка при обращении к серверу. Код 5');
             }
         });
     }
@@ -2585,7 +2567,6 @@ $(document).ready(function(){
             },
             error: function(msg)
             {
-                alert('Ошибка при обращении к серверу. Код 5.1');
             }
         });
     }
@@ -2701,7 +2682,6 @@ $(document).ready(function(){
             },
             error: function(msg)
             {
-                alert('Ошибка при обращении к серверу. Код 5.2');
             }
         });
     }
