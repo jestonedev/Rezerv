@@ -199,11 +199,11 @@
         }
     }
 
-
 if ($_SERVER["REQUEST_METHOD"]==="POST") {
     $DTD = new DataTableData();
     if (isset($_POST['action']) && $_POST['action'] == 'init_columns')
         echo $DTD->GetDataTableColumns();
-    else
-    	echo $DTD->GetDataTableData();
+    else {
+        echo $DTD->GetDataTableData();
+    }
 }

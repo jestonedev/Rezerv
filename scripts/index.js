@@ -1387,7 +1387,7 @@ $(document).ready(function(){
 
     $(window).resize(
         function() {
-            $('.dataTables_scrollBody').css('height', ($(window).height() - 300));
+            $('.dataTables_scrollBody').css('height', ($(window).height() - 320));
             var table = $('#example').DataTable();
             table.columns.adjust().draw();
         }
@@ -1409,7 +1409,7 @@ $(document).ready(function(){
 			"bDeferRender": true,
             "bServerSide": false,
             "bJQueryUI": true,
-            "scrollY": $(window).height() - 300,
+            "scrollY": $(window).height() - 320,
             "bFilter": true,
             "iDisplayLength": 25,
             "destroy": $.fn.DataTable.fnIsDataTable( ex ),

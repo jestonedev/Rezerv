@@ -593,9 +593,35 @@ class Request {
             if ($row = mysqli_fetch_array($result_transport, MYSQLI_ASSOC))
             {
                 $class = ($class == "even")?"odd":"even";
-                $result .= '<tr class="'.$class.'"><td id="detail_header" width="30%">Выделенный транспорт:</td><td>Регистрационный номер: "'.
-                    htmlspecialchars($row['number']).'"<br>Модель: "'.htmlspecialchars($row['model']).'"<br>Ответственный: "'.
-                    htmlspecialchars($row['owner']).'"</td></tr>';
+                $result .= '<tr class="'.$class.'"><td id="detail_header" width="30%">Выделенный транспорт:</td><td>';
+                if ($row['type'] == 'Такси')
+                {
+                    $result .= 'Такси';
+                } else {
+                    $result_car = '';
+                    if ($row['number'] != '')
+                        $result_car .= 'Регистрационный номер: "'.htmlspecialchars($row['number']).'"';
+                    if ($row['model'] != '')
+                    {
+                        if ($result_car != '')
+                            $result_car .= '<br>';
+                        $result_car .= 'Модель: "'.htmlspecialchars($row['model']).'"';
+                    }
+                    if ($row['type'] != '')
+                    {
+                        if ($result_car != '')
+                            $result_car .= ' - ';
+                        $result_car .= htmlspecialchars($row['type']);
+                    }
+                    if ($row['owner'] != '')
+                    {
+                        if ($result_car != '')
+                            $result_car .= '<br>';
+                        $result_car .= 'Ответственный: "'.htmlspecialchars($row['owner']).'"';
+                    }
+                    $result .= $result_car;
+                }
+                $result .= '</td></tr>';
             }
         }
         //Добавляем неключевые поля
