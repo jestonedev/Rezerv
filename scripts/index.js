@@ -105,7 +105,7 @@ $(document).ready(function(){
         $('#calendarSettings').dialog({
             autoOpen: true,
             modal: true,
-            title: "Настроки отображаемой информации",
+            title: "Настройки отображаемой информации",
             width: $(window).width()/1.5,
             resizable: false,
             buttons: [
@@ -114,7 +114,7 @@ $(document).ready(function(){
                     click: function() {
                         var checked = false;
                         $('#calendarSettings input[type=checkbox]').each( function() {
-                            if ($(this).attr("checked")) {
+                            if ($(this).prop("checked")) {
                                 checked = true; }
                         });
                         if (!checked)
@@ -135,12 +135,13 @@ $(document).ready(function(){
                             modal: true,
                             title: title,
                             width: "auto",
+                            height: $(window).height() - 10,
                             close: function(event, ui) {
                                 allowRefreshCalendar = 0;
                             },
                             buttons: [{text: "Закрыть",
                                 click: function() { $( this ).dialog( "close" ); }}]
-                        }).height($(window).height()-175);
+                        });
                         $('#calendar').dialog("option","position",{ at: "center center" });
                         $('#calendar').fullCalendar( 'refetchEvents' );
                         $('#calendar').fullCalendar( 'rerenderEvents' );
@@ -280,29 +281,29 @@ $(document).ready(function(){
                         $( this ).dialog( "close" );
                         menu_code = 1;
                         setCookie("menu_code", menu_code);
-                        report_id = $("#report_id").attr("value");
+                        report_id = $("#report_id").prop("value");
                         setCookie("report_id", report_id);
-                        start_date = $("#start_date").attr("value");
+                        start_date = $("#start_date").prop("value");
                         setCookie("start_date", start_date);
-                        end_date = $("#end_date").attr("value");
+                        end_date = $("#end_date").prop("value");
                         setCookie("end_date", end_date);
-                        department = $("#departments select[name='department']").attr("value");
+                        department = $("#departments select[name='department']").prop("value");
                         setCookie("department",department);
-                        date_id = $("#filter_criteria select[name='date_id']").attr("value");
+                        date_id = $("#filter_criteria select[name='date_id']").prop("value");
                         setCookie("date_id",date_id);
                         
-                        var title = $('#report_id option[value="'+$("#report_id").attr("value")+'"]').text();
-                        if ($("#report_id").attr("value").inList(rep_with_fuel_type))
+                        var title = $('#report_id option[value="'+$("#report_id").prop("value")+'"]').text();
+                        if ($("#report_id").prop("value").inList(rep_with_fuel_type))
                         {
-                            fuel_type_id = $("#reportSettings select[name='fuel_type_id']").attr("value");
+                            fuel_type_id = $("#reportSettings select[name='fuel_type_id']").prop("value");
                             setCookie("fuel_type_id",fuel_type_id);
                             var fuel_type = $("#reportSettings select[name='fuel_type_id'] option[value='"+fuel_type_id+"']").text();
                             if ($.trim(fuel_type) != "Все марки горючего") {
                                 title = title + " ("+fuel_type+")"; }
                         }
-                        if ($("#report_id").attr("value").inList(rep_with_car_id))
+                        if ($("#report_id").prop("value").inList(rep_with_car_id))
                         {
-                            car_id = $("#reportSettings select[name='car_id']").attr("value");
+                            car_id = $("#reportSettings select[name='car_id']").prop("value");
                             setCookie("car_id",car_id);
                             var car = $("#reportSettings select[name='car_id'] option[value='"+car_id+"']").text();
                             var car_arr = car.split('|');
@@ -311,7 +312,7 @@ $(document).ready(function(){
                                     car_arr[2]+" номер "+car_arr[0]; }
                         }
                         title = $.trim(title);
-                        header = title+" с "+$("#start_date").attr("value")+" по "+$("#end_date").attr("value");
+                        header = title+" с "+$("#start_date").prop("value")+" по "+$("#end_date").prop("value");
                         setCookie("header",header);
                         initDataTable();
                         initButtonsState();
@@ -387,15 +388,15 @@ $(document).ready(function(){
     //Обработчик события нажатия на кнопку "Создать акт"
     $('#btnCreateAct').button().click(function() {
         $("#error_act_create").hide();
-        $("#act_create_form #act_number").attr("value","");
-        $("#act_create_form #act_date").attr("value","");
-        $("#act_create_form #reason_for_repair").attr("value","");
-        $("#act_create_form #work_performed").attr("value","");
-        $("#act_create_form #act_odometer").attr("value","");
-        $("#act_create_form #act_wait_start_date").attr("value","");
-        $("#act_create_form #act_wait_end_date").attr("value","");
-        $("#act_create_form #act_repair_start_date").attr("value","");
-        $("#act_create_form #act_repair_end_date").attr("value","");
+        $("#act_create_form #act_number").prop("value","");
+        $("#act_create_form #act_date").prop("value","");
+        $("#act_create_form #reason_for_repair").prop("value","");
+        $("#act_create_form #work_performed").prop("value","");
+        $("#act_create_form #act_odometer").prop("value","");
+        $("#act_create_form #act_wait_start_date").prop("value","");
+        $("#act_create_form #act_wait_end_date").prop("value","");
+        $("#act_create_form #act_repair_start_date").prop("value","");
+        $("#act_create_form #act_repair_end_date").prop("value","");
         $("#act_expended_list option").remove();
         $('#act_create_form').dialog( {
                 autoOpen: true,
@@ -427,14 +428,14 @@ $(document).ready(function(){
     //Обработчик события нажатия на кнопку "Создать акт"
     $('#btnCreateWaybill').button().click(function() {
         $("#error_waybill_create").hide();
-        $("#waybill_number").attr("value","");
-        $("#waybill_start_date").attr("value","");
-        $("#waybill_end_date").attr("value","");
-        $("#waybill_address_supply").attr("value","ул. Ленина, 37");
-        $("#waybill_mileage_before").attr("value","");
-        $("#waybill_mileage_after").attr("value","");
-        $("#waybill_fuel_before").attr("value","");
-        $("#waybill_given_fuel").attr("value","");
+        $("#waybill_number").prop("value","");
+        $("#waybill_start_date").prop("value","");
+        $("#waybill_end_date").prop("value","");
+        $("#waybill_address_supply").prop("value","ул. Ленина, 37");
+        $("#waybill_mileage_before").prop("value","");
+        $("#waybill_mileage_after").prop("value","");
+        $("#waybill_fuel_before").prop("value","");
+        $("#waybill_given_fuel").prop("value","");
         $("#ways_list option").remove();
         $('#waybill_create_form').dialog( {
                 autoOpen: true,
@@ -464,7 +465,7 @@ $(document).ready(function(){
     });
 
     //Обработчик события нажатия на кнопку "Подробнее"
-    $('#example tbody td img').live('click', function () {
+    $('#example tbody').on('click', 'img', function () {
         //Если это пробег
         if (menu_code == 2)
         {
@@ -510,7 +511,7 @@ $(document).ready(function(){
         $(".btnAcceptRequest").button().click(
             function()
             {
-                var id_request_number = $(this).attr("value");
+                var id_request_number = $(this).prop("value");
                 if (id_request == 1)
                 {
                     $('#select_car_form').dialog({
@@ -522,7 +523,7 @@ $(document).ready(function(){
                         buttons: [
                             {text: "Выбрать",
                                 click: function() {
-                                    var id_car = $("#select_car_form select[name='car_id']").attr("value");
+                                    var id_car = $("#select_car_form select[name='car_id']").prop("value");
                                     $.ajax( {
                                             type: "POST",
                                             url: "inc/moderation_request.php",
@@ -571,7 +572,7 @@ $(document).ready(function(){
             {
                 if (confirm("Вы действительно хотите отклонить заявку?"))
                 {
-                    var id_request_number = $(this).attr("value");
+                    var id_request_number = $(this).prop("value");
                     $.ajax( {
                             type: "POST",
                             url: "inc/moderation_request.php",
@@ -593,7 +594,7 @@ $(document).ready(function(){
             {
                 if (confirm("Вы действительно хотите отменить свою заявку?"))
                 {
-                    var id_request_number = $(this).attr("value");
+                    var id_request_number = $(this).prop("value");
                     $.ajax( {
                             type: "POST",
                             url: "inc/moderation_request.php",
@@ -615,7 +616,7 @@ $(document).ready(function(){
             {
                 if (confirm("Вы действительно хотите отметить заявку, как выполненную?"))
                 {
-                    var id_request_number = $(this).attr("value");
+                    var id_request_number = $(this).prop("value");
                     $.ajax( {
                             type: "POST",
                             url: "inc/moderation_request.php",
@@ -637,7 +638,7 @@ $(document).ready(function(){
             {
                 if (confirm("Вы действительно хотите отметить заявку как невыполненную?"))
                 {
-                    var id_request_number = $(this).attr("value");
+                    var id_request_number = $(this).prop("value");
                     $.ajax( {
                             type: "POST",
                             url: "inc/moderation_request.php",
@@ -657,7 +658,7 @@ $(document).ready(function(){
         $(".btnChangeRequest").button().click(
             function()
             {
-                var id_request_number = $(this).attr("value");
+                var id_request_number = $(this).prop("value");
 
                 $('#frmRequest').remove();
                 $.ajax({
@@ -721,7 +722,7 @@ $(document).ready(function(){
         $(".btnModifyAct, .btnDeleteAct, .btnReportByAct").button();
         $(".btnModifyAct, .btnDeleteAct, .btnReportByAct").button().unbind('click');
         $(".btnDeleteAct").button().click( function() {
-                var id_repair = $(this).attr("value");
+                var id_repair = $(this).prop("value");
                 if (!confirm('Вы действительно хотите удалить акт № '+id_repair+'?'))
                 {
                     return;
@@ -742,7 +743,7 @@ $(document).ready(function(){
             }
         );
         $('.btnModifyAct').button().click(function() {
-            var id_repair = $(this).attr("value");
+            var id_repair = $(this).prop("value");
             $.ajax( {
                     type: "POST",
                     url: "inc/acts_modify.php",
@@ -751,31 +752,31 @@ $(document).ready(function(){
                     success: function(msg)
                     {
                         var info = JSON.parse(msg);
-                        $("#act_create_form #act_number").attr("value", info["repair_act_number"]);
-                        $("#act_create_form #act_date").attr("value", convert_date(info["act_date"]));
+                        $("#act_create_form #act_number").prop("value", info["repair_act_number"]);
+                        $("#act_create_form #act_date").prop("value", convert_date(info["act_date"]));
                         if (info["wait_start_date"]) {
-                            $("#act_create_form #act_wait_start_date").attr("value", convert_datetime(info["wait_start_date"])); }
+                            $("#act_create_form #act_wait_start_date").prop("value", convert_datetime(info["wait_start_date"])); }
                         else {
-                            $("#act_create_form #act_wait_start_date").attr("value", ""); }
+                            $("#act_create_form #act_wait_start_date").prop("value", ""); }
                         if (info["wait_end_date"]) {
-                            $("#act_create_form #act_wait_end_date").attr("value", convert_datetime(info["wait_end_date"])); }
+                            $("#act_create_form #act_wait_end_date").prop("value", convert_datetime(info["wait_end_date"])); }
                         else {
-                            $("#act_create_form #act_wait_end_date").attr("value", ""); }
+                            $("#act_create_form #act_wait_end_date").prop("value", ""); }
                         if (info["repair_start_date"]) {
-                            $("#act_create_form #act_repair_start_date").attr("value", convert_datetime(info["repair_start_date"])); }
+                            $("#act_create_form #act_repair_start_date").prop("value", convert_datetime(info["repair_start_date"])); }
                         else {
-                            $("#act_create_form #act_repair_start_date").attr("value", ""); }
+                            $("#act_create_form #act_repair_start_date").prop("value", ""); }
                         if (info["repair_end_date"]) {
-                            $("#act_create_form #act_repair_end_date").attr("value", convert_datetime(info["repair_end_date"])); }
+                            $("#act_create_form #act_repair_end_date").prop("value", convert_datetime(info["repair_end_date"])); }
                         else {
-                            $("#act_create_form #act_repair_end_date").attr("value", ""); }
-                        $("#act_create_form select[name='act_respondent_id']").attr("value",info["id_respondent"]);
-                        $("#act_create_form select[name='car_id']").attr("value", info["id_car"]);
-                        $("#act_create_form select[name='driver_id']").attr("value", info["id_driver"]);
-                        $("#act_create_form select[name='mechanic_id']").attr("value", info["id_mechanic"]);
-                        $("#act_create_form #reason_for_repair").attr("value", info["reason_for_repairs"]);
-                        $("#act_create_form #work_performed").attr("value", info["work_performed"]);
-                        $("#act_create_form #act_odometer").attr("value", info["odometer"]);
+                            $("#act_create_form #act_repair_end_date").prop("value", ""); }
+                        $("#act_create_form select[name='act_respondent_id']").prop("value",info["id_respondent"]);
+                        $("#act_create_form select[name='car_id']").prop("value", info["id_car"]);
+                        $("#act_create_form select[name='driver_id']").prop("value", info["id_driver"]);
+                        $("#act_create_form select[name='mechanic_id']").prop("value", info["id_mechanic"]);
+                        $("#act_create_form #reason_for_repair").prop("value", info["reason_for_repairs"]);
+                        $("#act_create_form #work_performed").prop("value", info["work_performed"]);
+                        $("#act_create_form #act_odometer").prop("value", info["odometer"]);
 
                         var expended_array = info["expended"];
                         $("#act_expended_list option").remove();
@@ -821,7 +822,7 @@ $(document).ready(function(){
             ).height("auto");
         });
         $('.btnReportByAct').button().click(function() {
-            var id_repair = $(this).attr("value");
+            var id_repair = $(this).prop("value");
             $.fileDownload('inc/acts_report.php?id_repair='+id_repair,
                 {failMessageHtml: "Не удалось загрузить файл, попробуйте еще раз."});
             return false;
@@ -835,7 +836,7 @@ $(document).ready(function(){
         $(".btnModifyWaybill, .btnDeleteWaybill, .btnReportByWaybill").button();
         $(".btnModifyWaybill, .btnDeleteWaybill, .btnReportByWaybill").button().unbind('click');
         $(".btnDeleteWaybill").button().click( function() {
-                var id_waybill = $(this).attr("value");
+                var id_waybill = $(this).prop("value");
                 if (!confirm('Вы действительно хотите удалить путевой лист № '+id_waybill+'?'))
                 {
                     return;
@@ -856,7 +857,7 @@ $(document).ready(function(){
             }
         );
         $('.btnModifyWaybill').button().click(function() {
-            var id_waybill = $(this).attr("value");
+            var id_waybill = $(this).prop("value");
             $.ajax( {
                     type: "POST",
                     url: "inc/waybills_modify.php",
@@ -871,26 +872,26 @@ $(document).ready(function(){
                         var start_day = start_date.getDate()<10?"0"+start_date.getDate():start_date.getDate();
                         var start_month = (start_date.getMonth()+1)<10?"0"+(start_date.getMonth()+1):(start_date.getMonth()+1);
                         var start_year = start_date.getFullYear();
-                        $("#waybill_start_date").attr("value",start_day+"."+start_month+"."+start_year);
+                        $("#waybill_start_date").prop("value",start_day+"."+start_month+"."+start_year);
                         var end_date_str = info["end_date"].split(' ')[0];
                         var end_date_arr = end_date_str.split('-');
                         var end_date = new Date(end_date_arr[0],end_date_arr[1] - 1,end_date_arr[2]);
                         var end_day = end_date.getDate()<10?"0"+end_date.getDate():end_date.getDate();
                         var end_month = (end_date.getMonth()+1)<10?"0"+(end_date.getMonth()+1):(end_date.getMonth()+1);
                         var end_year = end_date.getFullYear();
-                        $("#waybill_end_date").attr("value",end_day+"."+end_month+"."+end_year);
-                        $("#waybill_create_form select[name='car_id']").attr("value", info["id_car"]);
-                        $("#waybill_create_form select[name='driver_id']").attr("value", info["id_driver"]);
-                        $("#waybill_create_form select[name='mechanic_id']").attr("value", info["id_mechanic"]);
-                        $("#waybill_create_form select[name='dispatcher_id']").attr("value", info["id_dispatcher"]);
-                        $("#waybill_create_form select[name='department']").attr("value",info["department"]);
-                        $("#waybill_create_form select[name='fuel_type_id']").attr("value",info["id_fuel_type"]);
-                        $("#waybill_number").attr("value", info["waybill_number"]);
-                        $("#waybill_address_supply").attr("value", info["address_supply"]);
-                        $("#waybill_mileage_before").attr("value", info["mileage_before"]);
-                        $("#waybill_mileage_after").attr("value", info["mileage_after"]);
-                        $("#waybill_fuel_before").attr("value", info["fuel_before"]);
-                        $("#waybill_given_fuel").attr("value", info["given_fuel"]);
+                        $("#waybill_end_date").prop("value",end_day+"."+end_month+"."+end_year);
+                        $("#waybill_create_form select[name='car_id']").prop("value", info["id_car"]);
+                        $("#waybill_create_form select[name='driver_id']").prop("value", info["id_driver"]);
+                        $("#waybill_create_form select[name='mechanic_id']").prop("value", info["id_mechanic"]);
+                        $("#waybill_create_form select[name='dispatcher_id']").prop("value", info["id_dispatcher"]);
+                        $("#waybill_create_form select[name='department']").prop("value",info["department"]);
+                        $("#waybill_create_form select[name='fuel_type_id']").prop("value",info["id_fuel_type"]);
+                        $("#waybill_number").prop("value", info["waybill_number"]);
+                        $("#waybill_address_supply").prop("value", info["address_supply"]);
+                        $("#waybill_mileage_before").prop("value", info["mileage_before"]);
+                        $("#waybill_mileage_after").prop("value", info["mileage_after"]);
+                        $("#waybill_fuel_before").prop("value", info["fuel_before"]);
+                        $("#waybill_given_fuel").prop("value", info["given_fuel"]);
 
                         var ways_array = info["ways"];
                         $("#ways_list option").remove();
@@ -945,13 +946,13 @@ $(document).ready(function(){
             ).height("auto");
         });
         $('.btnReportByWaybill').button().click(function() {
-            var id_waybill = $(this).attr("value");
+            var id_waybill = $(this).prop("value");
             $.fileDownload('inc/waybills_report.php?id_report_type=1&id_waybill='+id_waybill,
                 {failMessageHtml: "Не удалось загрузить файл, попробуйте еще раз."});
             return false;
         });
         $('.btnReportByWaybillWithPeriod').button().click(function() {
-            var id_waybill = $(this).attr("value");
+            var id_waybill = $(this).prop("value");
             $.fileDownload('inc/waybills_report.php?id_report_type=2&id_waybill='+id_waybill,
                 {failMessageHtml: "Не удалось загрузить файл, попробуйте еще раз."});
             return false;
@@ -961,7 +962,7 @@ $(document).ready(function(){
     function show_mileage_details(sender)
     {
         //Отобразить форму внесения данных о пробеге
-        var id_car = $(sender).attr("value");
+        var id_car = $(sender).prop("value");
         $("#error_mileagesEditor").hide();
         $('#mileagesEditor').dialog({
             autoOpen: true,
@@ -976,8 +977,8 @@ $(document).ready(function(){
                         {
                             return;
                         }
-                        var milage_date = $("#mileage_date").attr("value");
-                        var milage_value = $("#mileage_value").attr("value");
+                        var milage_date = $("#mileage_date").prop("value");
+                        var milage_value = $("#mileage_value").prop("value");
                         $("#error_mileagesEditor div").remove();
                         var is_error = false;
                         if (milage_date.length == 0)
@@ -994,7 +995,7 @@ $(document).ready(function(){
                             $("#error_mileagesEditor").show();
                             return;
                         }
-                        var mileage_type = $("#mileagesEditor select[name='mileage_type']").attr("value");
+                        var mileage_type = $("#mileagesEditor select[name='mileage_type']").prop("value");
                         $.ajax( {
                                 type: "POST",
                                 url: "inc/add_mileage.php",
@@ -1398,7 +1399,6 @@ $(document).ready(function(){
     {
         var ex = document.getElementById('example');
         if ( $.fn.DataTable.fnIsDataTable( ex ) ) {
-            //$(ex).dataTable().fnClearTable();
             $(ex).dataTable().api().clear();
             $(ex).dataTable().api().destroy();
         }
@@ -1409,7 +1409,7 @@ $(document).ready(function(){
 			"bDeferRender": true,
             "bServerSide": false,
             "bJQueryUI": true,
-            "scrollY": $(window).height() - 320,
+            "scrollY": $("td#body").height()- 55,
             "bFilter": true,
             "iDisplayLength": 25,
             "destroy": $.fn.DataTable.fnIsDataTable( ex ),
@@ -1499,7 +1499,7 @@ $(document).ready(function(){
         //Обработчик событий нажатия на кнопку "Мои заявки"
         $('#ShowMyRequestsOnly').click(function()
         {
-            if ($(this).attr("checked")) {
+            if ($(this).prop("checked")) {
                 only_my_requests = 1;
                 setCookie("only_my_requests",1);
             }
@@ -1540,22 +1540,22 @@ $(document).ready(function(){
             firstHour: 7,
             axisFormat: "HH:mm",
             allDaySlot: false,
-            height: $(window).height() - 200,
+            height: $("td#body").height() - 70,
             cache: true,
             timeFormat: 'H:mm',
             theme: true,
             events: function(start, end, timezone, callback) {
                 //Формируем данные для фильтрации
-                var department = $('#calendarSettings select[name=department]').attr("value");
+                var department = $('#calendarSettings select[name=department]').prop("value");
                 if (department == undefined) {
                     return; }
                 if (id_request == 1) {
-                    var transport = $('#calendarSettings select[name=car_id]').attr("value"); }
+                    var transport = $('#calendarSettings select[name=car_id]').prop("value"); }
                 var requestStates = [];
                 $("#calendarSettings .requestState").each(
                     function() {
-                        if ($(this).attr("checked")) {
-                            requestStates.push($(this).attr("value")); }
+                        if ($(this).prop("checked")) {
+                            requestStates.push($(this).prop("value")); }
                     }
                 );
                 //Преобразуем полученные данные в строку запроса
@@ -1619,7 +1619,7 @@ $(document).ready(function(){
                     return; }
                 $('#calendar_details table').remove();
                 $('#calendar_details').append(msge);
-                $('#calendar_details').attr('title',calEvent.title);
+                $('#calendar_details').prop('title',calEvent.title);
                 $('#calendar_details').dialog({
                     autoOpen: true,
                     modal:true,
@@ -1748,15 +1748,15 @@ $(document).ready(function(){
         $("#car_row").hide();
         $("#fuel_row").hide();
         $("#report_id").bind("change", function() {
-        if ($("#report_id").attr("value").inList(rep_with_car_id)) {
+        if ($("#report_id").prop("value").inList(rep_with_car_id)) {
             $("#car_row").show();
         } else {
             $("#car_row").hide(); }
-        if ($("#report_id").attr("value").inList(rep_with_fuel_type)) {
+        if ($("#report_id").prop("value").inList(rep_with_fuel_type)) {
             $("#fuel_row").show();
         } else {
             $("#fuel_row").hide(); }
-        if ($("#report_id").attr("value").inList(rep_without_dep_and_date_type)) {
+        if ($("#report_id").prop("value").inList(rep_without_dep_and_date_type)) {
             $("#department_row").hide();
             $("#date_row").hide();
         } else
@@ -1921,8 +1921,8 @@ $(document).ready(function(){
         );
         $("#insert_expended").click(function() {
             $("#error_add_expended").hide();
-            $("#act_expended_edit_name").attr("value","");
-            $("#act_expended_edit_count").attr("value","");
+            $("#act_expended_edit_name").prop("value","");
+            $("#act_expended_edit_count").prop("value","");
             $('#add_expended').dialog({
                 autoOpen: true,
                 modal: true,
@@ -1936,8 +1936,8 @@ $(document).ready(function(){
                         click: function() {
                             $("#error_add_expended div").remove();
                             $("#error_add_expended").hide();
-                            var expended_name = $("#act_expended_edit_name").attr("value");
-                            var expended_count = $("#act_expended_edit_count").attr("value");
+                            var expended_name = $("#act_expended_edit_name").prop("value");
+                            var expended_count = $("#act_expended_edit_count").prop("value");
                             var is_correct = true;
                             if ($.trim(expended_name).length== 0)
                             {
@@ -2095,10 +2095,10 @@ $(document).ready(function(){
         );
         $("#insert_way").click(function() {
             $("#error_add_way").hide();
-            $("#way_value").attr("value","");
-            $("#way_out_time").attr("value","");
-            $("#way_return_time").attr("value","");
-            $("#way_distance").attr("value","");
+            $("#way_value").prop("value","");
+            $("#way_out_time").prop("value","");
+            $("#way_return_time").prop("value","");
+            $("#way_distance").prop("value","");
 
             $("#way_out_time").inputmask("99:99");
             $("#way_return_time").inputmask("99:99");
@@ -2116,10 +2116,10 @@ $(document).ready(function(){
                         click: function() {
                             $("#error_add_way div").remove();
                             $("#error_add_way").hide();
-                            var way_value = $("#way_value").attr("value");
-                            var way_out_time = $("#way_out_time").attr("value");
-                            var way_return_time = $("#way_return_time").attr("value");
-                            var way_distance = $("#way_distance").attr("value");
+                            var way_value = $("#way_value").prop("value");
+                            var way_out_time = $("#way_out_time").prop("value");
+                            var way_return_time = $("#way_return_time").prop("value");
+                            var way_distance = $("#way_distance").prop("value");
                             var is_correct = true;
                             if ($.trim(way_value).length== 0)
                             {
@@ -2222,8 +2222,8 @@ $(document).ready(function(){
     function checkReportSettings()
     {
         $("#error_reportSettings div").remove();
-        var start_date = $("#start_date").attr("value");
-        var end_date = $("#end_date").attr("value");
+        var start_date = $("#start_date").prop("value");
+        var end_date = $("#end_date").prop("value");
         var is_correct = true;
         if (!dateCorrect(start_date))
         {
@@ -2245,12 +2245,12 @@ $(document).ready(function(){
     //Функция изменения вида топлива
     function change_fuel_type()
     {
-        var id_car = $("#waybill_create_form select[name='car_id']").attr("value");
+        var id_car = $("#waybill_create_form select[name='car_id']").prop("value");
         var i = 0;
         for (i = 0; i < cars_default_fuel.length; i++)
         {
             if (cars_default_fuel[i]["id"] == id_car) {
-                $("#waybill_create_form select[name='fuel_type_id']").attr("value", cars_default_fuel[i]["id_fuel_default"]); }
+                $("#waybill_create_form select[name='fuel_type_id']").prop("value", cars_default_fuel[i]["id_fuel_default"]); }
         }
     }
 
@@ -2411,7 +2411,7 @@ $(document).ready(function(){
         var data = params+'action=process_request&id_request_number='+id_request_number+"&id_request="+id_request;
         if (id_request == 1)
         {
-            var id_car = $("#ParamTable select[name='car_id']").attr("value");
+            var id_car = $("#ParamTable select[name='car_id']").prop("value");
             if (!isNaN(id_car)) {
                 data = data + '&id_car='+id_car; }
         }
@@ -2441,19 +2441,19 @@ $(document).ready(function(){
     //Создание/изменение акта выполненных работ
     function ProcessAct(id_repair)
     {
-        var act_number = $("#act_create_form #act_number").attr("value");
-        var act_date = $("#act_create_form #act_date").attr("value");
-        var respondent_id = $("#act_create_form select[name='act_respondent_id']").attr("value");
-        var car_id = $("#act_create_form select[name='car_id']").attr("value");
-        var driver_id = $("#act_create_form select[name='driver_id']").attr("value");
-        var mechanic_id = $("#act_create_form select[name='mechanic_id']").attr("value");
-        var reason_for_repair = $("#act_create_form #reason_for_repair").attr("value");
-        var work_performed = $("#act_create_form #work_performed").attr("value");
-        var act_odometer = $("#act_create_form #act_odometer").attr("value");
-        var act_wait_start_date = $("#act_create_form #act_wait_start_date").attr("value");
-        var act_wait_end_date = $("#act_create_form #act_wait_end_date").attr("value");
-        var act_repair_start_date = $("#act_create_form #act_repair_start_date").attr("value");
-        var act_repair_end_date = $("#act_create_form #act_repair_end_date").attr("value");
+        var act_number = $("#act_create_form #act_number").prop("value");
+        var act_date = $("#act_create_form #act_date").prop("value");
+        var respondent_id = $("#act_create_form select[name='act_respondent_id']").prop("value");
+        var car_id = $("#act_create_form select[name='car_id']").prop("value");
+        var driver_id = $("#act_create_form select[name='driver_id']").prop("value");
+        var mechanic_id = $("#act_create_form select[name='mechanic_id']").prop("value");
+        var reason_for_repair = $("#act_create_form #reason_for_repair").prop("value");
+        var work_performed = $("#act_create_form #work_performed").prop("value");
+        var act_odometer = $("#act_create_form #act_odometer").prop("value");
+        var act_wait_start_date = $("#act_create_form #act_wait_start_date").prop("value");
+        var act_wait_end_date = $("#act_create_form #act_wait_end_date").prop("value");
+        var act_repair_start_date = $("#act_create_form #act_repair_start_date").prop("value");
+        var act_repair_end_date = $("#act_create_form #act_repair_end_date").prop("value");
         var expended_list = "";
         var div = null;
         if (($.trim(act_date) == "") || ($.trim(respondent_id) == "") ||
@@ -2534,7 +2534,7 @@ $(document).ready(function(){
 
         var array = [];
         $("#act_expended_list option").each(function() {
-            expended_list += $(this).attr("value")+"@@";
+            expended_list += $(this).prop("value")+"@@";
         });
         var action = "";
         if (id_repair == 0) {
@@ -2587,20 +2587,20 @@ $(document).ready(function(){
     {
         $("#error_waybill_create div").remove();
         $("#error_waybill_create").hide();
-        var waybill_number = $("#waybill_number").attr("value");
-        var waybill_start_date = $("#waybill_start_date").attr("value");
-        var waybill_end_date = $("#waybill_end_date").attr("value");
-        var car_id = $("#waybill_create_form select[name='car_id']").attr("value");
-        var driver_id = $("#waybill_create_form select[name='driver_id']").attr("value");
-        var mechanic_id = $("#waybill_create_form select[name='mechanic_id']").attr("value");
-        var dispatcher_id = $("#waybill_create_form select[name='dispatcher_id']").attr("value");
-        var department = $("#waybill_create_form select[name='department']").attr("value");
-        var address_supply = $("#waybill_address_supply").attr("value");
-        var waybill_mileage_before = $("#waybill_mileage_before").attr("value");
-        var waybill_mileage_after = $("#waybill_mileage_after").attr("value");
-        var waybill_fuel_before = $("#waybill_fuel_before").attr("value").replace(",",".");
-        var waybill_given_fuel = $("#waybill_given_fuel").attr("value").replace(",",".");
-        var fuel_type_id = $("#waybill_create_form select[name='fuel_type_id']").attr("value");
+        var waybill_number = $("#waybill_number").prop("value");
+        var waybill_start_date = $("#waybill_start_date").prop("value");
+        var waybill_end_date = $("#waybill_end_date").prop("value");
+        var car_id = $("#waybill_create_form select[name='car_id']").prop("value");
+        var driver_id = $("#waybill_create_form select[name='driver_id']").prop("value");
+        var mechanic_id = $("#waybill_create_form select[name='mechanic_id']").prop("value");
+        var dispatcher_id = $("#waybill_create_form select[name='dispatcher_id']").prop("value");
+        var department = $("#waybill_create_form select[name='department']").prop("value");
+        var address_supply = $("#waybill_address_supply").prop("value");
+        var waybill_mileage_before = $("#waybill_mileage_before").prop("value");
+        var waybill_mileage_after = $("#waybill_mileage_after").prop("value");
+        var waybill_fuel_before = $("#waybill_fuel_before").prop("value").replace(",",".");
+        var waybill_given_fuel = $("#waybill_given_fuel").prop("value").replace(",",".");
+        var fuel_type_id = $("#waybill_create_form select[name='fuel_type_id']").prop("value");
         var ways_list = "";
         var is_correct = true;
         if (($.trim(waybill_start_date) == "") || ($.trim(waybill_end_date) == "") ||
@@ -2649,7 +2649,7 @@ $(document).ready(function(){
 
         var array = [];
         $("#ways_list option").each(function() {
-            ways_list += $(this).attr("value")+"$";
+            ways_list += $(this).prop("value")+"$";
         });
         var action = "";
         if (id_waybill == 0) {

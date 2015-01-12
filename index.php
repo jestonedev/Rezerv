@@ -17,7 +17,7 @@ header("Cache-Control: no-cache, must-revalidate");
         <link href='css/fullcalendar.css' rel='stylesheet' type='text/css'  />
         <link href='css/fullcalendar.print.css' rel='stylesheet' type='text/css'  media='print' />
 
-        <script src="scripts/jquery-1.7.2.js" type='text/javascript'></script>
+        <script src="scripts/jquery-1.11.2.min.js" type='text/javascript'></script>
         <script src="scripts/jquery-ui-1.11.2.min.js" type='text/javascript'></script>
         <script src="scripts/jquery.inputmask-3.1.0.js" type="text/javascript"></script>
         <script src="scripts/jquery.dataTables_1.10.4.min.js" type="text/javascript"></script>
