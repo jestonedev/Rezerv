@@ -57,19 +57,6 @@ $(document).ready(function(){
     //Инициализация компонентов
     $( "input[type=submit], input[type=reset], a, button" ).button();
 
-    initVariables();
-    initDataTable();
-    initButtonsState();
-    initMileagesEditor();
-
-    initCalendar();
-    initReportForm();
-    initCarSelectForm();
-    initActCreateForm();
-    initWaybillCreateForm();
-    initAutoRefresh();
-
-    $('#calendar').hide();
     $('#calendar_details').hide();
     $('#reportSettings').hide();
     $('#select_car_form').hide();
@@ -78,6 +65,19 @@ $(document).ready(function(){
     $('#add_expended').hide();
     $('#waybill_create_form').hide();
     $('#add_way').hide();
+
+    initCalendar();
+    $('#calendar').hide();
+
+    initVariables();
+    initDataTable();
+    initButtonsState();
+    initMileagesEditor();
+    initReportForm();
+    initCarSelectForm();
+    initActCreateForm();
+    initWaybillCreateForm();
+    initAutoRefresh();
 
     ///////////////////////////////////
     //Назначение обработчиков событий//
@@ -143,8 +143,10 @@ $(document).ready(function(){
                                 click: function() { $( this ).dialog( "close" ); }}]
                         });
                         $('#calendar').dialog("option","position",{ at: "center center" });
-                        $('#calendar').fullCalendar( 'refetchEvents' );
-                        $('#calendar').fullCalendar( 'rerenderEvents' );
+                        $('#calendar').fullCalendar("option", "height",
+                            $('#calendar').dialog("option","height") - 150);
+                        $('#calendar').fullCalendar( "refetchEvents" );
+                        $('#calendar').fullCalendar( "rerenderEvents" );
                         allowRefreshCalendar = 1;
                     }
                 },
@@ -962,7 +964,7 @@ $(document).ready(function(){
     function show_mileage_details(sender)
     {
         //Отобразить форму внесения данных о пробеге
-        var id_car = $(sender).prop("value");
+        var id_car = $(sender).attr("value");
         $("#error_mileagesEditor").hide();
         $('#mileagesEditor').dialog({
             autoOpen: true,
@@ -1388,7 +1390,7 @@ $(document).ready(function(){
 
     $(window).resize(
         function() {
-            $('.dataTables_scrollBody').css('height', ($(window).height() - 320));
+            $('.dataTables_scrollBody').css('height', ($(window).height() - 290));
             var table = $('#example').DataTable();
             table.columns.adjust().draw();
         }
@@ -1409,7 +1411,7 @@ $(document).ready(function(){
 			"bDeferRender": true,
             "bServerSide": false,
             "bJQueryUI": true,
-            "scrollY": $("td#body").height()- 55,
+            "scrollY": $(window).height() - 290,
             "bFilter": true,
             "iDisplayLength": 25,
             "destroy": $.fn.DataTable.fnIsDataTable( ex ),
@@ -1540,7 +1542,6 @@ $(document).ready(function(){
             firstHour: 7,
             axisFormat: "HH:mm",
             allDaySlot: false,
-            height: $("td#body").height() - 70,
             cache: true,
             timeFormat: 'H:mm',
             theme: true,
