@@ -63,7 +63,10 @@ class Helper{
                 break;
             case "date":
                 $tmp = explode('.', $value );
-                if (checkdate($tmp[1],$tmp[0],$tmp[2]))
+                if (trim($tmp[0],"_") == $tmp[0] &&
+                    trim($tmp[1],"_") == $tmp[1] &&
+                    trim($tmp[2],"_") == $tmp[2] &&
+                    checkdate($tmp[1],$tmp[0],$tmp[2]))
                 {
                     Helper::$requestDate = $value;
                     return "";
