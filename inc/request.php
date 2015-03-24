@@ -13,7 +13,7 @@ class Request {
     private function fatal_error ( $sErrorMessage = '' )
     {
         header( $_SERVER['SERVER_PROTOCOL'] .' 500 Internal Server Error ' );
-        die( $sErrorMessage );
+        die( '<div id="request_result_error">'.$sErrorMessage.'</div>' );
     }
 
     public function __Construct(){
@@ -147,7 +147,7 @@ class Request {
                         WHERE YEAR(str_to_date(field_value, '%d.%m.%Y')) = YEAR(STR_TO_DATE('".$event_date."','%d.%m.%Y'))
                         AND MONTH(str_to_date(field_value, '%d.%m.%Y')) = MONTH(STR_TO_DATE('".$event_date."','%d.%m.%Y'))
                         AND (rn.department = '".$department."')
-                        AND (rn.stage = '".$stage."') AND (request_state <> 2) AND (request_state <> 4)
+                        AND (rn.stage LIKE '".$stage."%' OR '".$stage."' LIKE CONCAT(rn.stage,'%') ) AND (request_state <> 2) AND (request_state <> 4)
                         AND (alien_department=0) GROUP BY (ReqMonth)";
                 $res=mysqli_query($this->con,$query);
                 if (!$res)
@@ -231,11 +231,17 @@ class Request {
         //Проверка основных полученных от пользователя данных
         $ldap = new LDAP();
         $user_department = $ldap->GetLoginParam('COMPANY');
+        $user_stage = $ldap->GetLoginParam('DEPARTMENT');
         $organization = explode(':',stripslashes($request_array['department']));
         $department = $organization[0];
         $stage = $organization[1];
-        if ((!Auth::hasPrivilege(AUTH_CHANGE_DEPARTMENT_REQUEST)) && ($user_department != $department))
+        if ((!Auth::hasPrivilege(AUTH_CHANGE_DEPARTMENT_REQUEST)) && ($user_department != $department)) {
             $this->fatal_error("У вас нет прав на изменение наименования департамента");
+        }
+        if (!Auth::hasPrivilege(AUTH_ROOT_DEPARTMENT_REQUEST) && ($user_department == $department) &&
+            ((!isset($stage)) || (mb_substr($user_stage, 0, mb_strlen($stage)) != mb_substr($stage, 0, mb_strlen($user_stage))))) {
+            $this->fatal_error("Вы имеете права на подачу заявок только на свое подразделение/отдел");
+        }
         if (!is_array($request_array))
             $this->fatal_error("Переданные данные некорректного формата");
         if (isset($_POST['id_request']))
@@ -928,7 +934,7 @@ class Request {
         else
             $departments = $departments = $ldap->getDepartmentsAndSections("");
 
-        if (($include_all_marker) && (Auth::hasPrivilege(AUTH_ALL_DEPARTMENTS_READ_DATA)) || ($include_all_marker_force))
+        if ((($include_all_marker) && (Auth::hasPrivilege(AUTH_ALL_DEPARTMENTS_READ_DATA))) || ($include_all_marker_force))
             $html .= '<option value="Все департаменты">Все департаменты</option>';
 
         foreach ($departments as $department => $department_parts )
