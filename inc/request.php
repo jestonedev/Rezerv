@@ -128,17 +128,22 @@ class Request {
     public function RequestCount($department, $stage, $event_date)
     {
         //Получаем maxReqCount
-        $maxReqCount = 50;      //Максимальное количество разрешенных заявок в месяц по умолчанию
-        if (!empty($stage))
+        $maxReqCount = 0;      //Максимальное количество разрешенных заявок в месяц по умолчанию
+        $departments = '\''.$department.'\'';
+        $stages = '\''.$department.'\'';
+        if ($stage !== null)
         {
-            $query = "SELECT * FROM limite_req_except_dep WHERE Department = '".$department."' AND Stage = '".$stage."'";
+            $query = 'SELECT * FROM limite_req_except_dep WHERE Department LIKE \'%'.$department.'%\' AND Stage LIKE \'%'.$stage.'%\'';
             $res=mysqli_query($this->con,$query);
-            if (!$res)
-                $this->fatal_error("Не удалось выполнить запрос к базе данных");
+            if (!$res) {
+                $this->fatal_error('Не удалось выполнить запрос к базе данных');
+            }
             $row = mysqli_fetch_array($res, MYSQL_ASSOC);
             if ($row)
             {
                 $maxReqCount = $row['MaxReq'];
+                $departments = $row['Department'];
+                $stages = $row['Stage'];
                 //Вычисляем текущее число поданых заявок
                 $query = "SELECT COUNT(*) AS CountReq, MONTH(field_value) AS ReqMonth
                         FROM request_data RIGHT JOIN calendar_fields
@@ -147,7 +152,11 @@ class Request {
                         WHERE YEAR(str_to_date(field_value, '%d.%m.%Y')) = YEAR(STR_TO_DATE('".$event_date."','%d.%m.%Y'))
                         AND MONTH(str_to_date(field_value, '%d.%m.%Y')) = MONTH(STR_TO_DATE('".$event_date."','%d.%m.%Y'))
                         AND (rn.department = '".$department."')
-                        AND (rn.stage LIKE '".$stage."%' OR '".$stage."' LIKE CONCAT(rn.stage,'%') ) AND (request_state <> 2) AND (request_state <> 4)
+                        AND (rn.stage IS NULL OR
+                            (SELECT COUNT(*) FROM limite_req_except_dep lred
+                            WHERE lred.Stage IS NOT NULL AND lred.department LIKE '%".$department."%' AND
+                             lred.Stage LIKE '%".$stage."%') = 0)
+                        AND (request_state <> 2) AND (request_state <> 4)
                         AND (alien_department=0) GROUP BY (ReqMonth)";
                 $res=mysqli_query($this->con,$query);
                 if (!$res)
@@ -157,11 +166,11 @@ class Request {
                 if (!$row)
                     return $maxReqCount;
                 else
-                    return $maxReqCount - $row["CountReq"];
+                    return $maxReqCount - $row['CountReq'];
             }
             else
             {
-                $query = "SELECT * FROM limite_req_except_dep WHERE Department = '".$department."'";
+                $query = 'SELECT * FROM limite_req_except_dep WHERE Department LIKE \'%'.$department.'%\'';
                 $res=mysqli_query($this->con,$query);
                 if (!$res)
                     $this->fatal_error("Не удалось выполнить запрос к базе данных");
@@ -176,9 +185,11 @@ class Request {
                         WHERE YEAR(str_to_date(field_value, '%d.%m.%Y')) = YEAR(STR_TO_DATE('".$event_date."','%d.%m.%Y'))
                         AND MONTH(str_to_date(field_value, '%d.%m.%Y')) = MONTH(STR_TO_DATE('".$event_date."','%d.%m.%Y'))
                         AND (rn.department = '".$department."')
-                        AND (rn.stage IS NULL OR rn.stage NOT IN
-                            (SELECT lred.Stage FROM limite_req_except_dep lred
-                            WHERE lred.department = '".$department."' AND lred.Stage IS NOT NULL ))
+                        AND (rn.department = '".$department."')
+                        AND (rn.stage IS NULL OR
+                            (SELECT COUNT(*) FROM limite_req_except_dep lred
+                            WHERE lred.Stage IS NOT NULL AND lred.department LIKE '%".$department."%' AND
+                             lred.Stage LIKE '%".$stage."%') = 0)
                         AND (request_state <> 2) AND (request_state <> 4)
                         AND (alien_department=0) GROUP BY (ReqMonth)";
                 $res=mysqli_query($this->con,$query);
@@ -193,7 +204,7 @@ class Request {
             }
         } else
         {
-            $query = "SELECT * FROM limite_req_except_dep WHERE Department = '".$department."'";
+            $query = 'SELECT * FROM limite_req_except_dep WHERE Department LIKE \'%'.$department.'%\'';
             $res=mysqli_query($this->con,$query);
             if (!$res)
                 $this->fatal_error("Не удалось выполнить запрос к базе данных");

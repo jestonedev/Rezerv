@@ -101,7 +101,8 @@ $(document).ready(function(){
             }
         });
         if (!has_form_data) {
-            return; }
+            return;
+        }
         $('#calendarSettings').dialog({
             autoOpen: true,
             modal: true,
