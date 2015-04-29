@@ -988,7 +988,7 @@ class Request {
     //Функция построения и заполнения ComboBox машин
     public function CreateCarsComboBox($include_all_marker = false, $id_car = 0)
     {
-        $query = "SELECT * FROM cars ORDER BY number";
+        $query = "SELECT * FROM cars WHERE is_active = 1 ORDER BY number";
         $result = mysqli_query($this->con, $query);
         if (!$result)
             $this->fatal_error("Ошибка при выполнении запроса к базе данных");
