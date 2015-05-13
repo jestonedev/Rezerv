@@ -776,7 +776,13 @@ class Request {
                         $title = 'Ваша заявка успешно принята';
                     else
                         $title = 'Статус вашей заявки изменен';
-                    $smtp->SendEmail(SMTP_FROM, $email, $title, $email_body);
+					try
+					{
+						$smtp->SendEmail(SMTP_FROM, $email, $title, $email_body);
+					} catch(Exception $e)
+					{
+						// Stub
+					}
                 }
             }
             //Оповестить всех broadcast-notify-пользователей о появлении новой заявки
@@ -796,9 +802,15 @@ class Request {
                         continue;
                     $disp_email = $ldap->GetLoginParamByLogin("MAIL", $disp_login[1]);
                     $disp_name = $ldap->GetLoginParamByLogin("FIO", $disp_login[1]);
-                    $smtp->SendEmail(SMTP_FROM, $disp_email, "Новая заявка №".$id_request_number,
-                        "Здравствуйте, ".$disp_name."!<br>Подана новая заявка №".$id_request_number.
-                            ". Дата подачи ".date_format($date, 'd.m.Y H:i'));
+					try
+					{
+						$smtp->SendEmail(SMTP_FROM, $disp_email, "Новая заявка №".$id_request_number,
+							"Здравствуйте, ".$disp_name."!<br>Подана новая заявка №".$id_request_number.
+								". Дата подачи ".date_format($date, 'd.m.Y H:i'));
+					} catch(Exception $e)
+					{
+						// Stub
+					}
                 }
             }
             //Оповестить всех broadcast-notify-пользователей об отмене заявки пользователем
@@ -818,9 +830,15 @@ class Request {
                         continue;
                     $disp_email = $ldap->GetLoginParamByLogin("MAIL", $disp_login[1]);
                     $disp_name = $ldap->GetLoginParamByLogin("FIO", $disp_login[1]);
-                    $smtp->SendEmail(SMTP_FROM, $disp_email, "Заявка №".$id_request_number,
-                        "Здравствуйте, ".$disp_name."!<br>Заявка №".$id_request_number.
-                            " была <span style='color: red; font-weight: 600'>отменена</span> пользователем. Дата отмены заявки ".date_format($date, 'd.m.Y H:i'));
+					try
+					{
+						$smtp->SendEmail(SMTP_FROM, $disp_email, "Заявка №".$id_request_number,
+							"Здравствуйте, ".$disp_name."!<br>Заявка №".$id_request_number.
+								" была <span style='color: red; font-weight: 600'>отменена</span> пользователем. Дата отмены заявки ".date_format($date, 'd.m.Y H:i'));
+					} catch(Exception $e)
+					{
+						// Stub
+					}
                 }
             }
             $smtp->Quit();

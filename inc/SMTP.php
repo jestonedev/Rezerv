@@ -10,7 +10,7 @@ class SMTP
     private function fatal_error ( $sErrorMessage = '' )
     {
         header( $_SERVER['SERVER_PROTOCOL'] .' 500 Internal Server Error ' );
-        die( $sErrorMessage );
+        throw new Exception( $sErrorMessage );
     }
 
     public function __construct()
