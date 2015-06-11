@@ -1532,7 +1532,7 @@ $(document).ready(function(){
                 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
             titleFormat: {
                 month: 'MMMM YYYY',
-                day: 'dddd, d MMM, YYYY' },
+                day: 'dddd, DD MMM, YYYY' },
             buttonText: {
                 today:    'Сегодня',
                 month:    'Месяц',
@@ -1640,7 +1640,7 @@ $(document).ready(function(){
                 }).height("auto");
             },
             dayClick: function(date, allDay, jsEvent, view) {
-                if ((view.name == 'month') || (view.name == 'agendaWeek'))
+                if ((view != undefined) && ((view.name == 'month') || (view.name == 'agendaWeek')))
                 {
                     $("#calendar").fullCalendar('gotoDate',date.getFullYear(), date.getMonth(), date.getDate());
                     $("#calendar").fullCalendar('changeView','agendaDay');
@@ -2716,13 +2716,7 @@ $(document).ready(function(){
         day = date.getDate();
         if (day < 10) {
             day = '0'+day; }
-        hour = date.getHours();
-        if (hour < 10) {
-            hour = '0'+hour; }
-        minute = date.getMinutes();
-        if (minute < 10) {
-            minute = '0'+minute; }
-        return year+'-'+month+'-'+day+' '+hour+':'+minute;
+        return year+'-'+month+'-'+day+' '+'00:00';
     }
 
     //Возвращает cookie если есть или undefined
