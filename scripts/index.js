@@ -965,7 +965,9 @@ $(document).ready(function(){
     function show_mileage_details(sender)
     {
         //Отобразить форму внесения данных о пробеге
-        var id_car = $(sender).attr("value");
+        var id_car = $(sender).attr('value');
+        var id_chief_default = $(sender).data('id-chief-default');
+        $('#car_chief').prop('value', id_chief_default);
         $("#error_mileagesEditor").hide();
         $('#mileagesEditor').dialog({
             autoOpen: true,
@@ -999,11 +1001,12 @@ $(document).ready(function(){
                             return;
                         }
                         var mileage_type = $("#mileagesEditor select[name='mileage_type']").prop("value");
+                        var car_chief = $("#mileagesEditor select[name='car_chief']").prop("value");
                         $.ajax( {
                                 type: "POST",
                                 url: "inc/add_mileage.php",
                                 data: "id_car="+id_car+"&milage_date="+milage_date+"&milage_value="+milage_value+
-                                    "&mileage_type="+mileage_type,
+                                    "&mileage_type="+mileage_type+"&car_chief="+car_chief,
                                 success: function(msg)
                                 {
                                     if (msg == '')
@@ -1897,17 +1900,18 @@ $(document).ready(function(){
         );
         $.ajax( {
                 type: "POST",
-                url: "inc/drivers_list.php",
+                url: "inc/chiefs_list.php",
                 success: function(msg)
                 {
-                    $('#act_driver select').remove();
-                    $('#act_driver').append(msg);
+                    $('#car_chief_wrapper select').remove();
+                    $('#car_chief_wrapper').append(msg);
                 },
                 error: function(msg)
                 {
                 }
             }
         );
+
         $.ajax( {
                 type: "POST",
                 url: "inc/mechanics_list.php",

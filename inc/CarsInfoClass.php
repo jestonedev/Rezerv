@@ -31,27 +31,24 @@ class CarsInfoClass
             mysqli_close($this->link);
     }
 
-    public function AddMileAge($id_car, $date, $mileage, $mileage_type)
+    public function AddMileAge($id_car, $date, $mileage, $mileage_type, $car_chief)
     {
-        if ($mileage_type == 1)
+        $query = "SELECT * FROM mileages WHERE id_car = ".$id_car." AND `date` = str_to_date('".$date."','%d.%m.%Y') AND mileage_type = $mileage_type";
+        $result = mysqli_query($this->link, $query);
+        $car_chief = ($car_chief == null ? "NULL" : $car_chief);
+        if (mysqli_errno($this->con)!=0)
         {
-            $query = "SELECT * FROM mileages WHERE id_car = ".$id_car." AND `date` = str_to_date('".$date."','%d.%m.%Y') AND mileage_type = 1";
-            $result = mysqli_query($this->link, $query);
-            if (mysqli_errno($this->con)!=0)
-            {
-                $this->fatal_error('Ошибка при выполнении запроса к базе данных');
-                echo 'Ошибка при выполнении запроса';
-            }
-            if (mysqli_num_rows($result) > 0)
-            {
-                $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-                $id = $row["id"];
-                $query = "UPDATE mileages SET mileage = ".$mileage." WHERE id = ".$id;
-            } else
-                $query = "INSERT INTO mileages (id_car, mileage, `date`, mileage_type) VALUES (".$id_car.", ".$mileage.", str_to_date('".$date."','%d.%m.%Y'), ".$mileage_type.")";
-            mysqli_free_result($result);
+            $this->fatal_error('Ошибка при выполнении запроса к базе данных');
+            echo 'Ошибка при выполнении запроса';
+        }
+        if (mysqli_num_rows($result) > 0)
+        {
+            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+            $id = $row["id"];
+            $query = "UPDATE mileages SET mileage = ".$mileage.", car_chief = $car_chief WHERE id = ".$id;
         } else
-            $query = "INSERT INTO mileages (id_car, mileage, `date`, mileage_type) VALUES (".$id_car.", ".$mileage.", str_to_date('".$date."','%d.%m.%Y'), ".$mileage_type.")";
+            $query = "INSERT INTO mileages (id_car, id_car_chief, mileage, `date`, mileage_type) VALUES (".$id_car.",".$car_chief.",".$mileage.", str_to_date('".$date."','%d.%m.%Y'),".$mileage_type.")";
+        mysqli_free_result($result);
         $pq = mysqli_prepare($this->link, $query);
         mysqli_stmt_execute($pq);
         if (mysqli_errno($this->con)!=0)
@@ -97,7 +94,8 @@ class CarsInfoClass
         $start_date = '01.'.$now->format('m').'.'.$now->format('Y');
         $end_date = $this->LastDayOfMonth(intval($now->format('m')), intval($now->format('Y'))).'.'.$now->format('m').'.'.$now->format('Y');
 
-        return "(SELECT CONCAT('<img src=\'img/details_open.png\' value=\'',cars.id,'\'>') AS edit_lbl, CONCAT(cars.model,' г/н ',cars.number) AS car
+        return "(SELECT CONCAT('<img src=\'img/details_open.png\' value=\'',cars.id,'\' data-id-chief-default=\'',IFNULL(cars.id_chief_default, 0),'\'>') AS edit_lbl,
+               IF(cars.model = '' AND cars.number = '', cars.type, CONCAT(cars.model,' г/н ',cars.number)) AS car
              , IFNULL(date(l.`date`), 'Не указано') AS limit_date
              , IFNULL(l.mileage, 'Без ограничений') AS limit_mileage
              , IFNULL(m.mileage, 0) AS fact_mileage

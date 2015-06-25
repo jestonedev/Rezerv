@@ -26,6 +26,11 @@ if ($_SERVER["REQUEST_METHOD"]==="POST") {
         $mileage_type = addslashes($_POST['mileage_type']);
     else
         die('Отсутствует переменная mileage_type');
+    if (isset($_POST['car_chief']) && trim($_POST['car_chief']) !== '')
+        $car_chief = addslashes($_POST['car_chief']);
+    else
+        $car_chief = null;
+
     $mil = new CarsInfoClass();
-    echo $mil->AddMileAge($id_car, $milage_date, $milage_value, $mileage_type);
+    echo $mil->AddMileAge($id_car, $milage_date, $milage_value, $mileage_type, $car_chief);
 }

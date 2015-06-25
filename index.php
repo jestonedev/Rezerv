@@ -156,6 +156,13 @@ header("Cache-Control: no-cache, must-revalidate");
                 </select>
                 </td>
             </tr>
+            <tr>
+                <td>Руководитель:</td>
+                <td id="car_chief_wrapper">
+                    <select id="car_chief" name="car_chief">
+                    </select>
+                </td>
+            </tr>
         </table>
         <div id="error_mileagesEditor"></div>
     </div>

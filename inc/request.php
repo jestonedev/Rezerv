@@ -1056,6 +1056,29 @@ class Request {
         return $html;
     }
 
+    //Функция построения и заполнения ComboBox руководителей/владельцев транспорта
+    public function CreateChiefsComboBox()
+    {
+        $query = "SELECT * FROM cars_chiefs WHERE is_active = 1 ORDER BY name";
+        $result = mysqli_query($this->con, $query);
+        if (!$result)
+            $this->fatal_error("Ошибка при выполнении запроса к базе данных");
+        $is_first_row = true;
+        $html = "<select id='car_chief' name='car_chief'>";
+        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC))
+        {
+            $value = $row['name'];
+            if ($is_first_row)
+            {
+                $html.='<option selected="true" value="'. $row['id_chief'].'">'.$value.'</option>';
+                $is_first_row = false;
+            } else
+                $html.='<option value="'.$row['id_chief'].'">'.$value.'</option>';
+        }
+        $html.="</select>";
+        return $html;
+    }
+
     //Функция построения и заполнения ComboBox ответственных
     public function CreateRespondentsComboBox($id_respondent = 0)
     {

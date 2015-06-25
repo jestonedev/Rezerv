@@ -109,7 +109,7 @@ td#footer
     margin-top: 7pt;
 }
 
-#mileage_date, #mileage_value, #mileage_type {
+#mileage_date, #mileage_value, #mileage_type, #car_chief {
     width: 90%;
 }
 
