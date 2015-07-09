@@ -2041,6 +2041,8 @@ $(document).ready(function(){
                 {
                     $('#waybill_driver select').remove();
                     $('#waybill_driver').append(msg);
+                    $('#act_driver select').remove();
+                    $('#act_driver').append(msg);
                 },
                 error: function(msg)
                 {
