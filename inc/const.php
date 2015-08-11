@@ -1,5 +1,5 @@
 <?php
-define("MYSQL_SERVER","b520");
+define("MYSQL_SERVER","db01");
 define("MYSQL_USER","request");
 define("MYSQL_PASSWORD","cbcntvfpfzdjr");
 define("MYSQL_BASE","request");

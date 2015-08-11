@@ -310,8 +310,12 @@ class Request {
                     return '<div id="request_result_error">Заявка не изменена. Обратитесь к адмнистратору</div>';
             } else
             {
-                if($this->AddRequest($request_array))
-                    return '<div id="request_result_success">Заявка добавлена.</div><div id="request_count">Лимит ваших заявок на этот месяц составляет '.$this->RequestCount($department, $stage, $event_date).' шт.</div>';
+                if($this->AddRequest($request_array)) {
+                    if (!Auth::hasPrivilege(AUTH_UNLIMIT_REQUESTS))
+                        return '<div id="request_result_success">Заявка добавлена.</div><div id="request_count">Лимит ваших заявок на этот месяц составляет ' . $this->RequestCount($department, $stage, $event_date) . ' шт.</div>';
+                    else
+                        return '<div id="request_result_success">Заявка добавлена.</div>';
+                }
                 else
                     return '<div id="request_result_error">Заявка не добавлена. Обратитесь к адмнистратору</div>';
             }
