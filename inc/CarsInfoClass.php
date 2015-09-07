@@ -45,7 +45,7 @@ class CarsInfoClass
         {
             $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
             $id = $row["id"];
-            $query = "UPDATE mileages SET mileage = ".$mileage.", car_chief = $car_chief WHERE id = ".$id;
+            $query = "UPDATE mileages SET mileage = ".$mileage.", id_car_chief = $car_chief WHERE id = ".$id;
         } else
             $query = "INSERT INTO mileages (id_car, id_car_chief, mileage, `date`, mileage_type) VALUES (".$id_car.",".$car_chief.",".$mileage.", str_to_date('".$date."','%d.%m.%Y'),".$mileage_type.")";
         mysqli_free_result($result);
