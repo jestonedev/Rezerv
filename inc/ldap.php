@@ -235,7 +235,7 @@ class LDAP
 
     public function getDepartmentsAndSections($department_filter = "")
     {
-        $stuff="";
+        $stuff=[];
         if($this->bind)
         {
             $departments=array();

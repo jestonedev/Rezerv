@@ -63,7 +63,7 @@ class Request {
                     $this->fatal_error("Ошибка при выполнении запроса");
                 $row = mysqli_fetch_array($res_values, MYSQLI_ASSOC);
                 $field_html='<select name="[name]">';
-                while ($mysql_data=mysqli_fetch_array($res,MYSQL_ASSOC)){
+                while ($mysql_data=mysqli_fetch_array($res,MYSQLI_ASSOC)){
                     if ($mysql_data["id_field_data"] == $row["field_value"])
                         $field_html.='<option selected="true" value="'.$mysql_data["id_field_data"].'">'.$mysql_data["field_data_value"].'</option>';
                     else
@@ -141,7 +141,7 @@ class Request {
             if (!$res) {
                 $this->fatal_error('Не удалось выполнить запрос к базе данных');
             }
-            $row = mysqli_fetch_array($res, MYSQL_ASSOC);
+            $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
             if ($row)
             {
                 $maxReqCount = $row['MaxReq'];
@@ -160,7 +160,7 @@ class Request {
                 $res=mysqli_query($this->con,$query);
                 if (!$res)
                     $this->fatal_error("Не удалось выполнить запрос к базе данных");
-                $row = mysqli_fetch_array($res, MYSQL_ASSOC);
+                $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
                 //Возвращаем текущее количество оставшихся заявок
                 if (!$row)
                     return $maxReqCount;
@@ -173,7 +173,7 @@ class Request {
                 $res=mysqli_query($this->con,$query);
                 if (!$res)
                     $this->fatal_error("Не удалось выполнить запрос к базе данных");
-                $row = mysqli_fetch_array($res, MYSQL_ASSOC);
+                $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
                 if ($row)
                     $maxReqCount = $row['MaxReq'];
                 //Вычисляем текущее число поданых заявок
@@ -193,7 +193,7 @@ class Request {
                 $res=mysqli_query($this->con,$query);
                 if (!$res)
                     $this->fatal_error("Не удалось выполнить запрос к базе данных");
-                $row = mysqli_fetch_array($res, MYSQL_ASSOC);
+                $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
                 //Возвращаем текущее количество оставшихся заявок
                 if (!$row)
                     return $maxReqCount;
@@ -206,7 +206,7 @@ class Request {
             $res=mysqli_query($this->con,$query);
             if (!$res)
                 $this->fatal_error("Не удалось выполнить запрос к базе данных");
-            $row = mysqli_fetch_array($res, MYSQL_ASSOC);
+            $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
             if ($row)
                 $maxReqCount = $row['MaxReq'];
             //Вычисляем текущее число поданых заявок
@@ -226,7 +226,7 @@ class Request {
             $res=mysqli_query($this->con,$query);
             if (!$res)
                 $this->fatal_error("Не удалось выполнить запрос к базе данных");
-            $row = mysqli_fetch_array($res, MYSQL_ASSOC);
+            $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
             //Возвращаем текущее количество оставшихся заявок
             if (!$row)
                 return $maxReqCount;
@@ -265,7 +265,7 @@ class Request {
         $res_date_field_id = mysqli_query($this->con,$query);
         if (!$res_date_field_id)
             $this->fatal_error("Не удалось выполнить запрос к базе данных");
-        $mysql_data=mysqli_fetch_array($res_date_field_id, MYSQL_ASSOC);
+        $mysql_data=mysqli_fetch_array($res_date_field_id, MYSQLI_ASSOC);
         if (isset($request_array["param".$mysql_data['start_date_field']]))
             $event_date = $request_array["param".$mysql_data['start_date_field']];
         if (!Auth::hasPrivilege(AUTH_UNLIMIT_REQUESTS))
@@ -282,7 +282,7 @@ class Request {
 
         //Заполнение массивов со значениями и характеристиками(тип, обязательность) полей запроса
         $fields_param=array();
-        while($mysql_data=mysqli_fetch_array($res, MYSQL_ASSOC)) {
+        while($mysql_data=mysqli_fetch_array($res, MYSQLI_ASSOC)) {
             if (!isset($request_array["param".$mysql_data['id_field']]))
                 $request_array["param".$mysql_data['id_field']]="";
             $fields_param["param".$mysql_data['id_field']] = array("name"=>$mysql_data['field_name'],"required"=>$mysql_data['field_required'],"type"=>$mysql_data['field_value_type']);
