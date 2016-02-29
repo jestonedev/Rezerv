@@ -65,6 +65,7 @@ header("Cache-Control: no-cache, must-revalidate");
         <button id="btnCreateAct">Создать акт</button>
         <button id="btnCreateWaybill">Создать путевой лист</button>
         <button id="btnShowCalendar">Календарь заявок</button>
+        <a class="user-doc_cell" href="/doc/user_manual.odt">Руководство пользователя</a>
     </td>
     <td id="body">
             <table cellpadding="0" cellspacing="0" class="display" id="example">

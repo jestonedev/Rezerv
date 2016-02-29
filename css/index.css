@@ -296,3 +296,10 @@ td#body {
 .expended_table th, .ways_table th {
 	background-color: #f2f2f2;
 }
+
+.user-doc_cell {
+    text-align: center;
+    margin-top:10px;
+    width: 170pt;
+    font-size: 12pt;
+}
