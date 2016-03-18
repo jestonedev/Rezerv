@@ -726,7 +726,7 @@ $(document).ready(function(){
         $(".btnModifyAct, .btnDeleteAct, .btnReportByAct").button().unbind('click');
         $(".btnDeleteAct").button().click( function() {
                 var id_repair = $(this).prop("value");
-                if (!confirm('Вы действительно хотите удалить акт № '+id_repair+'?'))
+                if (!confirm('Вы действительно хотите удалить акт?'))
                 {
                     return;
                 }
@@ -755,32 +755,33 @@ $(document).ready(function(){
                     success: function(msg)
                     {
                         var info = JSON.parse(msg);
-                        $("#act_create_form #act_number").prop("value", info["repair_act_number"]);
-                        $("#act_create_form #act_date").prop("value", convert_date(info["act_date"]));
+                        var form = $('#act_create_form');
+                        form.find("#act_number").prop("value", info["repair_act_number"]);
+                        form.find("#act_date").prop("value", convert_date(info["act_date"]));
                         if (info["wait_start_date"]) {
-                            $("#act_create_form #act_wait_start_date").prop("value", convert_datetime(info["wait_start_date"])); }
+                            form.find("#act_wait_start_date").prop("value", convert_datetime(info["wait_start_date"])); }
                         else {
-                            $("#act_create_form #act_wait_start_date").prop("value", ""); }
+                            form.find("#act_wait_start_date").prop("value", ""); }
                         if (info["wait_end_date"]) {
-                            $("#act_create_form #act_wait_end_date").prop("value", convert_datetime(info["wait_end_date"])); }
+                            form.find("#act_wait_end_date").prop("value", convert_datetime(info["wait_end_date"])); }
                         else {
-                            $("#act_create_form #act_wait_end_date").prop("value", ""); }
+                            form.find("#act_wait_end_date").prop("value", ""); }
                         if (info["repair_start_date"]) {
-                            $("#act_create_form #act_repair_start_date").prop("value", convert_datetime(info["repair_start_date"])); }
+                            form.find("#act_repair_start_date").prop("value", convert_datetime(info["repair_start_date"])); }
                         else {
-                            $("#act_create_form #act_repair_start_date").prop("value", ""); }
+                            form.find("#act_repair_start_date").prop("value", ""); }
                         if (info["repair_end_date"]) {
-                            $("#act_create_form #act_repair_end_date").prop("value", convert_datetime(info["repair_end_date"])); }
+                            form.find("#act_repair_end_date").prop("value", convert_datetime(info["repair_end_date"])); }
                         else {
-                            $("#act_create_form #act_repair_end_date").prop("value", ""); }
-                        $("#act_create_form select[name='act_respondent_id']").prop("value",info["id_respondent"]);
-                        $("#act_create_form select[name='car_id']").prop("value", info["id_car"]);
-                        $("#act_create_form select[name='driver_id']").prop("value", info["id_driver"]);
-                        $("#act_create_form select[name='mechanic_id']").prop("value", info["id_mechanic"]);
-                        $("#act_create_form #reason_for_repair").prop("value", info["reason_for_repairs"]);
-                        $("#act_create_form #work_performed").prop("value", info["work_performed"]);
-                        $("#act_create_form #act_odometer").prop("value", info["odometer"]);
-
+                            form.find("#act_repair_end_date").prop("value", ""); }
+                        form.find("select[name='act_respondent_id']").prop("value",info["id_respondent"]);
+                        form.find("select[name='car_id']").prop("value", info["id_car"]);
+                        form.find("select[name='driver_id']").prop("value", info["id_driver"]);
+                        form.find("select[name='mechanic_id']").prop("value", info["id_mechanic"]);
+                        form.find("#reason_for_repair").prop("value", info["reason_for_repairs"]);
+                        form.find("#work_performed").prop("value", info["work_performed"]);
+                        form.find("#act_odometer").prop("value", info["odometer"]);
+                        form.find("#self_repair").prop("checked", info["self_repair"] === "1");
                         var expended_array = info["expended"];
                         $("#act_expended_list option").remove();
                         var i = 0;
@@ -791,38 +792,38 @@ $(document).ready(function(){
                             $("#act_expended_list").append("<option value='"+expended_material+"@"+expended_count+"'>"+expended_material+" - "
                                 +expended_count+"</option>");
                         }
+                        $("#error_act_create").hide();
+                        form.dialog( {
+                                autoOpen: true,
+                                modal: true,
+                                title: 'Изменить акт №'+info["repair_act_number"],
+                                width: $(window).width()/1.5,
+                                height: "auto",
+                                resizable: false,
+                                close: function(event, ui) {
+                                    initButtonsState();
+                                },
+                                buttons: [
+                                    {
+                                        text: "Изменить",
+                                        click: function() {
+                                            UpdateAct(id_repair);
+                                        }
+                                    },
+                                    {
+                                        text: "Закрыть",
+                                        click: function() {
+                                            $( this ).dialog( "close" );
+                                        }
+                                    }]
+                            }
+                        ).height("auto");
                     },
                     error: function(msg)
                     {
                     }
                 }
             );
-            $("#error_act_create").hide();
-            $('#act_create_form').dialog( {
-                    autoOpen: true,
-                    modal: true,
-                    title: 'Изменить акт №'+id_repair,
-                    width: $(window).width()/1.5,
-                    height: "auto",
-                    resizable: false,
-                    close: function(event, ui) {
-                        initButtonsState();
-                    },
-                    buttons: [
-                        {
-                            text: "Изменить",
-                            click: function() {
-                                UpdateAct(id_repair);
-                            }
-                        },
-                        {
-                            text: "Закрыть",
-                            click: function() {
-                                $( this ).dialog( "close" );
-                            }
-                        }]
-                }
-            ).height("auto");
         });
         $('.btnReportByAct').button().click(function() {
             var id_repair = $(this).prop("value");
@@ -2451,20 +2452,23 @@ $(document).ready(function(){
     //Создание/изменение акта выполненных работ
     function ProcessAct(id_repair)
     {
-        var act_number = $("#act_create_form #act_number").prop("value");
-        var act_date = $("#act_create_form #act_date").prop("value");
-        var respondent_id = $("#act_create_form select[name='act_respondent_id']").prop("value");
-        var car_id = $("#act_create_form select[name='car_id']").prop("value");
-        var driver_id = $("#act_create_form select[name='driver_id']").prop("value");
-        var mechanic_id = $("#act_create_form select[name='mechanic_id']").prop("value");
-        var reason_for_repair = $("#act_create_form #reason_for_repair").prop("value");
-        var work_performed = $("#act_create_form #work_performed").prop("value");
-        var act_odometer = $("#act_create_form #act_odometer").prop("value");
-        var act_wait_start_date = $("#act_create_form #act_wait_start_date").prop("value");
-        var act_wait_end_date = $("#act_create_form #act_wait_end_date").prop("value");
-        var act_repair_start_date = $("#act_create_form #act_repair_start_date").prop("value");
-        var act_repair_end_date = $("#act_create_form #act_repair_end_date").prop("value");
-        var expended_list = "";
+        var form = $('#act_create_form');
+
+        var act_number = form.find("#act_number").prop("value");
+        var act_date = form.find("#act_date").prop("value");
+        var respondent_id = form.find("select[name='act_respondent_id']").prop("value");
+        var car_id = form.find("select[name='car_id']").prop("value");
+        var driver_id = form.find("select[name='driver_id']").prop("value");
+        var mechanic_id = form.find("select[name='mechanic_id']").prop("value");
+        var reason_for_repair = form.find("#reason_for_repair").prop("value");
+        var work_performed = form.find("#work_performed").prop("value");
+        var act_odometer = form.find("#act_odometer").prop("value");
+        var act_wait_start_date = form.find("#act_wait_start_date").prop("value");
+        var act_wait_end_date = form.find("#act_wait_end_date").prop("value");
+        var act_repair_start_date = form.find("#act_repair_start_date").prop("value");
+        var act_repair_end_date = form.find("#act_repair_end_date").prop("value");
+        var self_repair = form.find("#self_repair").prop("checked");
+
         var div = null;
         if (($.trim(act_date) == "") || ($.trim(respondent_id) == "") ||
             ($.trim(car_id) == "") || ($.trim(driver_id) == "") ||
@@ -2542,7 +2546,7 @@ $(document).ready(function(){
             act_repair_end_date = "";
         }
 
-        var array = [];
+        var expended_list = "";
         $("#act_expended_list option").each(function() {
             expended_list += $(this).prop("value")+"@@";
         });
@@ -2555,7 +2559,7 @@ $(document).ready(function(){
             "&driver_id="+driver_id+"&mechanic_id="+mechanic_id+"&reason_for_repair="+reason_for_repair+
             "&work_performed="+work_performed+"&act_odometer="+act_odometer+"&act_wait_start_date="+act_wait_start_date+
             "&act_wait_end_date="+act_wait_end_date+"&act_repair_start_date="+act_repair_start_date+
-            "&act_repair_end_date="+act_repair_end_date+"&expended_list="+expended_list;
+            "&act_repair_end_date="+act_repair_end_date+"&expended_list="+expended_list+"&self_repair="+self_repair;
         $.ajax({
             type: "POST",
             url: "inc/acts_modify.php",

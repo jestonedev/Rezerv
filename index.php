@@ -229,8 +229,8 @@ header("Cache-Control: no-cache, must-revalidate");
             </tr>
             <tr>
                 <td>Израсходованные материалы</td>
-                <td id="act_expended" name="act_expended" colspan="2">
-                    <select size="4" id="act_expended_list" multiple name="act_expended_list"></select>
+                <td id="act_expended" colspan="2">
+                    <select size="3" id="act_expended_list" multiple name="act_expended_list"></select>
                 </td>
             </tr>
             <tr>
@@ -238,6 +238,12 @@ header("Cache-Control: no-cache, must-revalidate");
                 <td id="act_expended_buttons" colspan="2">
                     <input type="button" id="insert_expended" name="insert_expended" value="Добавить материал">
                     <input type="button" id="delete_expended" name="delete_expended" value="Удалить материал">
+                </td>
+            </tr>
+            <tr>
+                <td>Собственный ремонт</td>
+                <td colspan="2">
+                    <input type="checkbox" id="self_repair" name="self_repair" checked>
                 </td>
             </tr>
         </table>

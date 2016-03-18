@@ -1251,7 +1251,7 @@ class Request {
         if (!Auth::hasPrivilege(AUTH_MODIFY_REPAIR_ACTS))
             $this->fatal_error('У вас нет прав на изменение акта выполненных работ');
         $query = "UPDATE cars_repair_acts SET id_car = ?, id_performer = ?, id_driver = ?, id_respondent = ?, repair_act_number = ?, act_date = ?, reason_for_repairs = ?, work_performed = ?,
-          odometer = ?, wait_start_date = ?, wait_end_date = ?, repair_start_date = ?, repair_end_date = ? WHERE id_repair = ?";
+          odometer = ?, wait_start_date = ?, wait_end_date = ?, repair_start_date = ?, repair_end_date = ?, self_repair = ? WHERE id_repair = ?";
         $pq = mysqli_prepare($this->con, $query);
         $car_id = $args['car_id'];
         $act_number = (trim($args['act_number']) == "") ? null : trim($args['act_number']);
@@ -1300,10 +1300,11 @@ class Request {
             $act_repair_end_date_parts = explode('.', $act_repair_end_datetime_parts[0]);
             $act_repair_end_date = $act_repair_end_date_parts[2].'-'.$act_repair_end_date_parts[1].'-'.$act_repair_end_date_parts[0].' '.$act_repair_end_datetime_parts[1];
         }
+        $self_repair = $args['self_repair'] === 'true' ? 1 : 0;
         $repair_id = $args['repair_id'];
-        mysqli_stmt_bind_param($pq,'iiiiisssissssi',$car_id, $performer_id, $driver_id, $respondent_id, $act_number, $act_date,
+        mysqli_stmt_bind_param($pq,'iiiiisssissssii',$car_id, $performer_id, $driver_id, $respondent_id, $act_number, $act_date,
             $reason_for_repairs, $work_performed, $odometer, $act_wait_start_date, $act_wait_end_date,
-            $act_repair_start_date, $act_repair_end_date, $repair_id);
+            $act_repair_start_date, $act_repair_end_date, $self_repair, $repair_id);
         mysqli_stmt_execute($pq);
         if (mysqli_errno($this->con)!=0)
         {
@@ -1351,8 +1352,8 @@ class Request {
         if (!Auth::hasPrivilege(AUTH_MODIFY_REPAIR_ACTS))
             $this->fatal_error('У вас нет прав на создание акта выполненных работ');
         $query = "INSERT INTO cars_repair_acts(id_car, id_performer, id_driver, id_respondent, repair_act_number, act_date,
-        reason_for_repairs, work_performed, odometer, wait_start_date, wait_end_date, repair_start_date, repair_end_date)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        reason_for_repairs, work_performed, odometer, wait_start_date, wait_end_date, repair_start_date, repair_end_date, self_repair)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $pq = mysqli_prepare($this->con, $query);
         $car_id = $args['car_id'];
         $act_number = (trim($args['act_number']) == "") ? null : trim($args['act_number']);
@@ -1401,9 +1402,10 @@ class Request {
             $act_repair_end_date_parts = explode('.', $act_repair_end_datetime_parts[0]);
             $act_repair_end_date = $act_repair_end_date_parts[2].'-'.$act_repair_end_date_parts[1].'-'.$act_repair_end_date_parts[0].' '.$act_repair_end_datetime_parts[1];
         }
-        mysqli_stmt_bind_param($pq,'iiiiisssissss',$car_id, $performer_id, $driver_id, $respondent_id, $act_number, $act_date,
+        $self_repair = $args['self_repair'] === 'true' ? 1 : 0;
+        mysqli_stmt_bind_param($pq,'iiiiisssissssi',$car_id, $performer_id, $driver_id, $respondent_id, $act_number, $act_date,
             $reason_for_repairs, $work_performed, $odometer, $act_wait_start_date, $act_wait_end_date,
-            $act_repair_start_date, $act_repair_end_date);
+            $act_repair_start_date, $act_repair_end_date, $self_repair);
         mysqli_stmt_execute($pq);
         if (mysqli_errno($this->con)!=0)
         {
