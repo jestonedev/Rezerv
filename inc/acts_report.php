@@ -19,7 +19,22 @@ if (!isset($_GET['id_repair']))
     die('Не объявлена переменная id_repair');
 $id_repair = $_GET['id_repair'];
 
-$query = "SELECT cra.*, m.name AS mechanic, d.name AS driver, r.name AS respondent, c.number, c.model
+$query = "SELECT cra.id_repair,
+  cra.id_car,
+  cra.id_performer,
+  cra.id_driver,
+  cra.id_respondent,
+  cra.repair_act_number,
+  cra.act_date,
+  cra.reason_for_repairs,
+  REPLACE(cra.work_performed,'\r\n','') AS work_performed,
+  cra.odometer,
+  cra.wait_start_date,
+  cra.wait_end_date,
+  cra.repair_start_date,
+  cra.repair_end_date,
+  cra.self_repair,
+  cra.deleted, m.name AS mechanic, d.name AS driver, r.name AS respondent, c.number, c.model
                     FROM cars_repair_acts cra
                       LEFT JOIN mechanics m ON (cra.id_performer = m.id_mechanic)
                       LEFT JOIN cars c ON (cra.id_car = c.id)
