@@ -197,18 +197,18 @@ class ReportClass
             if (Auth::hasPrivilege(AUTH_ALL_DEPARTMENTS_READ_DATA) && $department == 'Все департаменты')
                 $this->sTable = str_replace('%department_filter%', "", $this->sTable);
             else
-            if (Auth::hasPrivilege(AUTH_ALL_DEPARTMENTS_READ_DATA))
+            if (Auth::hasPrivilege(AUTH_ALL_DEPARTMENTS_READ_DATA) ||
+                ((!Auth::hasPrivilege(AUTH_ALL_DEPARTMENTS_READ_DATA)) && ($department == $user_department)))
             {
-                if (empty($stage))
-                    $department_template = " AND (department ='".addslashes($department)."')";
-                else
-                    $department_template = " AND (department ='".addslashes($department)."') AND (stage ='".addslashes($stage)."')";
-                $this->sTable = str_replace('%department_filter%', $department_template, $this->sTable);
-            } else
-            if ((!Auth::hasPrivilege(AUTH_ALL_DEPARTMENTS_READ_DATA)) && ($department == $user_department))
-            {
-                if (empty($stage))
-                    $department_template = " AND (department ='".addslashes($department)."')";
+                if (empty($stage)) {
+                    if ($department == 'Администрация')
+                    {
+                        $department_template = " AND (department IN ('Администрация','Организационно-контрольное управление'))";
+                    } else
+                    {
+                        $department_template = " AND (department ='" . addslashes($department) . "')";
+                    }
+                }
                 else
                     $department_template = " AND (department ='".addslashes($department)."') AND (stage ='".addslashes($stage)."')";
                 $this->sTable = str_replace('%department_filter%', $department_template, $this->sTable);
