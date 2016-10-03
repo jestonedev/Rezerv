@@ -1108,7 +1108,7 @@ class Request {
     //Функция построения и заполнения ComboBox водителей
     public function CreateDriversComboBox($id_driver = 0)
     {
-        $query = "SELECT * FROM drivers ORDER BY name";
+        $query = "SELECT * FROM drivers WHERE is_active = 1 ORDER BY name";
         $result = mysqli_query($this->con, $query);
         if (!$result)
             $this->fatal_error("Ошибка при выполнении запроса к базе данных");
@@ -1130,7 +1130,7 @@ class Request {
     //Функция построения и заполнения ComboBox механиков
     public function CreateMechanicsComboBox($id_mechanic = 0)
     {
-        $query = "SELECT * FROM mechanics ORDER BY name";
+        $query = "SELECT * FROM mechanics WHERE is_active = 1 ORDER BY name";
         $result = mysqli_query($this->con, $query);
         if (!$result)
             $this->fatal_error("Ошибка при выполнении запроса к базе данных");
