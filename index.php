@@ -16,6 +16,7 @@ header("Cache-Control: no-cache, must-revalidate");
         <link href="css/index.css" rel="stylesheet">
         <link href='css/fullcalendar.css' rel='stylesheet' type='text/css'  />
         <link href='css/fullcalendar.print.css' rel='stylesheet' type='text/css'  media='print' />
+		<link rel="shortcut icon" href="favicon.png" type="image/png">
 
         <script src="scripts/jquery-1.11.2.min.js" type='text/javascript'></script>
         <script src="scripts/jquery-ui-1.11.2.min.js" type='text/javascript'></script>
