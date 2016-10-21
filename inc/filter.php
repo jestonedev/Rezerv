@@ -142,28 +142,6 @@ class Helper{
                                     return "Вы не можете подать заявку после 16:00 на период до вторника<br>";
                             }
                         }
-						$friday_list_of_month = [];
-                        for ($i = 1; $i <= 7; $i++)
-                        {
-                            $day = mktime(0,0,0,$now->format('m'),$i,$now->format('Y'));
-                            if (date('l', $day) == 'Friday')
-                            {
-                                $friday_list_of_month[] = mktime(0,0,0,$now->format('m'),$i,$now->format('Y'));
-                                $friday_list_of_month[] = mktime(0,0,0,$now->format('m'),$i+14,$now->format('Y'));
-                                $friday_list_of_month[] = mktime(0,0,0,$now->format('m'),$i+21,$now->format('Y'));
-                            }
-                        }
-                        foreach($friday_list_of_month as $friday)
-                        {
-                            if (mktime(
-                                0, 0, 0,
-                                intval($now->format('m')),
-                                intval($now->format('d')),
-                                intval($now->format('Y'))) == $friday && $now->format('H') >= 12)
-                            {
-                                return "Вы не можете подать заявку на первую, третью и четвертую пятницу месяца после 12:00<br>";
-                            }
-                        }
                     }
                     return "";
                 }
