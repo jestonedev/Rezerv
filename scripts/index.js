@@ -1222,7 +1222,10 @@ $(document).ready(function(){
             if (hasCreateActsPrivilege())
             {
                 $('#btnCreateAct').show();
-            }
+            } else
+			{
+                $('#btnCreateAct').hide();
+			}
             $('#btnShowCalendar').hide();
             header = "Акты выполненных работ по обслуживанию автотранспорта";
             setCookie("header",header);
