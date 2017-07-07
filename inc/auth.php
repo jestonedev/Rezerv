@@ -103,7 +103,7 @@ class Auth
         if ($row && (($row['request_state'] == 1) || ($row['request_state'] == 3)))
         {
             //И если пользователь является хозяином заявки
-            if ($row['user'] == $_SERVER['AUTH_USER'])
+            if (mb_strtolower($row['user']) == mb_strtolower($_SERVER['AUTH_USER']))
                 return true;
             else
                 return false;
