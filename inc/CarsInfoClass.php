@@ -130,8 +130,8 @@ class CarsInfoClass
          ON (mileages.id_car = m.id_car AND mileages.`date` = m.`date`)) l
         ON (cars.id = l.id_car)
         WHERE
-  (mileage_type = 1)
-  OR (mileage_type IS NULL)
+  ((mileage_type = 1)
+  OR (mileage_type IS NULL)) AND is_active = 1
         ) t";
     }
 
