@@ -92,7 +92,7 @@ class ReportClass
         {
             $ids .= ', 37, 38';
         }
-        $query = 'SELECT id, name, id_request FROM reports_info WHERE id_request IN ('.$id_requests.') AND id NOT IN ('.$ids.') ORDER BY id_request, id';
+        $query = 'SELECT id, name, id_request FROM reports_info WHERE id_request IN ('.$id_requests.') AND id NOT IN ('.$ids.') ORDER BY id_request, name';
         $result = mysqli_query($this->link, $query) or
             $this->fatal_error("Ошибка выполнения запроса к базе данных");
         $html = "";
