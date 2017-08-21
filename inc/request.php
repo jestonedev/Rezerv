@@ -402,8 +402,6 @@ class Request {
         $stage = stripslashes($organization[1]);
         if (empty($stage))
             $stage = null;
-        $ldap = new LDAP();
-        $user_department = $ldap->GetLoginParam("COMPANY");
         mysqli_stmt_bind_param($pq,'ssi', $department, $stage, $id_request_number);
         mysqli_stmt_execute($pq);
         if (mysqli_errno($this->con)!=0)

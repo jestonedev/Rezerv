@@ -186,9 +186,9 @@ class CalendarSource
     //Функция прибавления времени
     private function AddHours($date, $hours)
     {
-
+        $floatPart = explode(".",$hours)[1];
         $end_date = new DateTime($date);
-        $minutes = round($hours*60);
+        $minutes = round(floor($hours)*60+($floatPart/100)*60);
         $end_date->modify('+'.$minutes.' minute');
         return $end_date->format('Y-m-d H:i');
     }
