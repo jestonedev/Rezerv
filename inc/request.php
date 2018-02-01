@@ -1570,20 +1570,20 @@ class Request {
 
     public function GetWaybillDetails($id_waybill)
     {
-        $query = "SELECT w.department, w.address_supply, w.mileage_before, w.mileage_after, w.fuel_before,
-              ROUND(w.fuel_before - (w.mileage_after-w.mileage_before)*fc.fuel_consumption/100 + IFNULL(w.given_fuel, 0),3) AS fuel_after,
-              w.given_fuel, fc.fuel_consumption AS rate_of_fuel_consumption,
-              ROUND((w.mileage_after-w.mileage_before)*fc.fuel_consumption/100,3) AS rate_of_fuel , d.name AS driver, d.employee_code, d.license_number, d.class,
-              m.name AS mechanic, ds.name AS dispatcher, w.deleted
-            FROM waybills w
-                LEFT JOIN mechanics m ON (w.id_mechanic = m.id_mechanic)
-                LEFT JOIN cars c ON (w.id_car = c.id)
-                LEFT JOIN drivers d ON (w.id_driver = d.id_driver)
-                LEFT JOIN dispatchers ds ON (w.id_dispatcher = ds.id_dispatcher)
-                LEFT JOIN fuel_types ft ON (w.id_fuel_type = ft.id_fuel_type)
-                LEFT JOIN fuel_consumption fc ON
-                (c.id = fc.id_car AND DAY(fc.start_date) <= DAY(w.start_date) AND DAY(fc.end_date) >= DAY(w.start_date))
-            WHERE id_waybill = $id_waybill";
+        $query = "SELECT w.start_date, w.end_date, w.department, w.mileage_before, w.mileage_after, w.fuel_before,
+                  ROUND(w.fuel_before - (w.mileage_after-w.mileage_before)*fc.fuel_consumption/100 + IFNULL(w.given_fuel, 0),3) AS fuel_after,
+                  w.given_fuel, fc.fuel_consumption AS rate_of_fuel_consumption,
+                  ROUND((w.mileage_after-w.mileage_before)*fc.fuel_consumption/100,3) AS rate_of_fuel ,
+                  d.name AS driver, d.employee_code, d.license_number, d.class, w.deleted
+                FROM waybills w
+                    LEFT JOIN cars c ON (w.id_car = c.id)
+                    LEFT JOIN drivers d ON (w.id_driver = d.id_driver)
+                    LEFT JOIN fuel_types ft ON (w.id_fuel_type = ft.id_fuel_type)
+                    LEFT JOIN fuel_consumption fc ON
+                    (c.id = fc.id_car AND DATE(fc.start_date) <= DATE(w.start_date))
+                WHERE id_waybill = $id_waybill
+                ORDER BY fc.start_date DESC
+                LIMIT 1";
         $result = mysqli_query($this->con, $query);
 
         $query_ways = "select * from ways where id_waybill = $id_waybill";
@@ -1593,8 +1593,9 @@ class Request {
             $this->fatal_error('Ошибка при выполнении запроса к базе данных');
 
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        $start_date = date('d.m.Y',strtotime($row['start_date']));
+        $end_date = date('d.m.Y',strtotime($row['end_date']));
         $department = $row['department'];
-        $address_supply = $row['address_supply'];
         $mileage_before = $row['mileage_before'];
         $mileage_after = $row['mileage_after'];
         $fuel_before = $row['fuel_before'];
@@ -1603,8 +1604,6 @@ class Request {
         $rate_of_fuel_consumption = $row['rate_of_fuel_consumption'];
         $rate_of_fuel = $row['rate_of_fuel'];
         $driver = $row['driver'];
-        $mechanic = $row['mechanic'];
-        $dispatcher = $row['dispatcher'];
         $deleted = $row['deleted'];
         mysqli_free_result($result);
 
@@ -1621,30 +1620,25 @@ class Request {
         //Объявляем таблицу
         $result = '<table style="border: #858585 solid 1px;" id="detail_table" cellpadding="5" cellspacing="0">';
         $class = "even";
-        if (!empty($mechanic))
+        if (!empty($start_date))
         {
             $class = ($class == 'odd')?'even':'odd';
-            $result .= '<tr class="'.$class.'"><td id="detail_header" width="30%">Механик:</td><td>'.htmlspecialchars(stripslashes($mechanic)).'</td></tr>';
+            $result .= '<tr class="'.$class.'"><td id="detail_header" width="30%">Дата выезда:</td><td>'.htmlspecialchars(stripslashes($start_date)).'</td></tr>';
+        }
+        if (!empty($end_date) && $start_date != $end_date)
+        {
+            $class = ($class == 'odd')?'even':'odd';
+            $result .= '<tr class="'.$class.'"><td id="detail_header" width="30%">Дата возврата:</td><td>'.htmlspecialchars(stripslashes($end_date)).'</td></tr>';
         }
         if (!empty($driver))
         {
             $class = ($class == 'odd')?'even':'odd';
             $result .= '<tr class="'.$class.'"><td id="detail_header" width="30%">Водитель:</td><td>'.htmlspecialchars(stripslashes($driver)).'</td></tr>';
         }
-        if (!empty($dispatcher))
-        {
-            $class = ($class == 'odd')?'even':'odd';
-            $result .= '<tr class="'.$class.'"><td id="detail_header" width="30%">Диспетчер:</td><td>'.htmlspecialchars(stripslashes($dispatcher)).'</td></tr>';
-        }
         if (!empty($department))
         {
             $class = ($class == 'odd')?'even':'odd';
             $result .= '<tr class="'.$class.'"><td id="detail_header" width="30%">В распоряжение:</td><td>'.htmlspecialchars(stripslashes($department)).'</td></tr>';
-        }
-        if (!empty($address_supply))
-        {
-            $class = ($class == 'odd')?'even':'odd';
-            $result .= '<tr class="'.$class.'"><td id="detail_header" width="30%">Адрес подачи:</td><td>'.htmlspecialchars(stripslashes($address_supply)).'</td></tr>';
         }
         if (!empty($mileage_before))
         {
@@ -1710,23 +1704,28 @@ class Request {
     {
         if (!Auth::hasPrivilege(AUTH_MODIFY_WAYBILLS))
             $this->fatal_error('У вас нет прав на создание путевых листов');
-        $query = "INSERT INTO waybills(id_car, id_driver, id_mechanic, id_dispatcher, waybill_number, start_date, end_date, address_supply, department,
+        $query = "INSERT INTO waybills(id_car, id_driver, waybill_number,
+            start_date, end_date, department,
             mileage_before, mileage_after, fuel_before, given_fuel, id_fuel_type)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            VALUES (?,?,?,?,?,?,?,?,?,?,?)";
         $pq = mysqli_prepare($this->con, $query);
 
-        $car_id = $args['car_id'];
-        $driver_id = $args['driver_id'];
-        $mechanic_id = $args['mechanic_id'];
-        $dispatcher_id = $args['dispatcher_id'];
+        $car_id = intval($args['car_id']);
+        $driver_id = intval($args['driver_id']);
         $number = $args['number'];
         $number = (trim($number) == "") ? null : trim($number);
         $department = stripslashes($args['department']);
-        $address_supply = $args['address_supply'];
         $mileage_before = $args['mileage_before'];
         $mileage_before = (trim($mileage_before) == "") ? null : trim($mileage_before);
-        $mileage_after = $args['mileage_after'];
-        $mileage_after = (trim($mileage_after) == "") ? null : trim($mileage_after);
+        $mileages = $args['mileages'];
+        $mileages = (trim($mileages) == "") ? null : trim($mileages);
+        $mileage_after = null;
+        if ($mileage_before != null && $mileages != null) {
+            $mileage_after = intval($mileage_before) + intval($mileages);
+        } else
+        if ($mileage_before != null) {
+            $mileage_after = $mileage_before;
+        }
         $fuel_before = $args['fuel_before'];
         $fuel_before = (trim($fuel_before) == "") ? null : trim($fuel_before);
         $given_fuel = $args['given_fuel'];
@@ -1736,8 +1735,8 @@ class Request {
         $start_date = $start_date_parts[2].'-'.$start_date_parts[1].'-'.$start_date_parts[0];
         $end_date_parts = explode('.', $args['end_date']);
         $end_date = $end_date_parts[2].'-'.$end_date_parts[1].'-'.$end_date_parts[0];
-        mysqli_stmt_bind_param($pq,'iiiiissssiiddi',$car_id, $driver_id, $mechanic_id, $dispatcher_id, $number, $start_date,
-            $end_date, $address_supply, $department,
+        mysqli_stmt_bind_param($pq,'iiisssiiddi',$car_id, $driver_id, $number, $start_date,
+            $end_date, $department,
             $mileage_before, $mileage_after, $fuel_before, $given_fuel, $fuel_type_id);
         mysqli_stmt_execute($pq);
         if (mysqli_errno($this->con)!=0)
@@ -1793,22 +1792,26 @@ class Request {
     {
         if (!Auth::hasPrivilege(AUTH_MODIFY_WAYBILLS))
             $this->fatal_error('У вас нет прав на изменение путевого листа');
-        $query = "UPDATE waybills SET id_car = ?, id_driver = ?, id_mechanic = ?, id_dispatcher = ?, waybill_number = ?, start_date = ?, end_date = ?,
-          address_supply = ?, department = ?, mileage_before = ?, mileage_after = ?, fuel_before = ?,
+        $query = "UPDATE waybills SET id_car = ?, id_driver = ?, waybill_number = ?, start_date = ?, end_date = ?,
+          department = ?, mileage_before = ?, mileage_after = ?, fuel_before = ?,
           given_fuel = ?, id_fuel_type = ? WHERE id_waybill = ?";
         $pq = mysqli_prepare($this->con, $query);
-        $car_id = $args['car_id'];
-        $driver_id = $args['driver_id'];
-        $mechanic_id = $args['mechanic_id'];
-        $dispatcher_id = $args['dispatcher_id'];
+        $car_id = intval($args['car_id']);
+        $driver_id = intval($args['driver_id']);
         $number = $args['number'];
         $number = (trim($number) == "") ? null : trim($number);
         $department = stripslashes($args['department']);
-        $address_supply = $args['address_supply'];
         $mileage_before = $args['mileage_before'];
         $mileage_before = (trim($mileage_before) == "") ? null : trim($mileage_before);
-        $mileage_after = $args['mileage_after'];
-        $mileage_after = (trim($mileage_after) == "") ? null : trim($mileage_after);
+        $mileages = $args['mileages'];
+        $mileages = (trim($mileages) == "") ? null : trim($mileages);
+        $mileage_after = null;
+        if ($mileage_before != null && $mileages != null) {
+            $mileage_after = intval($mileage_before) + intval($mileages);
+        } else
+            if ($mileage_before != null) {
+                $mileage_after = $mileage_before;
+            }
         $fuel_before = $args['fuel_before'];
         $fuel_before = (trim($fuel_before) == "") ? null : trim($fuel_before);
         $given_fuel = $args['given_fuel'];
@@ -1819,7 +1822,7 @@ class Request {
         $end_date_parts = explode('.', $args['end_date']);
         $end_date = $end_date_parts[2].'-'.$end_date_parts[1].'-'.$end_date_parts[0];
         $waybill_id = $args['waybill_id'];
-        mysqli_stmt_bind_param($pq,'iiiiissssiiddii',$car_id, $driver_id, $mechanic_id, $dispatcher_id, $number, $start_date, $end_date, $address_supply,
+        mysqli_stmt_bind_param($pq,'iiisssiiddii',$car_id, $driver_id, $number, $start_date, $end_date,
             $department, $mileage_before, $mileage_after, $fuel_before, $given_fuel,
             $fuel_type_id, $waybill_id);
         mysqli_stmt_execute($pq);

@@ -291,34 +291,27 @@ header("Cache-Control: no-cache, must-revalidate");
                 </td>
             </tr>
             <tr>
-                <td>Механик<span class="required_field_mark">*</span></td>
-                <td id="waybill_mechanic" name="waybill_mechanic"  colspan="2">
-                </td>
-            </tr>
-            <tr>
-                <td>Диспетчер<span class="required_field_mark">*</span></td>
-                <td id="waybill_dispatcher" name="waybill_dispatcher"  colspan="2">
-                </td>
-            </tr>
-            <tr>
                 <td>В распоряжение<span class="required_field_mark">*</span></td>
                 <td id="waybill_department" name="waybill_department"  colspan="2">
                 </td>
             </tr>
             <tr>
-                <td>Адрес подачи</td>
-                <td colspan="3">
-                    <input id="waybill_address_supply" type="text">
+                <td>Показание спидометра (до выезда)</td>
+                <td colspan="2">
+                    <input id="waybill_mileage_before" type="text">
                 </td>
             </tr>
             <tr>
-                <td class = "col1">Показание спидометра</td>
-                <td class = "col2"><input id="waybill_mileage_before" type="text"></td>
-                <td class = "col4"><input id="waybill_mileage_after" type="text"></td>
+                <td>Пробег</td>
+                <td colspan="2">
+                    <input id="waybill_mileages" type="text">
+                </td>
             </tr>
             <tr>
-                <td class = "col1">Остаток горючего при выезде</td>
-                <td colspan="2"><input id="waybill_fuel_before" type="text"></td>
+                <td>Остаток горючего при выезде</td>
+                <td colspan="2">
+                    <input id="waybill_fuel_before" type="text">
+                </td>
             </tr>
             <tr>
                 <td>Выдано горючего</td>

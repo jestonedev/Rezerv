@@ -68,7 +68,7 @@ td#footer
     width: 100%;
 }
 
-#waybill_start_date, #waybill_end_date, #waybill_mileage_before, #waybill_mileage_after,
+#waybill_start_date, #waybill_end_date,
 #act_wait_start_date, #act_wait_end_date, #act_repair_start_date, #act_repair_end_date {
     width: 90%
 }
@@ -77,7 +77,8 @@ td#footer
 #frmRequest .date_field, #frmRequest .time_field, #frmRequest .text_field,
 #reason_for_repair, #act_date, #act_expended_edit_name, #act_expended_list,
 #act_expended_edit_count, #act_odometer, #act_number, #waybill_create_form select, #waybill_address_supply, #waybill_given_fuel,
-#way_value, #way_out_time, #way_return_time, #way_distance, #waybill_fuel_before, #waybill_number {
+#way_value, #way_out_time, #way_return_time, #way_distance, #waybill_fuel_before, #waybill_number,
+#waybill_mileage_before, #waybill_mileages {
     width: 95%;
 }
 

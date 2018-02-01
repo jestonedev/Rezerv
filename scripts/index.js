@@ -19,7 +19,7 @@ $(document).ready(function(){
         [1,1,5],[2,1,5],[3,1,5],[4,1,5],[5,1,5],
         [6,1,5],[7,1,5],[8,1,5],[9,1,5],[10,1,5],
         [11,1,5],[12,1,5],[13,1,5],[14,1,4],[35,4,3],
-        [36,3,5],[38,7,1],[41,1,5],[44,3,1]];
+        [36,3,5],[38,7,1],[41,1,5],[44,3,1],[46,1,5]];
     var cars_default_fuel = get_cars_default_fuel();         //Тип топлива, выбираемый по умолчанию, при выборе автотранспорта
 
     //Указывает, разрешено ли обновление таблицы с данными (разрешено, только если значение равно 0)
@@ -2055,32 +2055,6 @@ $(document).ready(function(){
         );
         $.ajax( {
                 type: "POST",
-                url: "inc/mechanics_list.php",
-                success: function(msg)
-                {
-                    $('#waybill_mechanic select').remove();
-                    $('#waybill_mechanic').append(msg);
-                },
-                error: function(msg)
-                {
-                }
-            }
-        );
-        $.ajax( {
-                type: "POST",
-                url: "inc/dispatchers_list.php",
-                success: function(msg)
-                {
-                    $('#waybill_dispatcher select').remove();
-                    $('#waybill_dispatcher').append(msg);
-                },
-                error: function(msg)
-                {
-                }
-            }
-        );
-        $.ajax( {
-                type: "POST",
                 url: "inc/departments_without_stage_list.php",
                 success: function(msg)
                 {
@@ -2612,20 +2586,17 @@ $(document).ready(function(){
         var mechanic_id = $("#waybill_create_form select[name='mechanic_id']").prop("value");
         var dispatcher_id = $("#waybill_create_form select[name='dispatcher_id']").prop("value");
         var department = $("#waybill_create_form select[name='department']").prop("value");
-        var address_supply = $("#waybill_address_supply").prop("value");
         var waybill_mileage_before = $("#waybill_mileage_before").prop("value");
-        var waybill_mileage_after = $("#waybill_mileage_after").prop("value");
+        var waybill_mileages = $("#waybill_mileages").prop("value");
         var waybill_fuel_before = $("#waybill_fuel_before").prop("value").replace(",",".");
         var waybill_given_fuel = $("#waybill_given_fuel").prop("value").replace(",",".");
         var fuel_type_id = $("#waybill_create_form select[name='fuel_type_id']").prop("value");
         var ways_list = "";
         var is_correct = true;
         if (($.trim(waybill_start_date) == "") || ($.trim(waybill_end_date) == "") ||
-            ($.trim(car_id) == "") || ($.trim(driver_id) == "") ||
-            ($.trim(mechanic_id) == "") || ($.trim(department) == "") || ($.trim(dispatcher_id) == ""))
+            ($.trim(car_id) == "") || ($.trim(driver_id) == "") || ($.trim(department) == ""))
         {
-            $("#error_waybill_create").append("<div>Не все обязательные поля заполнены</div>");
-            $("#error_waybill_create").show();
+            $("#error_waybill_create").append("<div>Не все обязательные поля заполнены</div>").show();
             return;
         }
         if (!dateCorrect(waybill_start_date) || !dateCorrect(waybill_end_date))
@@ -2643,9 +2614,9 @@ $(document).ready(function(){
             $("#error_waybill_create").append("<div>Показание спидометра до выезда указано неверно</div>");
             is_correct = false;
         }
-        if (($.trim(waybill_mileage_after) != "") && (!intCorrect(waybill_mileage_after)))
+        if (($.trim(waybill_mileages) != "") && (!intCorrect(waybill_mileages)))
         {
-            $("#error_waybill_create").append("<div>Показание спидометра после возвращения указано неверно</div>");
+            $("#error_waybill_create").append("<div>Пробег указан неверно</div>");
             is_correct = false;
         }
         if (($.trim(waybill_fuel_before) != "") && (!floatCorrect(waybill_fuel_before)))
@@ -2675,8 +2646,8 @@ $(document).ready(function(){
             action = "action=update_waybill&waybill_id="+id_waybill; }
         var data = action+"&number="+waybill_number+"&start_date="+waybill_start_date+"&end_date="+waybill_end_date+"&car_id="+car_id+
             "&driver_id="+driver_id+"&mechanic_id="+mechanic_id+"&dispatcher_id="+dispatcher_id+"&department="+department+
-            "&address_supply="+address_supply+"&mileage_before="+waybill_mileage_before+
-            "&mileage_after="+waybill_mileage_after+"&fuel_before="+waybill_fuel_before+
+            "&mileage_before="+waybill_mileage_before+
+            "&mileages="+waybill_mileages+"&fuel_before="+waybill_fuel_before+
             "&given_fuel="+waybill_given_fuel+"&fuel_type_id="+fuel_type_id+
             "&ways_list="+ways_list;
         $.ajax({
