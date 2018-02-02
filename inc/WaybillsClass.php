@@ -6,6 +6,8 @@
  * Time: 10:46
  * To change this template use File | Settings | File Templates.
  */
+include_once 'const.php';
+
 class WaybillsClass
 {
     var $link;
@@ -27,6 +29,42 @@ class WaybillsClass
     {
         if ($this->link)
             mysqli_close($this->link);
+    }
+
+    public function AutoCompleteDetails($idCar)
+    {
+        $queryWaybill = "SELECT w.mileage_after, w.fuel_after
+            FROM waybills w
+            WHERE w.id_car = $idCar AND w.deleted <> 1
+            ORDER BY w.start_date DESC, id_waybill DESC
+            LIMIT 1";
+        $queryCarInfo = "SELECT c.id_fuel_default, c.id_driver_default, c.department_default
+            FROM cars c
+            WHERE c.id = $idCar";
+        $waybillNumberQuery = "SELECT IFNULL(MAX(waybill_number), 0) + 1 AS waybill_number FROM waybills";
+        $resultWaybill = mysqli_query($this->link, $queryWaybill);
+        $resultWaybill = mysqli_fetch_assoc($resultWaybill);
+        $resultCarInfo = mysqli_query($this->link, $queryCarInfo);
+        $resultCarInfo = mysqli_fetch_assoc($resultCarInfo);
+        $waybillNumberInfo = mysqli_query($this->link, $waybillNumberQuery);
+        $waybillNumberInfo = mysqli_fetch_assoc($waybillNumberInfo);
+        $waybillInfo = ["mileage_after" => 0,
+            "fuel_after" => 0];
+        $carInfo = ["id_fuel_default" => 1,
+            "id_driver_default" => 1,
+            "department_default" => "Администрация"];
+        if ($resultWaybill != null)
+        {
+            $waybillInfo = ["mileage_after" => $resultWaybill["mileage_after"],
+                "fuel_after" => $resultWaybill["fuel_after"]];
+        }
+        if ($resultCarInfo != null)
+        {
+            $carInfo = ["id_fuel_default" => $resultCarInfo["id_fuel_default"],
+                "id_driver_default" => $resultCarInfo["id_driver_default"],
+                "department_default" => $resultCarInfo["department_default"]];
+        }
+        return array_merge($waybillInfo, $carInfo, ["waybill_number" => $waybillNumberInfo["waybill_number"]]);
     }
 
     ///////////////////////////////////////////////////////////////////////////

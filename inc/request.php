@@ -1571,7 +1571,7 @@ class Request {
     public function GetWaybillDetails($id_waybill)
     {
         $query = "SELECT w.start_date, w.end_date, w.department, w.mileage_before, w.mileage_after, w.fuel_before,
-                  ROUND(w.fuel_before - (w.mileage_after-w.mileage_before)*fc.fuel_consumption/100 + IFNULL(w.given_fuel, 0),3) AS fuel_after,
+                  w.fuel_after,
                   w.given_fuel, fc.fuel_consumption AS rate_of_fuel_consumption,
                   ROUND((w.mileage_after-w.mileage_before)*fc.fuel_consumption/100,3) AS rate_of_fuel ,
                   d.name AS driver, d.employee_code, d.license_number, d.class, w.deleted
@@ -1691,10 +1691,6 @@ class Request {
                 $result.='<button value="'.$id_waybill.'" class="btnModifyWaybill">Изменить лист</button>';
                 $result.='<button value="'.$id_waybill.'" class="btnDeleteWaybill">Удалить лист</button>';
             }
-            //Добавляем кнопку формирования акта выполненных работ в odt (Тип А)
-            $result.='<button value="'.$id_waybill.'" class="btnReportByWaybill">Лист (День)</button>';
-            //Добавляем кнопку формирования акта выполненных работ в odt
-            $result.='<button value="'.$id_waybill.'" class="btnReportByWaybillWithPeriod">Лист (Ночь)</button>';
             $result.='</td></tr></table>';
         }
         return $result;
@@ -1706,8 +1702,8 @@ class Request {
             $this->fatal_error('У вас нет прав на создание путевых листов');
         $query = "INSERT INTO waybills(id_car, id_driver, waybill_number,
             start_date, end_date, department,
-            mileage_before, mileage_after, fuel_before, given_fuel, id_fuel_type)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+            mileage_before, mileage_after, fuel_before, given_fuel, fuel_after, id_fuel_type)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
         $pq = mysqli_prepare($this->con, $query);
 
         $car_id = intval($args['car_id']);
@@ -1735,9 +1731,27 @@ class Request {
         $start_date = $start_date_parts[2].'-'.$start_date_parts[1].'-'.$start_date_parts[0];
         $end_date_parts = explode('.', $args['end_date']);
         $end_date = $end_date_parts[2].'-'.$end_date_parts[1].'-'.$end_date_parts[0];
-        mysqli_stmt_bind_param($pq,'iiisssiiddi',$car_id, $driver_id, $number, $start_date,
+
+        $fuelConsumptionQuery = "SELECT fc.fuel_consumption
+            FROM fuel_consumption fc
+            WHERE fc.id_car = $car_id AND date(fc.start_date) < STR_TO_DATE('$start_date', '%Y-%m-%d')
+            ORDER BY fc.start_date DESC
+            LIMIT 1";
+        $fuelConsumptionResult = mysqli_query($this->con, $fuelConsumptionQuery);
+        if (!$fuelConsumptionResult)
+            $this->fatal_error('Ошибка при выполнении запроса к базе данных');
+        $fuelConsumptionRow = mysqli_fetch_array($fuelConsumptionResult, MYSQLI_ASSOC);
+        $fuelConsumption = 0;
+        if ($fuelConsumptionRow != null)
+            $fuelConsumption = $fuelConsumptionRow["fuel_consumption"];
+        $fuel_after = floatval($fuel_before == null ? 0 : $fuel_before) -
+            (intval($mileage_after == null ? 0 : $mileage_after) -
+                intval($mileage_before == null ? 0 : $mileage_before))*$fuelConsumption / 100 +
+            ($given_fuel == null ? 0 : floatval($given_fuel));
+
+        mysqli_stmt_bind_param($pq,'iiisssiidddi',$car_id, $driver_id, $number, $start_date,
             $end_date, $department,
-            $mileage_before, $mileage_after, $fuel_before, $given_fuel, $fuel_type_id);
+            $mileage_before, $mileage_after, $fuel_before, $given_fuel, $fuel_after, $fuel_type_id);
         mysqli_stmt_execute($pq);
         if (mysqli_errno($this->con)!=0)
         {
@@ -1745,6 +1759,7 @@ class Request {
             $this->fatal_error('Ошибка выполнения запроса к базе данных');
         }
         $waybill_id = mysqli_insert_id($this->con);
+
         $ways_strs = explode('$', $args['ways_list']);
         foreach ($ways_strs as $ways_str)
         {
@@ -1794,7 +1809,7 @@ class Request {
             $this->fatal_error('У вас нет прав на изменение путевого листа');
         $query = "UPDATE waybills SET id_car = ?, id_driver = ?, waybill_number = ?, start_date = ?, end_date = ?,
           department = ?, mileage_before = ?, mileage_after = ?, fuel_before = ?,
-          given_fuel = ?, id_fuel_type = ? WHERE id_waybill = ?";
+          given_fuel = ?, fuel_after = ?, id_fuel_type = ? WHERE id_waybill = ?";
         $pq = mysqli_prepare($this->con, $query);
         $car_id = intval($args['car_id']);
         $driver_id = intval($args['driver_id']);
@@ -1822,8 +1837,25 @@ class Request {
         $end_date_parts = explode('.', $args['end_date']);
         $end_date = $end_date_parts[2].'-'.$end_date_parts[1].'-'.$end_date_parts[0];
         $waybill_id = $args['waybill_id'];
-        mysqli_stmt_bind_param($pq,'iiisssiiddii',$car_id, $driver_id, $number, $start_date, $end_date,
-            $department, $mileage_before, $mileage_after, $fuel_before, $given_fuel,
+        $fuelConsumptionQuery = "SELECT fc.fuel_consumption
+            FROM fuel_consumption fc
+            WHERE fc.id_car = $car_id AND date(fc.start_date) < STR_TO_DATE('$start_date', '%Y-%m-%d')
+            ORDER BY fc.start_date DESC
+            LIMIT 1";
+        $fuelConsumptionResult = mysqli_query($this->con, $fuelConsumptionQuery);
+        if (!$fuelConsumptionResult)
+            $this->fatal_error('Ошибка при выполнении запроса к базе данных');
+        $fuelConsumptionRow = mysqli_fetch_array($fuelConsumptionResult, MYSQLI_ASSOC);
+        $fuelConsumption = 0;
+        if ($fuelConsumptionRow != null)
+            $fuelConsumption = $fuelConsumptionRow["fuel_consumption"];
+        $fuel_after = floatval($fuel_before == null ? 0 : $fuel_before) -
+            (intval($mileage_after == null ? 0 : $mileage_after) -
+                intval($mileage_before == null ? 0 : $mileage_before))*$fuelConsumption / 100 +
+            ($given_fuel == null ? 0 : floatval($given_fuel));
+
+        mysqli_stmt_bind_param($pq,'iiisssiidddii',$car_id, $driver_id, $number, $start_date, $end_date,
+            $department, $mileage_before, $mileage_after, $fuel_before, $given_fuel, $fuel_after,
             $fuel_type_id, $waybill_id);
         mysqli_stmt_execute($pq);
         if (mysqli_errno($this->con)!=0)

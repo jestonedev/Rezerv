@@ -432,13 +432,21 @@ $(document).ready(function(){
     $('#btnCreateWaybill').button().click(function() {
         $("#error_waybill_create").hide();
         $("#waybill_number").prop("value","");
-        $("#waybill_start_date").prop("value","");
-        $("#waybill_end_date").prop("value","");
+        var now = new Date();
+        var day = now.getDate();
+        if (day < 10) day = "0"+day;
+        var month = now.getMonth() + 1;
+        if (month < 10) month = "0"+month;
+        var year = now.getFullYear();
+        $("#waybill_start_date").prop("value", day+"."+month+"."+year);
+        $("#waybill_end_date").prop("value", day+"."+month+"."+year);
         $("#waybill_address_supply").prop("value","ул. Ленина, 37");
         $("#waybill_mileage_before").prop("value","");
-        $("#waybill_mileage_after").prop("value","");
+        $("#waybill_mileages").prop("value","");
         $("#waybill_fuel_before").prop("value","");
         $("#waybill_given_fuel").prop("value","");
+        $("#waybill_car select").prop("value","22");
+        $("#waybill_car select").change();
         $("#ways_list option").remove();
         $('#waybill_create_form').dialog( {
                 autoOpen: true,
@@ -500,6 +508,18 @@ $(document).ready(function(){
                 show_request_details(oTable, nTr); }
         }
     } );
+
+    $('#waybill_car').on('change', 'select', function(idx, val) {
+        var idCar = $(this).val();
+        $.getJSON('inc/waybills_autocomplete.php?id_car='+idCar, function(data) {
+            $("#waybill_driver select").val(data.id_driver_default || 0);
+            $("#waybill_department select").val(data.department_default || "Диспетчер");
+            $("#waybill_fuel_type select").val(data.id_fuel_default || 1);
+            $("#waybill_number").val(data.waybill_number || 1);
+            $("#waybill_mileage_before").val(data.mileage_after || 0);
+            $("#waybill_fuel_before").val(data.fuel_after || 0);
+        });
+    });
 
     ////////////////////////////////////////////
     //Функции отображения детальной информации//
@@ -893,7 +913,7 @@ $(document).ready(function(){
                         $("#waybill_number").prop("value", info["waybill_number"]);
                         $("#waybill_address_supply").prop("value", info["address_supply"]);
                         $("#waybill_mileage_before").prop("value", info["mileage_before"]);
-                        $("#waybill_mileage_after").prop("value", info["mileage_after"]);
+                        $("#waybill_mileages").prop("value", info["mileage_after"] - info["mileage_before"]);
                         $("#waybill_fuel_before").prop("value", info["fuel_before"]);
                         $("#waybill_given_fuel").prop("value", info["given_fuel"]);
 
@@ -1494,6 +1514,10 @@ $(document).ready(function(){
                     sum_array[i] = 0; }
                 for (i=0 ; i<aaData.length ; i++ ) {
                     for (j = 0; j < rep_cfg[2]; j++) {
+                        if (rep_cfg[0] == 46 && aaData[i][0] == "Администрация (всего)")
+                        {
+                            continue;
+                        }
                         sum_array[j] += aaData[i][rep_cfg[1]+j]*Number(1); }
                 }
                 var nCells = nRow.getElementsByTagName('th');
@@ -2060,6 +2084,8 @@ $(document).ready(function(){
                 {
                     $('#waybill_department select').remove();
                     $('#waybill_department').append(msg);
+                    $('#waybill_department select').
+                        prepend("<option value=\"Диспетчер\" style=\"background-color: #f9ff9b\" selected>Диспетчер</option>");
                 },
                 error: function(msg)
                 {
@@ -2081,7 +2107,8 @@ $(document).ready(function(){
         );
         $("#insert_way").click(function() {
             $("#error_add_way").hide();
-            $("#way_value").prop("value","");
+            $("#way_value_from").prop("value","");
+            $("#way_value_to").prop("value","");
             $("#way_out_time").prop("value","");
             $("#way_return_time").prop("value","");
             $("#way_distance").prop("value","");
@@ -2102,14 +2129,20 @@ $(document).ready(function(){
                         click: function() {
                             $("#error_add_way div").remove();
                             $("#error_add_way").hide();
-                            var way_value = $("#way_value").prop("value");
+                            var way_value_from = $("#way_value_from").prop("value");
+                            var way_value_to = $("#way_value_to").prop("value");
                             var way_out_time = $("#way_out_time").prop("value");
                             var way_return_time = $("#way_return_time").prop("value");
                             var way_distance = $("#way_distance").prop("value");
                             var is_correct = true;
-                            if ($.trim(way_value).length== 0)
+                            if ($.trim(way_value_from).length== 0)
                             {
-                                $("#error_add_way").append("<div>Необходимо указать маршрут</div>");
+                                $("#error_add_way").append("<div>Необходимо указать маршрут (из)</div>");
+                                is_correct = false;
+                            }
+                            if ($.trim(way_value_to).length== 0)
+                            {
+                                $("#error_add_way").append("<div>Необходимо указать маршрут (в)</div>");
                                 is_correct = false;
                             }
                             if ($.trim(way_out_time).length == 0)
@@ -2143,9 +2176,9 @@ $(document).ready(function(){
                                 {
                                     way_distance_str = " - "+way_distance+" км.";
                                 }
-                                $("#ways_list").append("<option value='"+way_value+"@"+way_out_time+"@"+
+                                $("#ways_list").append("<option value='"+way_value_from+" - "+way_value_to+"@"+way_out_time+"@"+
                                     way_return_time+"@"+way_distance+"'>"+"("
-                                    +way_out_time+"-"+way_return_time+")"+way_distance_str+" - "+way_value+"</option>");
+                                    +way_out_time+"-"+way_return_time+")"+way_distance_str+" - "+way_value_from+" - "+way_value_to+"</option>");
                                 $( this ).dialog( "close" );
                             }
                         }

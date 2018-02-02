@@ -343,9 +343,41 @@ header("Cache-Control: no-cache, must-revalidate");
     <div id="add_way">             <!-- Форма добавления маршрута -->
         <table>
             <tr>
-                <td class="col1">Маршрут</td>
+                <td class="col1">Маршрут (из)</td>
                 <td class="col2">
-                    <input type="text" id="way_value" name="way_value">
+                    <select id="way_value_from" name="way_value_from">
+                        <option value="Бикей">Бикей</option>
+                        <option value="Гидростроитель">Гидростроитель</option>
+                        <option value="Осиновка">Осиновка</option>
+                        <option value="Падун">Падун</option>
+                        <option value="Порожский">Порожский</option>
+                        <option value="Сосновый">Сосновый</option>
+                        <option value="Стениха">Стениха</option>
+                        <option value="Сухой">Сухой</option>
+                        <option value="Центральный">Центральный</option>
+                        <option value="Чекановский">Чекановский</option>
+                        <option value="Энергетик">Энергетик</option>
+                        <option value="Южный Падун">Южный Падун</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="col1">Маршрут (в)</td>
+                <td class="col2">
+                    <select id="way_value_to" name="way_value_to">
+                        <option value="Бикей">Бикей</option>
+                        <option value="Гидростроитель">Гидростроитель</option>
+                        <option value="Осиновка">Осиновка</option>
+                        <option value="Падун">Падун</option>
+                        <option value="Порожский">Порожский</option>
+                        <option value="Сосновый">Сосновый</option>
+                        <option value="Стениха">Стениха</option>
+                        <option value="Сухой">Сухой</option>
+                        <option value="Центральный">Центральный</option>
+                        <option value="Чекановский">Чекановский</option>
+                        <option value="Энергетик">Энергетик</option>
+                        <option value="Южный Падун">Южный Падун</option>
+                    </select>
                 </td>
             </tr>
             <tr>
@@ -355,7 +387,7 @@ header("Cache-Control: no-cache, must-revalidate");
                 </td>
             </tr>
             <tr>
-                <td>Время возвращения</td>
+                <td>Время приезда</td>
                 <td>
                     <input type="text" id="way_return_time" name="way_return_time">
                 </td>
