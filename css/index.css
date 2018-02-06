@@ -304,3 +304,9 @@ td#body {
     width: 170pt;
     font-size: 12pt;
 }
+
+#calendar, #calendar_details, #select_car_form, #reportSettings,
+#calendarSettings, #mileagesEditor, #act_create_form, #add_expended, #waybill_create_form,
+#add_way {
+    display: none;
+}
