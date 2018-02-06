@@ -50,6 +50,7 @@ header("Cache-Control: no-cache, must-revalidate");
         <script src="scripts/mileages.js" type="text/javascript"></script>
         <script src="scripts/repair_acts.js" type="text/javascript"></script>
         <script src="scripts/reports.js" type="text/javascript"></script>
+        <script src="scripts/gantt.js" type="text/javascript"></script>
         <script src="scripts/calendar.js" type="text/javascript"></script>
 
     <table id="struct_table">
@@ -71,6 +72,7 @@ header("Cache-Control: no-cache, must-revalidate");
         <button id="btnCreateRequest">Подать заявку</button>
         <button id="btnCreateAct">Создать акт</button>
         <button id="btnCreateWaybill">Создать путевой лист</button>
+        <button id="btnShowGantt">Диаграмма Ганта</button>
         <button id="btnShowCalendar">Календарь заявок</button>
         <a class="user-doc_cell" href="/doc/user_manual.odt">Руководство пользователя</a>
     </td>
@@ -147,6 +149,7 @@ header("Cache-Control: no-cache, must-revalidate");
         <div id="error_reportSettings"></div>
     </div>
     <div id='calendarSettings'></div>                               <!--Форма настройки календаря-->
+    <div id='ganttSettings'></div>                               <!--Форма настройки диаграммы Ганта-->
     <div id='mileagesEditor'>                                       <!--Форма изменения информации о пробеге-->
         <table>
             <tr>

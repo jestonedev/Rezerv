@@ -69,79 +69,11 @@ $(document).ready(function() {
         $("#act_wait_end_date").inputmask("99.99.9999 99:99");
         $("#act_repair_start_date").inputmask("99.99.9999 99:99");
         $("#act_repair_end_date").inputmask("99.99.9999 99:99");
-        var Now = new Date();
-        $("#act_date").datepicker({
-            monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
-            dayNames:	["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
-            dayNamesMin:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
-            buttonImageOnly: true,
-            buttonImage: "./img/SelCalendar.gif",
-            buttonText: "Календарь",
-            showOn: "button",
-            dateFormat:"dd.mm.yy",
-            firstDay: 1,
-            defaultDate: Now
-        });
-        $("#act_wait_start_date").datetimepicker({
-            monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
-            dayNames:	["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
-            dayNamesMin:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
-            buttonImageOnly: true,
-            buttonImage: "./img/SelCalendar.gif",
-            buttonText: "Календарь",
-            showOn: "button",
-            dateFormat:"dd.mm.yy",
-            firstDay: 1,
-            defaultDate: Now,
-            timeFormat: "HH:mm",
-            currentText: "Сейчас",
-            closeText: "Принять"
-        });
-        $("#act_wait_end_date").datetimepicker({
-            monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
-            dayNames:	["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
-            dayNamesMin:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
-            buttonImageOnly: true,
-            buttonImage: "./img/SelCalendar.gif",
-            buttonText: "Календарь",
-            showOn: "button",
-            dateFormat:"dd.mm.yy",
-            firstDay: 1,
-            defaultDate: Now,
-            timeFormat: "HH:mm",
-            currentText: "Сейчас",
-            closeText: "Принять"
-        });
-        $("#act_repair_start_date").datetimepicker({
-            monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
-            dayNames:	["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
-            dayNamesMin:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
-            buttonImageOnly: true,
-            buttonImage: "./img/SelCalendar.gif",
-            buttonText: "Календарь",
-            showOn: "button",
-            dateFormat:"dd.mm.yy",
-            firstDay: 1,
-            defaultDate: Now,
-            timeFormat: "HH:mm",
-            currentText: "Сейчас",
-            closeText: "Принять"
-        });
-        $("#act_repair_end_date").datetimepicker({
-            monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
-            dayNames:	["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
-            dayNamesMin:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
-            buttonImageOnly: true,
-            buttonImage: "./img/SelCalendar.gif",
-            buttonText: "Календарь",
-            showOn: "button",
-            dateFormat:"dd.mm.yy",
-            firstDay: 1,
-            defaultDate: Now,
-            timeFormat: "HH:mm",
-            currentText: "Сейчас",
-            closeText: "Принять"
-        });
+        $("#act_date").datepicker(datePickerSettings);
+        $("#act_wait_start_date").datetimepicker(dateTimePickerSettings);
+        $("#act_wait_end_date").datetimepicker(dateTimePickerSettings);
+        $("#act_repair_start_date").datetimepicker(dateTimePickerSettings);
+        $("#act_repair_end_date").datetimepicker(dateTimePickerSettings);
 
         $("#insert_expended, #delete_expended").button();
         $.ajax( {

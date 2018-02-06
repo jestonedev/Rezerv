@@ -11,31 +11,37 @@ if ($_SERVER["REQUEST_METHOD"]==="POST") {
 
     $req= new Request();
 
-    if ($_POST["action"]=='process_request'){
-		echo "<pre>";
-		$args=Helper::ClearArray($_POST);
-		echo $req->ProcessRequest($args, $_POST["id_request_number"]);
-		echo "</pre>";
-	} else
-	if ($_POST["action"]=='display_request_form') {
-		echo "<pre>";
-		$args=Helper::ClearArray($_POST);
-		echo $req->BuildRequest($id_request, 0);
-		echo "</pre>";
-	} else
-    if ($_POST["action"]=='modify_request_form') {
-        echo "<pre>";
-        $args=Helper::ClearArray($_POST);
-        echo $req->BuildRequest($id_request, $_POST['id_request_number']);
-        echo "</pre>";
-    } else
-    if ($_POST["action"]=='display_calendar_settings_form') {
-        echo $req->BuildCalendarSettingsForm($id_request);
-    } else
-    if ($_POST["action"]=='display_all_transport_combobox') {
-        echo $req->CreateCarsComboBox(true);
-    }
-    if ($_POST["action"]=='display_all_fuel_type_combobox') {
-        echo $req->CreateFuelTypesComboBox(true);
+    switch($_POST["action"])
+    {
+        case 'process_request':
+            echo "<pre>";
+            $args=Helper::ClearArray($_POST);
+            echo $req->ProcessRequest($args, $_POST["id_request_number"]);
+            echo "</pre>";
+            break;
+        case 'display_request_form':
+            echo "<pre>";
+            $args=Helper::ClearArray($_POST);
+            echo $req->BuildRequest($id_request, 0);
+            echo "</pre>";
+            break;
+        case 'modify_request_form':
+            echo "<pre>";
+            $args=Helper::ClearArray($_POST);
+            echo $req->BuildRequest($id_request, $_POST['id_request_number']);
+            echo "</pre>";
+            break;
+        case 'display_gantt_settings_form':
+            echo $req->BuildGanttSettingsForm($id_request);
+            break;
+        case 'display_calendar_settings_form':
+            echo $req->BuildCalendarSettingsForm($id_request);
+            break;
+        case 'display_all_transport_combobox':
+            echo $req->CreateCarsComboBox(true);
+            break;
+        case 'display_all_fuel_type_combobox':
+            echo $req->CreateFuelTypesComboBox(true);
+            break;
     }
 }

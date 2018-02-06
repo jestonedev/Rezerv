@@ -31,6 +31,18 @@ class Request {
             mysqli_close($this->con);
     }
 
+    public function BuildGanttSettingsForm($id_request)
+    {
+        $html = "<table>";
+        if ($id_request == 1)
+            $html .= "<tr><td>Транспорт: </td><td colspan='3'>".$this->CreateCarsComboBox(true)."</td></tr>";
+        $html .= "<tr><td>Виды заявок: </td><td colspan='3'>".$this->CreateRequestsStatusCheckBoxGroup()."</td></tr>";
+        $html .= "<tr><td>Начальная дата: </td><td><input name='date-from' type='text'></td></tr>";
+        $html .= "<tr><td>Конечная дата: </td><td><input name='date-to' type='text'></td></tr>";
+        $html .= "</table>";
+        return $html;
+    }
+
     public function BuildCalendarSettingsForm($id_request)
     {
         $html = "<table><tr><td width=30%>Департамент: </td><td>".$this->CreateDepartmentsComboBox(true,'','',true)."</td></tr>";

@@ -112,30 +112,8 @@ $(document).ready(function() {
         $("#end_date").inputmask("99.99.9999");
         var Now = new Date();
         //календарь
-        $("#start_date").datepicker({
-            monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
-            dayNames:	["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
-            dayNamesMin:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
-            buttonImageOnly: true,
-            buttonImage: "./img/SelCalendar.gif",
-            buttonText: "Календарь",
-            showOn: "button",
-            dateFormat:"dd.mm.yy",
-            firstDay: 1,
-            defaultDate: Now
-        });
-        $("#end_date").datepicker({
-            monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
-            dayNames:	["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
-            dayNamesMin:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
-            buttonImageOnly: true,
-            buttonImage: "./img/SelCalendar.gif",
-            buttonText: "Календарь",
-            showOn: "button",
-            dateFormat:"dd.mm.yy",
-            firstDay: 1,
-            defaultDate: Now
-        });
+        $("#start_date").datepicker(datePickerSettings);
+        $("#end_date").datepicker(datePickerSettings);
         $.ajax({
             type: "POST",
             url: "inc/report_names.php",

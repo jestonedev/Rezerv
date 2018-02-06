@@ -50,7 +50,7 @@ td#footer
 }
 
 #frmRequest table, #mileagesEditor table, #reportSettings table, #act_create_form table, #add_expended table,
-#calendarSettings table, #waybill_create_form table, #add_way table {
+#calendarSettings table, #ganttSettings table, #waybill_create_form table, #add_way table {
     width: 100%;
 }
 
@@ -82,7 +82,7 @@ td#footer
     width: 95%;
 }
 
-#rqlb1, #rqlb2, #rqlb3, #rqlb4, #rqlb5, #rqlb6, #rplb, #btnShowCalendar,
+#rqlb1, #rqlb2, #rqlb3, #rqlb4, #rqlb5, #rqlb6, #rplb, #btnShowCalendar, #btnShowGantt,
 #btnReports, #btnCreateRequest, #btnCreateAct, #btnCreateWaybill, #left_menu_requests_title {
 	display:block;
 	width: 170pt;
@@ -106,7 +106,7 @@ td#footer
 	vertical-align: top;
 }
 
-#btnCreateRequest, #btnCreateAct, #btnCreateWaybill, #btnShowCalendar {
+#btnCreateRequest, #btnCreateAct, #btnCreateWaybill, #btnShowGantt {
     margin-top: 7pt;
 }
 
@@ -122,7 +122,7 @@ td#footer
     width: 100%;
 }
 
-#select_car_form select, #calendarSettings select {
+#select_car_form select, #calendarSettings select, #ganttSettings select {
     width: 100%;
 }
 
@@ -233,7 +233,7 @@ td#body {
     color: #f40000;
 }
 
-#calendarSettings td {
+#calendarSettings td, #ganttSettings td {
     vertical-align: top;
 }
 
@@ -306,7 +306,7 @@ td#body {
 }
 
 #calendar, #calendar_details, #select_car_form, #reportSettings,
-#calendarSettings, #mileagesEditor, #act_create_form, #add_expended, #waybill_create_form,
+#calendarSettings, #ganttSettings, #mileagesEditor, #act_create_form, #add_expended, #waybill_create_form,
 #add_way {
     display: none;
 }

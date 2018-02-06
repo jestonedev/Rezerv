@@ -71,7 +71,7 @@ $(document).ready(function() {
     // Автокомплит полей при изменении автомобиля в путевом листе
     $('#waybill_car').on('change', 'select', function(idx, val) {
         var idCar = $(this).val();
-        $.getJSON('inc/waybills_autocomplete.php?id_car='+idCar, function(data) {
+        $.getJSON('inc/waybills_autocomplete.php?id_car='+idCar+'&rnd='+Math.random(), function(data) {
             $("#waybill_driver select").val(data.id_driver_default || 0);
             $("#waybill_department select").val(data.department_default || "Диспетчер");
             $("#waybill_fuel_type select").val(data.id_fuel_default || 1);

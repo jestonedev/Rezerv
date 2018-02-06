@@ -20,6 +20,36 @@ var menu_code, report_id, start_date, end_date, date_id, car_id, fuel_type_id, d
 //Заголовок
 var header = "";
 
+var datePickerSettings = {
+    monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
+    dayNames:	["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
+    dayNamesMin:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
+    buttonImageOnly: true,
+    buttonImage: "./img/SelCalendar.gif",
+    buttonText: "Календарь",
+    showOn: "button",
+    dateFormat:"dd.mm.yy",
+    firstDay: 1,
+    defaultDate: Now
+};
+
+var Now = new Date();
+var dateTimePickerSettings = {
+    monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
+    dayNames:	["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
+    dayNamesMin:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
+    buttonImageOnly: true,
+    buttonImage: "./img/SelCalendar.gif",
+    buttonText: "Календарь",
+    showOn: "button",
+    dateFormat:"dd.mm.yy",
+    firstDay: 1,
+    defaultDate: Now,
+    timeFormat: "HH:mm",
+    currentText: "Сейчас",
+    closeText: "Принять"
+};
+
 //Функция инициализации состояния кнопок главной формы
 function initButtonsState()
 {
@@ -32,6 +62,7 @@ function initButtonsState()
         $('#btnCreateAct').hide();
         $('#btnCreateWaybill').hide();
         $('#btnShowCalendar').hide();
+        $('#btnShowGantt').hide();
     } else
     if (menu_code == 2)
     {
@@ -42,6 +73,7 @@ function initButtonsState()
         $('#btnCreateAct').hide();
         $('#btnCreateWaybill').hide();
         $('#btnShowCalendar').hide();
+        $('#btnShowGantt').hide();
         header = "Информация по пробегу транспортных средств администрации";
         setCookie("header",header);
     } else
@@ -60,6 +92,7 @@ function initButtonsState()
             $('#btnCreateAct').hide();
         }
         $('#btnShowCalendar').hide();
+        $('#btnShowGantt').hide();
         header = "Акты выполненных работ по обслуживанию автотранспорта";
         setCookie("header",header);
     } else
@@ -75,6 +108,7 @@ function initButtonsState()
             $('#btnCreateWaybill').show();
         }
         $('#btnShowCalendar').hide();
+        $('#btnShowGantt').hide();
         header = "Путевые листы";
         setCookie("header",header);
     }
@@ -111,6 +145,8 @@ function initButtonsState()
         else {
             $('#btnCreateRequest').hide(); }
         $('#btnShowCalendar').show();
+        $('#btnShowGantt').show();
+
         if (only_my_requests == 1)
         {
             document.getElementById('ShowMyRequestsOnly').checked = true;
