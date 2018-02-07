@@ -83,6 +83,7 @@ $(document).ready(function() {
     //Функция инициализации календаря
     function initCalendar()
     {
+        $('#calendar').show();
         $('#calendar').fullCalendar({
             editable: false,
             header: {
@@ -187,13 +188,14 @@ $(document).ready(function() {
                     return; }
                 $('#calendar_details table').remove();
                 $('#calendar_details').append(msge);
+                $('#calendar_details').show();
                 $('#calendar_details').prop('title',calEvent.title);
                 $('#calendar_details').dialog({
                     autoOpen: true,
                     modal:true,
                     width: $(window).width() / 1.3,
                     title: 'Подробности заявки №'+id_request_number,
-                    height:  $('#calendar_details').height,
+                    height:  $('#calendar_details').height(),
                     resizable: false,
                     buttons: [
                         {
@@ -213,5 +215,6 @@ $(document).ready(function() {
                 }
             }
         });
+        $('#calendar').hide();
     }
 });

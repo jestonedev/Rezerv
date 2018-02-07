@@ -29,6 +29,8 @@ header("Cache-Control: no-cache, must-revalidate");
         <script src="scripts/jquery.fileDownload.js" type='text/javascript'></script>
         <script src="scripts/moment.min.js" type="text/javascript"></script>
         <script src='scripts/fullcalendar.min.js' type='text/javascript' ></script>
+        <script src='scripts/highcharts.js' type='text/javascript' ></script>
+        <script src='scripts/xrange.js' type='text/javascript' ></script>
     </head>
     <body>
 	<?php
@@ -106,6 +108,7 @@ header("Cache-Control: no-cache, must-revalidate");
         </tr>
     </table>
     <div id='calendar'></div>                                       <!--Форма календаря-->
+    <div id='gantt'><div id="gantt-diagram"></div></div>            <!--Форма диаграммы Ганта-->
     <div id='calendar_details'></div>                               <!--Подробности о заявке на календаре-->
     <div id='select_car_form'></div>                                <!--Форма диалога выбора автомобиля-->
     <div id='reportSettings'>                                       <!--Форма настройки отчета-->
@@ -149,7 +152,7 @@ header("Cache-Control: no-cache, must-revalidate");
         <div id="error_reportSettings"></div>
     </div>
     <div id='calendarSettings'></div>                               <!--Форма настройки календаря-->
-    <div id='ganttSettings'></div>                               <!--Форма настройки диаграммы Ганта-->
+    <div id='ganttSettings'></div>                                  <!--Форма настройки диаграммы Ганта-->
     <div id='mileagesEditor'>                                       <!--Форма изменения информации о пробеге-->
         <table>
             <tr>

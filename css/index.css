@@ -310,3 +310,12 @@ td#body {
 #add_way {
     display: none;
 }
+
+#gantt-diagram {
+    width: 95%;
+    text-align: center;
+}
+
+#gantt {
+    width: 90%;
+}
