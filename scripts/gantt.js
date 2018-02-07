@@ -154,7 +154,6 @@ $(document).ready(function () {
                             headerFormat: '',
                             pointFormatter:
                                 function() {
-                                    console.log(this);
                                     return '<span style="color:'+this.color+'">●</span> ' +
                                         '<b> Заявка №'+this.ext_data.id_request_number+' ('+
                                         this.ext_data.request_state_text+'), '+this.yCategory+'</b>';
