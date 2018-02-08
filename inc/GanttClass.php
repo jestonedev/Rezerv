@@ -69,7 +69,7 @@ class GanttClass
               rn.request_date, rn.request_state, srs.request_status AS request_state_text,
               STR_TO_DATE(CONCAT(sdf.field_value, ' ', stf.field_value), '%d.%m.%Y %H:%i') AS date_from,
               SUBSTRING_INDEX(df.field_value, '.', 1) AS hour_duration,
-              ROUND(SUBSTRING_INDEX(df.field_value, '.', -1)*60/100) AS minutes_duration, cftr.id_car, c.number, c.model, c.type
+              ROUND(SUBSTRING_INDEX(df.field_value, '.', -1)*60/100) AS minutes_duration, cftr.id_car, c.number, cm.model, c.type
             FROM request_number rn
               INNER JOIN sp_request_status srs ON rn.request_state = srs.id_request_status
               INNER JOIN (
@@ -89,6 +89,7 @@ class GanttClass
             WHERE cf.id_request = $request_type_id) df ON rn.id_request_number = df.id_request_number
               LEFT JOIN cars_for_transport_requests cftr ON rn.id_request_number = cftr.id_request_number
               LEFT JOIN cars c ON cftr.id_car = c.id
+              LEFT JOIN car_models cm ON c.id_model = cm.id_model
               ) v
             WHERE v.date_from BETWEEN STR_TO_DATE('$date_from', '%d.%m.%Y') AND
               STR_TO_DATE('$date_to 23:59:59', '%d.%m.%Y %H:%i:%s') AND
