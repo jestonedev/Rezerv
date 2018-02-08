@@ -95,13 +95,14 @@ class CarsInfoClass
         $end_date = $this->LastDayOfMonth(intval($now->format('m')), intval($now->format('Y'))).'.'.$now->format('m').'.'.$now->format('Y');
 
         return "(SELECT CONCAT('<img src=\'img/details_open.png\' value=\'',cars.id,'\' data-id-chief-default=\'',IFNULL(cars.id_chief_default, 0),'\'>') AS edit_lbl,
-               IF(cars.model = '' AND cars.number = '', cars.type, CONCAT(cars.model,' г/н ',cars.number)) AS car
+               IFNULL(CONCAT(cm.model,' г/н ',cars.number), cars.type) AS car
              , IFNULL(date(l.`date`), 'Не указано') AS limit_date
              , IFNULL(l.mileage, 'Без ограничений') AS limit_mileage
              , IFNULL(m.mileage, 0) AS fact_mileage
              , IFNULL(date(m.`date`), 'Не указано') AS last_fact_mileage_date
         FROM
           cars
+        LEFT JOIN car_models cm ON cars.id_model = cm.id_model
         LEFT JOIN
         (SELECT id_car
               , sum(mileage) AS mileage, max(`date`) AS `date`

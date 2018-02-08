@@ -2,7 +2,7 @@
 define("MYSQL_SERVER","db01");
 define("MYSQL_USER","request");
 define("MYSQL_PASSWORD","cbcntvfpfzdjr");
-define("MYSQL_BASE","request_test");
+define("MYSQL_BASE","request");
 
 define("LDAP_SERVER","192.168.10.11");
 define("LDAP_PORT","3268");

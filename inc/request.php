@@ -614,8 +614,13 @@ class Request {
         //Если заявка транспортная, выводим транспортное поле, если оно необходимо
         if ($id_request == 1)
         {
-            $query_transport = "SELECT * FROM cars_for_transport_requests INNER JOIN cars ON (cars.id = cars_for_transport_requests.id_car)
-                               WHERE id_request_number = $id_request_number";
+            $query_transport = "SELECT c.id, c.id_chief_default, c.id_model, c.number, c.type, cc.name AS owner, c.id_fuel_default,
+                  c.id_driver_default, c.department_default, c.is_active, cm.model
+                FROM cars_for_transport_requests  cftr
+                  INNER JOIN cars c ON c.id = cftr.id_car
+                  LEFT JOIN car_models cm ON c.id_model = cm.id_model
+                  LEFT JOIN cars_chiefs cc ON c.id_chief_default = cc.id_chief
+                WHERE id_request_number = $id_request_number";
             $result_transport = mysqli_query($this->con, $query_transport);
             if (!$result_transport)
                 $this->fatal_error("Ошибка при выполнении запроса к базе данных");
@@ -1018,7 +1023,12 @@ class Request {
     //Функция построения и заполнения ComboBox машин
     public function CreateCarsComboBox($include_all_marker = false, $id_car = 0)
     {
-        $query = "SELECT * FROM cars WHERE is_active = 1 ORDER BY number";
+        $query = "SELECT id, id_chief_default, c.id_model, cm.model, number, type, cc.name AS owner, id_fuel_default,
+              id_driver_default, department_default, c.is_active
+            FROM cars c
+              LEFT JOIN car_models cm ON c.id_model = cm.id_model
+              LEFT JOIN cars_chiefs cc ON c.id_chief_default = cc.id_chief
+            WHERE c.is_active = 1 ORDER BY number";
         $result = mysqli_query($this->con, $query);
         if (!$result)
             $this->fatal_error("Ошибка при выполнении запроса к базе данных");

@@ -77,9 +77,10 @@ class WaybillsClass
 
     public function Table() {
         return "(SELECT CONCAT('<img src=\'img/details_open.png\' value=\'',id_waybill,'\'>') AS edit_lbl, w.waybill_number,
-            CONCAT(c.model,' г/н ',c.number) AS car,  DATE(w.start_date) AS start_date, IF(w.deleted = 0, 'Действительный', 'Удаленный') AS `status`
+            IFNULL(CONCAT(cm.model,' г/н ',c.number), c.type) AS car,  DATE(w.start_date) AS start_date, IF(w.deleted = 0, 'Действительный', 'Удаленный') AS `status`
             FROM waybills w
-            LEFT JOIN cars c ON (w.id_car = c.id)) t";
+            LEFT JOIN cars c ON (w.id_car = c.id)
+            LEFT JOIN car_models cm ON c.id_model = cm.id_model) t";
     }
 
     public function Where() {
