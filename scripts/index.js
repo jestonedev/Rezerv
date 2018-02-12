@@ -53,104 +53,79 @@ var dateTimePickerSettings = {
 //Функция инициализации состояния кнопок главной формы
 function initButtonsState()
 {
-    if (menu_code == 1)
-    {
+    $('#ShowMyRequestsOnly').hide();
+    $('#ShowMyRequestsOnlyLabel').hide();
+    $('#btnShowCalendar').hide();
+    $('#btnShowGantt').hide();
+    if (menu_code == 1) {
         document.getElementById('btnReports').checked = true;
-        $('#ShowMyRequestsOnly').hide();
-        $('#ShowMyRequestsOnlyLabel').hide();
-        $('#btnCreateRequest').hide();
-        $('#btnCreateAct').hide();
-        $('#btnCreateWaybill').hide();
-        $('#btnShowCalendar').hide();
-        $('#btnShowGantt').hide();
-    } else
-    if (menu_code == 2)
-    {
+    } else if (menu_code == 2) {
         document.getElementById('btnCarsInfo').checked = true;
-        $('#ShowMyRequestsOnly').hide();
-        $('#ShowMyRequestsOnlyLabel').hide();
-        $('#btnCreateRequest').hide();
-        $('#btnCreateAct').hide();
-        $('#btnCreateWaybill').hide();
-        $('#btnShowCalendar').hide();
-        $('#btnShowGantt').hide();
         header = "Информация по пробегу транспортных средств администрации";
-        setCookie("header",header);
-    } else
-    if (menu_code == 3)
-    {
+        setCookie("header", header);
+    } else if(menu_code == 3) {
         document.getElementById('btnRepairActs').checked = true;
-        $('#ShowMyRequestsOnly').hide();
-        $('#ShowMyRequestsOnlyLabel').hide();
-        $('#btnCreateRequest').hide();
-        $('#btnCreateWaybill').hide();
-        if (hasCreateActsPrivilege())
-        {
-            $('#btnCreateAct').show();
-        } else
-        {
-            $('#btnCreateAct').hide();
-        }
-        $('#btnShowCalendar').hide();
-        $('#btnShowGantt').hide();
         header = "Акты выполненных работ по обслуживанию автотранспорта";
-        setCookie("header",header);
-    } else
-    if (menu_code == 4)
-    {
-        document.getElementById('btnWaybills').checked = true;
-        $('#ShowMyRequestsOnly').hide();
-        $('#ShowMyRequestsOnlyLabel').hide();
-        $('#btnCreateRequest').hide();
-        $('#btnCreateAct').hide();
-        if (hasCreateWaybillsPrivilege())
-        {
-            $('#btnCreateWaybill').show();
-        }
-        $('#btnShowCalendar').hide();
-        $('#btnShowGantt').hide();
-        header = "Путевые листы";
-        setCookie("header",header);
-    }
-    else
-    {
-        switch(id_request.toString())
-        {
-            case "0":
-                header = 'Вид группы заявок не указан';
-                setCookie('header',header);
-                break;
-            case "1":
-                document.getElementById('btnTransportRequests').checked = true;
-                header = 'Заявки на транспорт';
-                setCookie('header',header);
-                break;
-            case "2":
-                document.getElementById('btnGreatHallRequests').checked = true;
-                header = 'Заявки на конферец-зал';
-                setCookie('header',header);
-                break;
-            case "3":
-                document.getElementById('btnSmallHallRequests').checked = true;
-                header = 'Заявки на зал заседания думы';
-                setCookie('header',header);
-                break;
-        }
-        $('#btnCreateAct').hide();
-        $('#btnCreateWaybill').hide();
-        $('#ShowMyRequestsOnly').show();
-        $('#ShowMyRequestsOnlyLabel').show();
-        if (hasCreateRequestPrivilege()) {
-            $('#btnCreateRequest').show(); }
-        else {
-            $('#btnCreateRequest').hide(); }
-        $('#btnShowCalendar').show();
-        $('#btnShowGantt').show();
+        setCookie("header", header);
+    } else if (menu_code == 4) {
 
-        if (only_my_requests == 1)
-        {
-            document.getElementById('ShowMyRequestsOnly').checked = true;
-        }
+        document.getElementById('btnWaybills').checked = true;
+        header = "Путевые листы";
+        setCookie("header", header);
+    } else {
+            switch (id_request.toString()) {
+                case "0":
+                    header = 'Вид группы заявок не указан';
+                    setCookie('header', header);
+                    break;
+                case "1":
+                    document.getElementById('btnTransportRequests').checked = true;
+                    header = 'Заявки на транспорт';
+                    setCookie('header', header);
+                    break;
+                case "2":
+                    document.getElementById('btnGreatHallRequests').checked = true;
+                    header = 'Заявки на конферец-зал';
+                    setCookie('header', header);
+                    break;
+                case "3":
+                    document.getElementById('btnSmallHallRequests').checked = true;
+                    header = 'Заявки на зал заседания думы';
+                    setCookie('header', header);
+                    break;
+            }
+            $('#ShowMyRequestsOnly').show();
+            $('#ShowMyRequestsOnlyLabel').show();
+            $('#btnShowCalendar').show();
+            $('#btnShowGantt').show();
+
+            if (only_my_requests == 1) {
+                document.getElementById('ShowMyRequestsOnly').checked = true;
+            }
+    }
+    if (hasCreateRequestPrivilege() && menu_code == 0) {
+        $('#btnCreateRequest').show();
+    } else
+    {
+        $('#btnCreateRequest').hide();
+    }
+    if (hasCreateActsPrivilege() && menu_code == 3) {
+        $('#btnCreateAct').show();
+    } else
+    {
+        $('#btnCreateAct').hide();
+    }
+    if (hasCreateWaybillsPrivilege() && menu_code == 4) {
+        $('#btnCreateWaybill').show();
+    } else
+    {
+        $('#btnCreateWaybill').hide();
+    }
+    if (hasManageCarsPrivilege())
+    {
+        $('#cars').show();
+    } else {
+        $('#cars').hide();
     }
     $("#requests_group").buttonset();
     $("#header").text(header);

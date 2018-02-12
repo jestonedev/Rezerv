@@ -83,7 +83,7 @@ td#footer
 }
 
 #rqlb1, #rqlb2, #rqlb3, #rqlb4, #rqlb5, #rqlb6, #rplb, #btnShowCalendar, #btnShowGantt,
-#btnReports, #btnCreateRequest, #btnCreateAct, #btnCreateWaybill, #left_menu_requests_title {
+#btnReports, #btnCreateRequest, #btnCreateAct, #btnCreateWaybill, #left_menu_requests_title, #cars {
 	display:block;
 	width: 170pt;
     font-size: 12pt;
@@ -106,7 +106,7 @@ td#footer
 	vertical-align: top;
 }
 
-#btnCreateRequest, #btnCreateAct, #btnCreateWaybill, #btnShowGantt {
+#btnCreateRequest, #btnCreateAct, #btnCreateWaybill, #btnShowGantt, #cars {
     margin-top: 7pt;
 }
 

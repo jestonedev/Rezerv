@@ -156,6 +156,6 @@ class CarsInfoClass
         {
             return $data;
         } else
-            return Helper::ClearJsonString($data);;
+            return Helper::ClearJsonString($data);
     }
 }

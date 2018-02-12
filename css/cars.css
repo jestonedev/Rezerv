@@ -1,0 +1,46 @@
+.navbar .navbar-nav>.active>a {
+    background-color: #ecebeb;
+}
+
+.cars__permissions_denied {
+    margin: 10pt;
+}
+
+.car__use-repair-card span {
+    font-size: 10px;
+    margin-bottom: 3px;
+}
+
+.table.car__table thead>tr>th,
+.table.car__table tbody>tr>th,
+.table.car__table tfoot>tr>th,
+.table.car__table thead>tr>td,
+.table.car__table tbody>tr>td,
+.table.car__table tfoot>tr>td {
+    vertical-align: middle;
+}
+
+.cars__page-header {
+    margin-top: 20px;
+}
+
+.cars__change-norm-button {
+    margin-left: 10px;
+}
+
+.cars__manage-button {
+    width: 200px;
+}
+
+.cars__manage-buttons {
+    margin: 20px;
+}
+
+.cars-breadcrumb {
+    margin-top: -20px;
+}
+
+.cars-row {
+    margin-left: 0;
+    margin-right: 0;
+}

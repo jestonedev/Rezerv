@@ -1,7 +1,6 @@
 ﻿<?php
 header("Cache-Control: no-cache, must-revalidate");
 ?>
-
 <html>
     <head>
         <meta charset="utf-8">
@@ -54,6 +53,7 @@ header("Cache-Control: no-cache, must-revalidate");
         <script src="scripts/reports.js" type="text/javascript"></script>
         <script src="scripts/gantt.js" type="text/javascript"></script>
         <script src="scripts/calendar.js" type="text/javascript"></script>
+        <script src="scripts/cars.js" type="text/javascript"></script>
 
     <table id="struct_table">
     <tr>
@@ -64,9 +64,10 @@ header("Cache-Control: no-cache, must-revalidate");
         <div id="requests_group">
             <input type="radio" name="rq" id="btnReports"><label id="rplb" for="btnReports">Отчеты</label>
             <div id="left_menu_requests_title">Главное меню:</div>
-            <input type="radio" name="rq" id="btnTransportRequests"><label id="rqlb1" for="btnTransportRequests">Транспорт</label>
-            <input type="radio" name="rq" id="btnGreatHallRequests"><label id="rqlb2" for="btnGreatHallRequests">Конференц-зал</label>
-            <input type="radio" name="rq" id="btnSmallHallRequests"><label id="rqlb3" for="btnSmallHallRequests">Зал заседания думы</label>
+            <input type="radio" name="rq" id="btnTransportRequests"><label id="rqlb1" for="btnTransportRequests">Заявки на транспорт</label>
+            <input type="radio" name="rq" id="btnGreatHallRequests"><label id="rqlb2" for="btnGreatHallRequests">Заявки на конф.-зал</label>
+            <input type="radio" name="rq" id="btnSmallHallRequests"><label id="rqlb3" for="btnSmallHallRequests">Заявки на зал думы</label>
+
             <input type="radio" name="rq" id="btnCarsInfo"><label id="rqlb4" for="btnCarsInfo">Пробег транспорта</label>
             <input type="radio" name="rq" id="btnRepairActs"><label id="rqlb5" for="btnRepairActs">Акты обслуживания</label>
             <input type="radio" name="rq" id="btnWaybills"><label id="rqlb6" for="btnWaybills">Путевые листы</label>
@@ -76,6 +77,7 @@ header("Cache-Control: no-cache, must-revalidate");
         <button id="btnCreateWaybill">Создать путевой лист</button>
         <button id="btnShowGantt">Диаграмма Ганта</button>
         <button id="btnShowCalendar">Календарь заявок</button>
+        <a id="cars" href="cars.php">Транспорт</a>
         <a class="user-doc_cell" href="/doc/user_manual.odt">Руководство пользователя</a>
     </td>
     <td id="body">

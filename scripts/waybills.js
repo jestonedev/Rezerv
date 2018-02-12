@@ -297,6 +297,7 @@ $(document).ready(function() {
         return array;
     }
 });
+
 //Есть привелегия на создание путевых листов
 function hasCreateWaybillsPrivilege()
 {

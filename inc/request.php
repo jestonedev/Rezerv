@@ -1756,7 +1756,7 @@ class Request {
 
         $fuelConsumptionQuery = "SELECT fc.fuel_consumption
             FROM fuel_consumption fc
-            WHERE fc.id_car = $car_id AND date(fc.start_date) < STR_TO_DATE('$start_date', '%Y-%m-%d')
+            WHERE fc.id_car = $car_id AND date(fc.start_date) <= STR_TO_DATE('$start_date', '%Y-%m-%d')
             ORDER BY fc.start_date DESC
             LIMIT 1";
         $fuelConsumptionResult = mysqli_query($this->con, $fuelConsumptionQuery);
@@ -1861,7 +1861,7 @@ class Request {
         $waybill_id = $args['waybill_id'];
         $fuelConsumptionQuery = "SELECT fc.fuel_consumption
             FROM fuel_consumption fc
-            WHERE fc.id_car = $car_id AND date(fc.start_date) < STR_TO_DATE('$start_date', '%Y-%m-%d')
+            WHERE fc.id_car = $car_id AND date(fc.start_date) <= STR_TO_DATE('$start_date', '%Y-%m-%d')
             ORDER BY fc.start_date DESC
             LIMIT 1";
         $fuelConsumptionResult = mysqli_query($this->con, $fuelConsumptionQuery);
