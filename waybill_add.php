@@ -7,6 +7,7 @@ header("Cache-Control: no-cache, must-revalidate");
     <meta charset="utf-8">
     <title>Транспорт</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <link rel="shortcut icon" href="favicon.png" type="image/png">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/bootstrap-datepicker3.min.css">
@@ -160,7 +161,7 @@ if (Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT)) {
                 <div class="col-xs-12 col-md-6 waybills-form-md-right-padding">
                     <div class="form-group">
                         <label for="waybillFuelBefore" class="control-label">Остаток горючего при выезде</label>
-                        <input type="text" class="form-control"" value="<?=$waybillAutocompleteInfo["fuel_after"]?>" id="waybillFuelBefore" placeholder="Остаток горючего при выезде">
+                        <input type="text" class="form-control" value="<?=$waybillAutocompleteInfo["fuel_after"]?>" id="waybillFuelBefore" placeholder="Остаток горючего при выезде">
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6 waybills-form-md-left-padding">
@@ -188,7 +189,7 @@ if (Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT)) {
                     ?>
                 </select>
             </div>
-            <div class="text-center waybill-modify-buttons">
+            <div class="text-center waybill-control-buttons">
                 <button class="btn btn-success" id="waybill-add-button">Сохранить</button>
                 <a href="car_waybills.php?id_car=<?=$carInfo["id_car"]?>" class="btn btn-danger">Отмена</a>
             </div>

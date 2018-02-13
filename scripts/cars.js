@@ -25,21 +25,54 @@ $(document).ready(
                 $(this).closest(".date.input-group").find("input").datepicker("show");
             });
 
-        $("#waybillStartDate, #waybillEndDate").datepicker({
-            format: "dd.mm.yyyy",
-            weekStart: 1,
-            maxViewMode: 2,
-            todayBtn: "linked",
-            language: "ru",
-            orientation: "bottom auto",
-            autoclose: true,
-            todayHighlight: true,
-            startDate: "01/01/1753"
-        });
+        if ($.fn.datepicker != undefined) {
+            $("#waybillStartDate, #waybillEndDate").datepicker({
+                format: "dd.mm.yyyy",
+                weekStart: 1,
+                maxViewMode: 2,
+                todayBtn: "linked",
+                language: "ru",
+                orientation: "bottom auto",
+                autoclose: true,
+                todayHighlight: true,
+                startDate: "01/01/1753"
+            });
+        }
 
         $("#waybill-add-button").on("click", function(e) {
             e.preventDefault();
-            ProcessWaybill(0);
+            InsertWaybill();
+        });
+
+        $("#waybill-edit-button").on("click", function(e) {
+            e.preventDefault();
+            UpdateWaybill($("#waybillId").prop("value"));
+        });
+
+        $(".waybill-delete-btn").on("click", function(e) {
+            var idWaybill = $(this).data("id-waybill");
+            var waybillNumber = $(this).data("waybill-number");
+            $("#delete-waybill .waybill-number").text(waybillNumber);
+            $("#delete-waybill-success").data("id-waybill", idWaybill);
+            $("#delete-waybill").modal('show');
+            e.preventDefault();
+        });
+
+        $("#delete-waybill-success").on("click", function(e) {
+            $.ajax({
+                    type: "POST",
+                    url: "inc/waybills_modify.php",
+                    data: "action=delete_waybill&id_waybill=" + $(this).data("id-waybill"),
+                    success: function () {
+                        $("#delete-waybill").modal('hide');
+                        location.href="";
+                    },
+                    error: function (msg) {
+                        $("#delete-waybill").modal('hide');
+                        location.href=""
+                    }
+                }
+            );
         });
 
         function ProcessWaybill(id_waybill)
@@ -128,7 +161,7 @@ $(document).ready(
                     if ($.trim(msg).length == 0)
                     {
                         //Если путевой лист успешно подан, закрываем диалог
-                        location.href = "car_waybills.php?id_car=11";
+                        location.href = "car_waybills.php?id_car="+car_id;
                     } else
                     {
                         alert.append(msg);

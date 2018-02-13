@@ -25,7 +25,7 @@
     margin-top: 20px;
 }
 
-.cars__change-norm-button {
+.cars__change-norm-button, .cars__change-tires-button, .cars__change-accum-button {
     margin-left: 10px;
 }
 
@@ -46,7 +46,7 @@
     margin-right: 0;
 }
 
-.waybill-modify-buttons button, .waybill-modify-buttons a {
+.waybill-control-buttons button, .waybill-control-buttons a {
     width: 150px;
 }
 
@@ -76,4 +76,18 @@
     .waybills-form-md-left-padding {
         padding-left: 20pt;
     }
+}
+
+@media (min-width: 768px) {
+    .waybill-detail-dl dt {
+        width: 280px;
+    }
+
+    .waybill-detail-dl dd {
+        margin-left: 300px;
+    }
+}
+
+.waybill-detail-dl {
+    margin: 0;
 }

@@ -7,6 +7,7 @@ header("Cache-Control: no-cache, must-revalidate");
     <meta charset="utf-8">
     <title>Транспорт</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <link rel="shortcut icon" href="favicon.png" type="image/png">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/cars.css">

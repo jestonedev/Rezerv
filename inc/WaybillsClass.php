@@ -67,6 +67,40 @@ class WaybillsClass
         return array_merge($waybillInfo, $carInfo, ["waybill_number" => $waybillNumberInfo["waybill_number"]]);
     }
 
+    public function GetWaybillInfo($idWaybill)
+    {
+        $query = "SELECT
+              w.id_waybill, w.id_car, w.id_driver, w.waybill_number,
+              DATE_FORMAT(w.start_date,'%d.%m.%Y') AS start_date,
+              DATE_FORMAT(w.end_date,'%d.%m.%Y') AS end_date,
+              w.department, w.mileage_before,
+              w.mileage_after, w.fuel_before, w.given_fuel,
+              w.fuel_after, w.id_fuel_type , c.number AS car_number
+            FROM waybills w INNER JOIN cars c ON w.id_car = c.id
+            WHERE w.id_waybill=".addslashes($idWaybill);
+        $query_ways = "SELECT * FROM ways WHERE id_waybill=".addslashes($idWaybill);
+        $result = mysqli_query($this->link, $query);
+        $result_ways = mysqli_query($this->link, $query_ways);
+        if (!$result || !$result_ways)
+            $this->fatal_error("Ошибка выполнения запроса");
+        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        foreach($row as $key => $value)
+        {
+            $row[$key] = stripslashes($value);
+        }
+        $array = array();
+        while ($row_ways = mysqli_fetch_array($result_ways, MYSQLI_ASSOC))
+        {
+            $row_ways["way"] = stripslashes($row_ways["way"]);
+            $row_ways["start_time"] = stripslashes($row_ways["start_time"]);
+            $row_ways["end_time"] = stripslashes($row_ways["end_time"]);
+            $row_ways["distance"] = stripslashes($row_ways["distance"]);
+            array_push($array, $row_ways);
+        }
+        $row["ways"] = $array;
+        return $row;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     //Интерфейс IQuery. Декларирует параметры для корректной работы DataTable//
     ///////////////////////////////////////////////////////////////////////////
