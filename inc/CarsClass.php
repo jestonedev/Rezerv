@@ -24,12 +24,48 @@ class CarsClass
             mysqli_close($this->link);
     }
 
+    public function GetDrivers()
+    {
+        $query = "SELECT *
+            FROM drivers d
+            WHERE d.is_active = 1
+            ORDER BY name";
+        $result = mysqli_query($this->link, $query);
+        $drivers = [];
+        while($driver = mysqli_fetch_assoc($result))
+        {
+            array_push($drivers, [
+                "id_driver" => $driver["id_driver"],
+                "name" => $driver["name"]
+            ]);
+        }
+        return $drivers;
+    }
+
+    public function GetFuelTypes()
+    {
+        $query = "SELECT *
+            FROM fuel_types ft
+            ORDER BY fuel_type";
+        $result = mysqli_query($this->link, $query);
+        $fuelTypes = [];
+        while($driver = mysqli_fetch_assoc($result))
+        {
+            array_push($fuelTypes, [
+                "id_fuel_type" => $driver["id_fuel_type"],
+                "fuel_type" => $driver["fuel_type"]
+            ]);
+        }
+        return $fuelTypes;
+    }
+
     public function GetCars()
     {
-        $query = "SELECT c.id, cm.model, c.number, c.type, c.department_default,
+        $query = "SELECT c.id, cm.model, c.number, c.type, cc.name AS chief, c.department_default,
             c.is_active
             FROM cars c
               INNER JOIN car_models cm ON c.id_model = cm.id_model
+              INNER JOIN cars_chiefs cc ON c.id_chief_default = cc.id_chief
             ORDER BY c.number";
         $result = mysqli_query($this->link, $query);
         $cars = [];
@@ -40,6 +76,7 @@ class CarsClass
                "model" => $car["model"],
                "number" => $car["number"],
                "type" => $car["type"],
+               "chief" => $car["chief"],
                "department_default" => $car["department_default"],
                "state" => $car["is_active"] == 0 ?
                    '<span class="label label-warning">Не активный</span>' :
@@ -121,7 +158,8 @@ class CarsClass
                 "fuel_consumption" => $waybill["fuel_consumption"],
                 "state" => $waybill["deleted"] == 1 ?
                 '<span class="label label-warning">Удаленный</span>' :
-                '<span class="label label-success">Действительный</span>'
+                '<span class="label label-success">Действительный</span>',
+                "deleted" => $waybill["deleted"]
             ]);
         }
         return $waybills;

@@ -18,6 +18,7 @@
 .table.car__table tbody>tr>td,
 .table.car__table tfoot>tr>td {
     vertical-align: middle;
+    text-align: center;
 }
 
 .cars__page-header {
@@ -43,4 +44,36 @@
 .cars-row {
     margin-left: 0;
     margin-right: 0;
+}
+
+.waybill-modify-buttons button, .waybill-modify-buttons a {
+    width: 150px;
+}
+
+.waybill-select-date-button span {
+    margin-top: -1px;
+}
+
+.datepicker table tr td,
+.datepicker table tr th {
+    font-size: 13px;
+}
+
+.dispetcher_car {
+    background-color: #d9fff5;
+}
+
+.waybill-require-mark {
+    color: #e64a54;
+    margin-left: 3px;
+}
+
+@media (min-width: 992px) {
+    .waybills-form-md-right-padding {
+        padding-right: 20pt;
+    }
+
+    .waybills-form-md-left-padding {
+        padding-left: 20pt;
+    }
 }

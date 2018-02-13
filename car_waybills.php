@@ -101,9 +101,16 @@ if (Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT)) {
                 <a title="Редактировать путевой лист" href="waybill_edit.php?id_waybill=<?=$waybill["id_waybill"]?>" class="btn btn-default">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </a>
-                <a title="Удалить путевой лист" href="car_waybills.php?id_car=<?=$car_id?>&page=<?=$page?>" data-id-waybill="id_waybill" class="btn btn-default waybill-delete-btn">
-                    <span class="glyphicon glyphicon-trash"></span>
-                </a>
+                <?
+                    if ($waybill["deleted"] == 0) {
+                ?>
+                        <a title="Удалить путевой лист" href="car_waybills.php?id_car=<?= $car_id ?>&page=<?= $page ?>"
+                           data-id-waybill="id_waybill" class="btn btn-default waybill-delete-btn">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                 <?
+                    }
+                ?>
                 </div>
                 </td>
                 </tr>

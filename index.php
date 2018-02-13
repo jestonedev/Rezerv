@@ -45,6 +45,7 @@ header("Cache-Control: no-cache, must-revalidate");
 
     include_once "inc/auth.php";
     if (Auth::hasPrivilege(AUTH_READ_DATA)) { ?>
+        <script src="scripts/helper.js" type="text/javascript"></script>
         <script src="scripts/index.js" type="text/javascript"></script>
         <script src="scripts/requests.js" type="text/javascript"></script>
         <script src="scripts/waybills.js" type="text/javascript"></script>

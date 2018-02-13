@@ -471,8 +471,6 @@ function fnFormatWaybillDetails( oTable, nTr )
     return msga;
 }
 
-
-
 function ProcessWaybill(id_waybill)
 {
     $("#error_waybill_create div").remove();
