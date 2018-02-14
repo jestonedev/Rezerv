@@ -13,6 +13,7 @@ header("Cache-Control: no-cache, must-revalidate");
     <link rel="stylesheet" href="css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" href="css/cars.css">
     <script src="scripts/jquery-1.11.2.min.js"></script>
+    <script src="scripts/jquery.mask.min.js"></script>
     <script src="scripts/bootstrap.min.js"></script>
     <script src="scripts/bootstrap-datepicker.min.js"></script>
     <script src="scripts/bootstrap-datepicker.ru.min.js"></script>
@@ -188,6 +189,22 @@ if (Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT)) {
                     }
                     ?>
                 </select>
+            </div>
+            <div class="panel panel-default waybill-ways">
+                <div class="panel-heading">Маршрут</div>
+                <table class="table car__table">
+                    <thead>
+                    <tr>
+                        <th>Маршрут (из)</th>
+                        <th>Маршрут (в)</th>
+                        <th>Время выезда</th>
+                        <th>Время приезда</th>
+                        <th>Проедно (км)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
             <div class="text-center waybill-control-buttons">
                 <button class="btn btn-success" id="waybill-add-button">Сохранить</button>

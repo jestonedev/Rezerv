@@ -1794,8 +1794,11 @@ class Request {
             }
             $query = "insert into ways (id_waybill, way, start_time, end_time, distance) values (?,?,?,?,?)";
             $pq = mysqli_prepare($this->con, $query);
+            $way = (trim($args[0]) == "") ? null : trim($args[0]);
+            $startDate = (trim($args[1]) == "") ? null : trim($args[1]);
+            $endDate = (trim($args[2]) == "") ? null : trim($args[2]);
             $distance = (trim($args[3]) == "") ? null : trim($args[3]);
-            mysqli_stmt_bind_param($pq, 'isssi', $waybill_id, trim($args[0]), trim($args[1]), trim($args[2]), $distance);
+            mysqli_stmt_bind_param($pq, 'isssi', $waybill_id, $way, $startDate, $endDate, $distance);
             mysqli_stmt_execute($pq);
             if (mysqli_errno($this->con)!=0)
             {
@@ -1907,8 +1910,11 @@ class Request {
             }
             $query = "insert into ways (id_waybill, way, start_time, end_time, distance) values (?,?,?,?,?)";
             $pq = mysqli_prepare($this->con, $query);
+            $way = (trim($args[0]) == "") ? null : trim($args[0]);
+            $startDate = (trim($args[1]) == "") ? null : trim($args[1]);
+            $endDate = (trim($args[2]) == "") ? null : trim($args[2]);
             $distance = (trim($args[3]) == "") ? null : trim($args[3]);
-            mysqli_stmt_bind_param($pq, 'isssi', $waybill_id, trim($args[0]), trim($args[1]), trim($args[2]), $distance);
+            mysqli_stmt_bind_param($pq, 'isssi', $waybill_id, $way, $startDate, $endDate, $distance);
             mysqli_stmt_execute($pq);
             if (mysqli_errno($this->con)!=0)
             {

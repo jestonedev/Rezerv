@@ -72,86 +72,125 @@ if (Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT)) {
         <h1><small>Просмотр путевого листа №<?=$waybillInfo["waybill_number"]?> автомобиля <?=$waybillInfo["car_number"]?></small></h1>
     </div>
     <div class="alert alert-danger text-center col-sm-10 col-sm-offset-1" id="waybill-error" style="display: none">Ошибка</div>
-    <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-        <ul class="list-group">
-            <li class="list-group-item">
-                <dl class="dl-horizontal waybill-detail-dl">
-                    <dt>Номер</dt>
-                    <dd><?=$waybillInfo["waybill_number"]?></dd>
-                </dl>
-            </li>
-            <li class="list-group-item">
-                <dl class="dl-horizontal waybill-detail-dl">
-                    <dt>Начало действия</dt>
-                    <dd><?=$waybillInfo["start_date"]?></dd>
-                    <dt>Окончание действия</dt>
-                    <dd><?=$waybillInfo["end_date"]?></dd>
-                </dl>
-            </li>
-            <li class="list-group-item">
-                <dl class="dl-horizontal waybill-detail-dl">
-                    <dt>Водитель</dt>
-                    <dd><?
-                        $drivers = $carClass->GetDrivers();
-                        foreach($drivers as $driver)
-                        {
-                            if ($driver["id_driver"] == $waybillInfo["id_driver"])
-                            {
-                                echo $driver["name"];
-                                break;
-                            }
-                        }
-                        ?>
-                    </dd>
-                </dl>
-            </li>
-            <li class="list-group-item">
+    <ul class="list-group col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+        <li class="list-group-item">
             <dl class="dl-horizontal waybill-detail-dl">
-                <dt>В распоряжение</dt>
-                <dd><?=$waybillInfo["department"]?></dd>
+                <dt>Номер</dt>
+                <dd><?=$waybillInfo["waybill_number"]?></dd>
             </dl>
-            </li>
-            <li class="list-group-item">
-                <dl class="dl-horizontal waybill-detail-dl">
-                    <dt>Показание спидометра (до выезда)</dt>
-                    <dd><?=empty($waybillInfo["mileage_before"]) ? 0 : $waybillInfo["mileage_before"]?> км.</dd>
-                    <dt>Пробег</dt>
-                    <dd><?=($waybillInfo["mileage_after"] - $waybillInfo["mileage_before"])?> км.</dd>
-                    <dt>Показание спидометра (возвр.)</dt>
-                    <dd><?=empty($waybillInfo["mileage_after"]) ? 0 : $waybillInfo["mileage_after"]?> км.</dd>
-                </dl>
-            </li>
-            <li class="list-group-item">
-                <dl class="dl-horizontal waybill-detail-dl">
-                    <dt>Остаток горючего (до выезда)</dt>
-                    <dd><?=empty($waybillInfo["fuel_before"]) ? 0 : $waybillInfo["fuel_before"]?> л.</dd>
-                    <dt>Выдано горючего</dt>
-                    <dd><?=empty($waybillInfo["given_fuel"]) ? 0 : $waybillInfo["given_fuel"]?> л.</dd>
-                    <dt>Остаток горючего (возвра.)</dt>
-                    <dd><?=$waybillInfo["fuel_after"]?> л.</dd>
-                    <dt>Марка горючего</dt>
-                    <dd><?
-                        $fuelTypes = $carClass->GetFuelTypes();
-                        $fuelFounded = false;
-                        foreach($fuelTypes as $fuelType)
+        </li>
+        <li class="list-group-item">
+            <dl class="dl-horizontal waybill-detail-dl">
+                <dt>Начало действия</dt>
+                <dd><?=$waybillInfo["start_date"]?></dd>
+                <dt>Окончание действия</dt>
+                <dd><?=$waybillInfo["end_date"]?></dd>
+            </dl>
+        </li>
+        <li class="list-group-item">
+            <dl class="dl-horizontal waybill-detail-dl">
+                <dt>Водитель</dt>
+                <dd><?
+                    $drivers = $carClass->GetDrivers();
+                    foreach($drivers as $driver)
+                    {
+                        if ($driver["id_driver"] == $waybillInfo["id_driver"])
                         {
-                            if ($fuelType["id_fuel_type"] == $waybillInfo["id_fuel_type"])
-                            {
-                                echo $fuelType["fuel_type"];
-                                $fuelFounded = true;
-                                break;
-                            }
+                            echo $driver["name"];
+                            break;
                         }
-                        if (!$fuelFounded)
+                    }
+                    ?>
+                </dd>
+            </dl>
+        </li>
+        <li class="list-group-item">
+        <dl class="dl-horizontal waybill-detail-dl">
+            <dt>В распоряжение</dt>
+            <dd><?=$waybillInfo["department"]?></dd>
+        </dl>
+        </li>
+        <li class="list-group-item">
+            <dl class="dl-horizontal waybill-detail-dl">
+                <dt>Показание спидометра (до выезда)</dt>
+                <dd><?=empty($waybillInfo["mileage_before"]) ? 0 : $waybillInfo["mileage_before"]?> км.</dd>
+                <dt>Пробег</dt>
+                <dd><?=($waybillInfo["mileage_after"] - $waybillInfo["mileage_before"])?> км.</dd>
+                <dt>Показание спидометра (возвр.)</dt>
+                <dd><?=empty($waybillInfo["mileage_after"]) ? 0 : $waybillInfo["mileage_after"]?> км.</dd>
+            </dl>
+        </li>
+        <li class="list-group-item">
+            <dl class="dl-horizontal waybill-detail-dl">
+                <dt>Остаток горючего (до выезда)</dt>
+                <dd><?=empty($waybillInfo["fuel_before"]) ? 0 : $waybillInfo["fuel_before"]?> л.</dd>
+                <dt>Выдано горючего</dt>
+                <dd><?=empty($waybillInfo["given_fuel"]) ? 0 : $waybillInfo["given_fuel"]?> л.</dd>
+                <dt>Остаток горючего (возвра.)</dt>
+                <dd><?=$waybillInfo["fuel_after"]?> л.</dd>
+                <dt>Марка горючего</dt>
+                <dd><?
+                    $fuelTypes = $carClass->GetFuelTypes();
+                    $fuelFounded = false;
+                    foreach($fuelTypes as $fuelType)
+                    {
+                        if ($fuelType["id_fuel_type"] == $waybillInfo["id_fuel_type"])
                         {
-                            echo "Не указана";
+                            echo $fuelType["fuel_type"];
+                            $fuelFounded = true;
+                            break;
                         }
-                        ?>
-                    </dd>
-                </dl>
-            </li>
-        </ul>
-        <div class="text-center waybill-control-buttons">
+                    }
+                    if (!$fuelFounded)
+                    {
+                        echo "Не указана";
+                    }
+                    ?>
+                </dd>
+            </dl>
+        </li>
+    </ul>
+    <div class=" col-md-8 col-md-offset-2">
+        <div class="panel panel-default waybill-ways-readonly">
+            <div class="panel-heading">Маршрут</div>
+            <table class="table car__table">
+                <thead>
+                <tr>
+                    <th>Маршрут (из)</th>
+                    <th>Маршрут (в)</th>
+                    <th>Время выезда</th>
+                    <th>Время приезда</th>
+                    <th>Проедно (км)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?
+                if (count($waybillInfo["ways"]) == 0)
+                {
+                    ?><tr><td colspan="5" class="text-center"><i>Маршруты отсутствуют</i></td></tr><?
+                }
+                foreach($waybillInfo["ways"] as $way)
+                {
+                    $wayFrom = explode(" - ", $way["way"])[0];
+                    $wayTo = explode(" - ", $way["way"])[1];
+                    $wayTimeFrom = substr($way["start_time"], 0, 5);
+                    $wayTimeTo = substr($way["end_time"], 0, 5);
+                    $wayDistance = $way["distance"] == "" ? 0 : $way["distance"];
+                    ?>
+                    <tr>
+                        <td><?=$wayFrom?></td>
+                        <td><?=$wayTo?></td>
+                        <td><?=$wayTimeFrom?></td>
+                        <td><?=$wayTimeTo?></td>
+                        <td><?=$wayDistance?> км.</td>
+                    </tr>
+                    <?
+                }
+                ?>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center waybill-control-buttons clearfix">
             <a title="Вернуться к списку путевых листов" href="car_waybills.php?id_car=<?=$waybillInfo["id_car"]?>" class="btn btn-danger">Назад</a>
             <a title="Редактировать путевой лист" href="waybill_edit.php?id_waybill=<?=$waybillInfo["id_waybill"]?>" class="btn btn-default">Редактировать</a>
         </div>

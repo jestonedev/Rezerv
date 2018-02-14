@@ -75,6 +75,70 @@ $(document).ready(
             );
         });
 
+        addWay();
+
+        function addWay() {
+            getWayTemplate(function (wayTemplate) {
+                var waysWrapper = $(".waybill-ways table tbody");
+                waysWrapper.append(wayTemplate);
+                if ($.fn.mask != undefined) {
+                    initTimeMask();
+                }
+            });
+        }
+
+        $(".waybill-ways").on("change", ".way-source, .way-destination, .way-time-from, .way-time-to, .way-distance", function(e) {
+            var ways = $(".waybill-way");
+            var hasNoEmptyString = true;
+            for(var i = 0; i < ways.length; i++)
+            {
+                var waySource = $(ways[i]).find(".way-source");
+                var wayDestination = $(ways[i]).find(".way-destination");
+                var wayTimeFrom = $(ways[i]).find(".way-time-from");
+                var wayTimeTo = $(ways[i]).find(".way-time-to");
+                var wayDistance = $(ways[i]).find(".way-distance");
+                if (waySource.prop("value") == "" &&
+                    wayDestination.prop("value") == "" &&
+                    wayTimeFrom.prop("value") == "" &&
+                    wayTimeTo.prop("value") == "" &&
+                    wayDistance.prop("value") == "")
+                {
+                    if (hasNoEmptyString)
+                    {
+                        hasNoEmptyString = false;
+                    } else
+                    {
+                        $(ways[i]).remove();
+                    }
+                }
+            }
+            if (hasNoEmptyString)
+            {
+                addWay();
+            }
+        });
+
+        var wayTemplateCached = undefined;
+
+        function getWayTemplate(callback)
+        {
+            if (wayTemplateCached != undefined)
+            {
+                callback(wayTemplateCached);
+                return;
+            }
+            $.get("inc/waybills_way_template.php", function(data) {
+                    wayTemplateCached = data;
+                    callback(data);
+                }
+            );
+        }
+
+        function initTimeMask() {
+            $('.way-time-from').mask('00:00');
+            $('.way-time-to').mask('00:00');
+        }
+
         function ProcessWaybill(id_waybill)
         {
             var alert = $("#waybill-error");
@@ -133,10 +197,34 @@ $(document).ready(
                 alert.show();
                 return;
             }
-            // TODO: Добавить маршруты
-            var array = [];
-            $("#ways_list option").each(function() {
-                ways_list += $(this).prop("value")+"$";
+            $(".waybill-way").each(function() {
+                var waySource = $(this).find(".way-source");
+                var wayDestination = $(this).find(".way-destination");
+                var wayTimeFrom = $(this).find(".way-time-from");
+                var wayTimeTo = $(this).find(".way-time-to");
+                var wayDistance = $(this).find(".way-distance");
+                if (waySource.prop("value") != "" ||
+                    wayDestination.prop("value") != "" ||
+                    wayTimeFrom.prop("value") != "" ||
+                    wayTimeTo.prop("value") != "" ||
+                    wayDistance.prop("value") != "")
+                {
+                    var way = "";
+                    if (waySource.prop("value") != "" && wayDestination.prop("value") != "")
+                    {
+                        way = waySource.prop("value")+" - "+wayDestination.prop("value");
+                    } else
+                    if (waySource.prop("value") != "")
+                    {
+                        way = waySource.prop("value");
+                    } else
+                    {
+                        way = wayDestination.prop("value");
+                    }
+                    var way_template = way+"@"+
+                        wayTimeFrom.prop("value") + "@" + wayTimeTo.prop("value") + "@" + wayDistance.prop("value");
+                    ways_list += way_template+"$";
+                }
             });
             var action = "";
             if (id_waybill == 0) {
