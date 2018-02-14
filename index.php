@@ -48,7 +48,6 @@ header("Cache-Control: no-cache, must-revalidate");
         <script src="scripts/helper.js" type="text/javascript"></script>
         <script src="scripts/index.js" type="text/javascript"></script>
         <script src="scripts/requests.js" type="text/javascript"></script>
-        <script src="scripts/waybills.js" type="text/javascript"></script>
         <script src="scripts/mileages.js" type="text/javascript"></script>
         <script src="scripts/repair_acts.js" type="text/javascript"></script>
         <script src="scripts/reports.js" type="text/javascript"></script>
@@ -71,11 +70,9 @@ header("Cache-Control: no-cache, must-revalidate");
 
             <input type="radio" name="rq" id="btnCarsInfo"><label id="rqlb4" for="btnCarsInfo">Пробег транспорта</label>
             <input type="radio" name="rq" id="btnRepairActs"><label id="rqlb5" for="btnRepairActs">Акты обслуживания</label>
-            <input type="radio" name="rq" id="btnWaybills"><label id="rqlb6" for="btnWaybills">Путевые листы</label>
         </div>
         <button id="btnCreateRequest">Подать заявку</button>
         <button id="btnCreateAct">Создать акт</button>
-        <button id="btnCreateWaybill">Создать путевой лист</button>
         <button id="btnShowGantt">Диаграмма Ганта</button>
         <button id="btnShowCalendar">Календарь заявок</button>
         <a id="cars" href="cars.php">Транспорт</a>
@@ -281,140 +278,6 @@ header("Cache-Control: no-cache, must-revalidate");
             </tr>
         </table>
         <div id="error_add_expended"></div>
-    </div>
-    <div id='waybill_create_form'>                                       <!--Форма подачи путевого листа-->
-        <table>
-            <tr>
-                <td>Номер</td>
-                <td colspan="3">
-                    <input id="waybill_number" type="text">
-                </td>
-            </tr>
-            <tr>
-                <td class = "col1">Период действия (с-по)<span class="required_field_mark">*</span></td>
-                <td class = "col2"><input id="waybill_start_date" type="text"></td>
-                <td class = "col4"><input id="waybill_end_date" type="text"></td>
-            </tr>
-            <tr>
-                <td>Транспортное средство<span class="required_field_mark">*</span></td>
-                <td id="waybill_car" name="waybill_car" colspan="2">
-                </td>
-            </tr>
-            <tr>
-                <td>Водитель<span class="required_field_mark">*</span></td>
-                <td id="waybill_driver" name="waybill_driver"  colspan="2">
-                </td>
-            </tr>
-            <tr>
-                <td>В распоряжение<span class="required_field_mark">*</span></td>
-                <td id="waybill_department" name="waybill_department"  colspan="2">
-                </td>
-            </tr>
-            <tr>
-                <td>Показание спидометра (до выезда)</td>
-                <td colspan="2">
-                    <input id="waybill_mileage_before" type="text">
-                </td>
-            </tr>
-            <tr>
-                <td>Пробег</td>
-                <td colspan="2">
-                    <input id="waybill_mileages" type="text">
-                </td>
-            </tr>
-            <tr>
-                <td>Остаток горючего при выезде</td>
-                <td colspan="2">
-                    <input id="waybill_fuel_before" type="text">
-                </td>
-            </tr>
-            <tr>
-                <td>Выдано горючего</td>
-                <td colspan="2">
-                    <input id="waybill_given_fuel" type="text">
-                </td>
-            </tr>
-            <tr>
-                <td>Марка горючего</td>
-                <td id="waybill_fuel_type" name="waybill_fuel_type"  colspan="2">
-                </td>
-            </tr>
-            <tr>
-                <td>Маршрут</td>
-                <td id="ways" name="ways" colspan="2">
-                    <select size="4" id="ways_list" multiple name="ways_list"></select>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td id="ways_buttons" colspan="2">
-                    <input type="button" id="insert_way" name="insert_way" value="Добавить маршрут">
-                    <input type="button" id="delete_way" name="delete_way" value="Удалить маршрут">
-                </td>
-            </tr>
-        </table>
-        <div id="error_waybill_create"></div>
-    </div>
-    <div id="add_way">             <!-- Форма добавления маршрута -->
-        <table>
-            <tr>
-                <td class="col1">Маршрут (из)</td>
-                <td class="col2">
-                    <select id="way_value_from" name="way_value_from">
-                        <option value="Бикей">Бикей</option>
-                        <option value="Гидростроитель">Гидростроитель</option>
-                        <option value="Осиновка">Осиновка</option>
-                        <option value="Падун">Падун</option>
-                        <option value="Порожский">Порожский</option>
-                        <option value="Сосновый">Сосновый</option>
-                        <option value="Стениха">Стениха</option>
-                        <option value="Сухой">Сухой</option>
-                        <option value="Центральный">Центральный</option>
-                        <option value="Чекановский">Чекановский</option>
-                        <option value="Энергетик">Энергетик</option>
-                        <option value="Южный Падун">Южный Падун</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td class="col1">Маршрут (в)</td>
-                <td class="col2">
-                    <select id="way_value_to" name="way_value_to">
-                        <option value="Бикей">Бикей</option>
-                        <option value="Гидростроитель">Гидростроитель</option>
-                        <option value="Осиновка">Осиновка</option>
-                        <option value="Падун">Падун</option>
-                        <option value="Порожский">Порожский</option>
-                        <option value="Сосновый">Сосновый</option>
-                        <option value="Стениха">Стениха</option>
-                        <option value="Сухой">Сухой</option>
-                        <option value="Центральный">Центральный</option>
-                        <option value="Чекановский">Чекановский</option>
-                        <option value="Энергетик">Энергетик</option>
-                        <option value="Южный Падун">Южный Падун</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>Время выезда</td>
-                <td>
-                    <input type="text" id="way_out_time" name="way_out_time">
-                </td>
-            </tr>
-            <tr>
-                <td>Время приезда</td>
-                <td>
-                    <input type="text" id="way_return_time" name="way_return_time">
-                </td>
-            </tr>
-            <tr>
-                <td>Пройдено (км)</td>
-                <td>
-                    <input type="text" id="way_distance" name="way_distance">
-                </td>
-            </tr>
-        </table>
-        <div id="error_add_way"></div>
     </div>
     <?php } else { ?>
         <h1 id="permission_denied">У вас нет прав на просмотр содержимого этого сайта</h1>

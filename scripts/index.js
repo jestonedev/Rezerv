@@ -67,11 +67,6 @@ function initButtonsState()
         document.getElementById('btnRepairActs').checked = true;
         header = "Акты выполненных работ по обслуживанию автотранспорта";
         setCookie("header", header);
-    } else if (menu_code == 4) {
-
-        document.getElementById('btnWaybills').checked = true;
-        header = "Путевые листы";
-        setCookie("header", header);
     } else {
             switch (id_request.toString()) {
                 case "0":
@@ -114,12 +109,6 @@ function initButtonsState()
     } else
     {
         $('#btnCreateAct').hide();
-    }
-    if (hasCreateWaybillsPrivilege() && menu_code == 4) {
-        $('#btnCreateWaybill').show();
-    } else
-    {
-        $('#btnCreateWaybill').hide();
     }
     if (hasManageCarsPrivilege())
     {
@@ -426,10 +415,6 @@ $(document).ready(function(){
             //Если это акты выполненных работ
             if (menu_code == 3) {
                 show_act_details(oTable, nTr); }
-            else
-            //Если это путевые листы
-            if (menu_code == 4) {
-                show_waybill_details(oTable, nTr); }
             else {
             //Если это заявки
                 show_request_details(oTable, nTr); }

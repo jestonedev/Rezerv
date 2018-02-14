@@ -7,6 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 include_once 'const.php';
+include_once 'auth.php';
 
 class WaybillsClass
 {
@@ -99,6 +100,217 @@ class WaybillsClass
         }
         $row["ways"] = $array;
         return $row;
+    }
+
+
+
+    public function InsertWaybill($args)
+    {
+        if (!Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT))
+            $this->fatal_error('У вас нет прав на создание путевых листов');
+        $query = "INSERT INTO waybills(id_car, id_driver, waybill_number,
+            start_date, end_date, department,
+            mileage_before, mileage_after, fuel_before, given_fuel, fuel_after, id_fuel_type)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+        $pq = mysqli_prepare($this->link, $query);
+
+        $car_id = intval($args['car_id']);
+        $driver_id = intval($args['driver_id']);
+        $number = $args['number'];
+        $number = (trim($number) == "") ? null : trim($number);
+        $department = stripslashes($args['department']);
+        $mileage_before = $args['mileage_before'];
+        $mileage_before = (trim($mileage_before) == "") ? null : trim($mileage_before);
+        $mileages = $args['mileages'];
+        $mileages = (trim($mileages) == "") ? null : trim($mileages);
+        $mileage_after = null;
+        if ($mileage_before != null && $mileages != null) {
+            $mileage_after = intval($mileage_before) + intval($mileages);
+        } else
+            if ($mileage_before != null) {
+                $mileage_after = $mileage_before;
+            }
+        $fuel_before = $args['fuel_before'];
+        $fuel_before = (trim($fuel_before) == "") ? null : trim($fuel_before);
+        $given_fuel = $args['given_fuel'];
+        $given_fuel = (trim($given_fuel) == "") ? null : trim($given_fuel);
+        $fuel_type_id = $args['fuel_type_id'];
+        $start_date_parts = explode('.', $args['start_date']);
+        $start_date = $start_date_parts[2].'-'.$start_date_parts[1].'-'.$start_date_parts[0];
+        $end_date_parts = explode('.', $args['end_date']);
+        $end_date = $end_date_parts[2].'-'.$end_date_parts[1].'-'.$end_date_parts[0];
+
+        $fuelConsumptionQuery = "SELECT fc.fuel_consumption
+            FROM fuel_consumption fc
+            WHERE fc.id_car = $car_id AND date(fc.start_date) <= STR_TO_DATE('$start_date', '%Y-%m-%d')
+            ORDER BY fc.start_date DESC
+            LIMIT 1";
+        $fuelConsumptionResult = mysqli_query($this->link, $fuelConsumptionQuery);
+        if (!$fuelConsumptionResult)
+            $this->fatal_error('Ошибка при выполнении запроса к базе данных');
+        $fuelConsumptionRow = mysqli_fetch_array($fuelConsumptionResult, MYSQLI_ASSOC);
+        $fuelConsumption = 0;
+        if ($fuelConsumptionRow != null)
+            $fuelConsumption = $fuelConsumptionRow["fuel_consumption"];
+        $fuel_after = floatval($fuel_before == null ? 0 : $fuel_before) -
+            (intval($mileage_after == null ? 0 : $mileage_after) -
+                intval($mileage_before == null ? 0 : $mileage_before))*$fuelConsumption / 100 +
+            ($given_fuel == null ? 0 : floatval($given_fuel));
+
+        mysqli_stmt_bind_param($pq,'iiisssiidddi',$car_id, $driver_id, $number, $start_date,
+            $end_date, $department,
+            $mileage_before, $mileage_after, $fuel_before, $given_fuel, $fuel_after, $fuel_type_id);
+        mysqli_stmt_execute($pq);
+        if (mysqli_errno($this->link)!=0)
+        {
+            mysqli_rollback($this->link);
+            $this->fatal_error('Ошибка выполнения запроса к базе данных');
+        }
+        $waybill_id = mysqli_insert_id($this->link);
+
+        $ways_strs = explode('$', $args['ways_list']);
+        foreach ($ways_strs as $ways_str)
+        {
+            if (empty($ways_str))
+                continue;
+            $args = explode('@',$ways_str);
+            if (count($args) != 4)
+            {
+                $this->fatal_error('Некорректный формат параметра "Маршрут следования"');
+            }
+            $query = "insert into ways (id_waybill, way, start_time, end_time, distance) values (?,?,?,?,?)";
+            $pq = mysqli_prepare($this->link, $query);
+            $way = (trim($args[0]) == "") ? null : trim($args[0]);
+            $startDate = (trim($args[1]) == "") ? null : trim($args[1]);
+            $endDate = (trim($args[2]) == "") ? null : trim($args[2]);
+            $distance = (trim($args[3]) == "") ? null : trim($args[3]);
+            mysqli_stmt_bind_param($pq, 'isssi', $waybill_id, $way, $startDate, $endDate, $distance);
+            mysqli_stmt_execute($pq);
+            if (mysqli_errno($this->link)!=0)
+            {
+                mysqli_rollback($this->link);
+                $this->fatal_error('Ошибка выполнения запроса к базе данных');
+            }
+        }
+        mysqli_stmt_close($pq);
+        mysqli_commit($this->link);
+        return "";
+    }
+
+    public function DeleteWaybill($id_waybill)
+    {
+        if (!Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT))
+            $this->fatal_error('У вас нет прав на удаление акта выполненных работ');
+        $query = "UPDATE waybills SET deleted = 1 WHERE id_waybill = ?";
+        $pq = mysqli_prepare($this->link, $query);
+        mysqli_stmt_bind_param($pq,'i', $id_waybill);
+        mysqli_stmt_execute($pq);
+        if (mysqli_errno($this->link)!=0)
+        {
+            mysqli_rollback($this->link);
+            $this->fatal_error('Ошибка выполнения запроса к базе данных');
+        }
+        mysqli_stmt_close($pq);
+        mysqli_commit($this->link);
+    }
+
+    public function UpdateWaybill($args)
+    {
+        if (!Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT))
+            $this->fatal_error('У вас нет прав на изменение путевого листа');
+        $query = "UPDATE waybills SET id_car = ?, id_driver = ?, waybill_number = ?, start_date = ?, end_date = ?,
+          department = ?, mileage_before = ?, mileage_after = ?, fuel_before = ?,
+          given_fuel = ?, fuel_after = ?, id_fuel_type = ? WHERE id_waybill = ?";
+        $pq = mysqli_prepare($this->link, $query);
+        $car_id = intval($args['car_id']);
+        $driver_id = intval($args['driver_id']);
+        $number = $args['number'];
+        $number = (trim($number) == "") ? null : trim($number);
+        $department = stripslashes($args['department']);
+        $mileage_before = $args['mileage_before'];
+        $mileage_before = (trim($mileage_before) == "") ? null : trim($mileage_before);
+        $mileages = $args['mileages'];
+        $mileages = (trim($mileages) == "") ? null : trim($mileages);
+        $mileage_after = null;
+        if ($mileage_before != null && $mileages != null) {
+            $mileage_after = intval($mileage_before) + intval($mileages);
+        } else
+            if ($mileage_before != null) {
+                $mileage_after = $mileage_before;
+            }
+        $fuel_before = $args['fuel_before'];
+        $fuel_before = (trim($fuel_before) == "") ? null : trim($fuel_before);
+        $given_fuel = $args['given_fuel'];
+        $given_fuel = (trim($given_fuel) == "") ? null : trim($given_fuel);
+        $fuel_type_id = $args['fuel_type_id'];
+        $start_date_parts = explode('.', $args['start_date']);
+        $start_date = $start_date_parts[2].'-'.$start_date_parts[1].'-'.$start_date_parts[0];
+        $end_date_parts = explode('.', $args['end_date']);
+        $end_date = $end_date_parts[2].'-'.$end_date_parts[1].'-'.$end_date_parts[0];
+        $waybill_id = $args['waybill_id'];
+        $fuelConsumptionQuery = "SELECT fc.fuel_consumption
+            FROM fuel_consumption fc
+            WHERE fc.id_car = $car_id AND date(fc.start_date) <= STR_TO_DATE('$start_date', '%Y-%m-%d')
+            ORDER BY fc.start_date DESC
+            LIMIT 1";
+        $fuelConsumptionResult = mysqli_query($this->link, $fuelConsumptionQuery);
+        if (!$fuelConsumptionResult)
+            $this->fatal_error('Ошибка при выполнении запроса к базе данных');
+        $fuelConsumptionRow = mysqli_fetch_array($fuelConsumptionResult, MYSQLI_ASSOC);
+        $fuelConsumption = 0;
+        if ($fuelConsumptionRow != null)
+            $fuelConsumption = $fuelConsumptionRow["fuel_consumption"];
+        $fuel_after = floatval($fuel_before == null ? 0 : $fuel_before) -
+            (intval($mileage_after == null ? 0 : $mileage_after) -
+                intval($mileage_before == null ? 0 : $mileage_before))*$fuelConsumption / 100 +
+            ($given_fuel == null ? 0 : floatval($given_fuel));
+
+        mysqli_stmt_bind_param($pq,'iiisssiidddii',$car_id, $driver_id, $number, $start_date, $end_date,
+            $department, $mileage_before, $mileage_after, $fuel_before, $given_fuel, $fuel_after,
+            $fuel_type_id, $waybill_id);
+        mysqli_stmt_execute($pq);
+        if (mysqli_errno($this->link)!=0)
+        {
+            mysqli_rollback($this->link);
+            $this->fatal_error('Ошибка выполнения запроса к базе данных');
+        }
+
+        $query = "delete from ways where id_waybill = ?";
+        $pq = mysqli_prepare($this->link, $query);
+        mysqli_stmt_bind_param($pq, 'i', $waybill_id);
+        mysqli_stmt_execute($pq);
+        if (mysqli_errno($this->link)!=0)
+        {
+            mysqli_rollback($this->link);
+            $this->fatal_error('Ошибка выполнения запроса к базе данных');
+        }
+        $ways_strs = explode('$', $args['ways_list']);
+        foreach ($ways_strs as $ways_str)
+        {
+            if (empty($ways_str))
+                continue;
+            $args = explode('@',$ways_str);
+            if (count($args) != 4)
+            {
+                die('Некорректный формат параметра "Маршрут следования"');
+            }
+            $query = "insert into ways (id_waybill, way, start_time, end_time, distance) values (?,?,?,?,?)";
+            $pq = mysqli_prepare($this->link, $query);
+            $way = (trim($args[0]) == "") ? null : trim($args[0]);
+            $startDate = (trim($args[1]) == "") ? null : trim($args[1]);
+            $endDate = (trim($args[2]) == "") ? null : trim($args[2]);
+            $distance = (trim($args[3]) == "") ? null : trim($args[3]);
+            mysqli_stmt_bind_param($pq, 'isssi', $waybill_id, $way, $startDate, $endDate, $distance);
+            mysqli_stmt_execute($pq);
+            if (mysqli_errno($this->link)!=0)
+            {
+                mysqli_rollback($this->link);
+                $this->fatal_error('Ошибка выполнения запроса к базе данных');
+            }
+        }
+        mysqli_stmt_close($pq);
+        mysqli_commit($this->link);
+        return "";
     }
 
     ///////////////////////////////////////////////////////////////////////////

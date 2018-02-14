@@ -14,6 +14,7 @@ header("Cache-Control: no-cache, must-revalidate");
     <script src="scripts/jquery-1.11.2.min.js"></script>
     <script src="scripts/bootstrap.min.js"></script>
     <script src="scripts/cars.js"></script>
+    <script src="scripts/waybills.js"></script>
 </head>
 <body>
 <?php

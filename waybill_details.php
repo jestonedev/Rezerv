@@ -17,6 +17,7 @@ header("Cache-Control: no-cache, must-revalidate");
     <script src="scripts/bootstrap-datepicker.min.js"></script>
     <script src="scripts/bootstrap-datepicker.ru.min.js"></script>
     <script src="scripts/cars.js"></script>
+    <script src="scripts/waybills.js"></script>
     <script src="scripts/helper.js"></script>
 </head>
 <body>
