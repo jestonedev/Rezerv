@@ -1,17 +1,7 @@
 $(document).ready(
     function() {
         if ($.fn.datepicker != undefined) {
-            $("#waybillStartDate, #waybillEndDate").datepicker({
-                format: "dd.mm.yyyy",
-                weekStart: 1,
-                maxViewMode: 2,
-                todayBtn: "linked",
-                language: "ru",
-                orientation: "bottom auto",
-                autoclose: true,
-                todayHighlight: true,
-                startDate: "01/01/1753"
-            });
+            $("#waybillStartDate, #waybillEndDate").datepicker(carsDatePickerSettings);
         }
 
         $("#waybill-add-button").on("click", function(e) {

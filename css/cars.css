@@ -25,7 +25,7 @@
     margin-top: 20px;
 }
 
-.cars__change-norm-button, .cars__change-tires-button, .cars__change-accum-button {
+.cars__change-norm-button, .cars__change-month-fuel-limit-button, .cars__change-tires-button, .cars__change-accum-button {
     margin-left: 10px;
 }
 
@@ -50,7 +50,7 @@
     width: 150px;
 }
 
-.waybill-select-date-button span {
+.select-date-button span {
     margin-top: -1px;
 }
 
@@ -90,4 +90,17 @@
 
 .waybill-detail-dl {
     margin: 0;
+}
+
+.fuel-consumption-form {
+    margin-bottom: 0;
+}
+
+.label {
+    padding: 0.3em .6em .3em;
+}
+
+.car-repair-card__state {
+    margin-top: 1px;
+    display: inline-block;
 }

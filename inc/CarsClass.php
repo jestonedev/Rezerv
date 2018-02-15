@@ -79,7 +79,7 @@ class CarsClass
                "chief" => $car["chief"],
                "department_default" => $car["department_default"],
                "state" => $car["is_active"] == 0 ?
-                   '<span class="label label-warning">Не активный</span>' :
+                   '<span class="label label-warning">Неактивный</span>' :
                    '<span class="label label-success">Активный</span>'
             ]);
         }
@@ -89,22 +89,27 @@ class CarsClass
     public function GetCarInfo($id_car)
     {
         $query = "SELECT cm.model, c.type, c.number, ROUND(IFNULL(fc.fuel_consumption, 0), 3) AS fuel_consumption,
-                  IFNULL(m.mileage_after, 0) AS mileage_after
-                FROM cars c
-                  LEFT JOIN car_models cm ON c.id_model = cm.id_model
-                  LEFT JOIN (
-                      SELECT fc.fuel_consumption, fc.id_car
-                      FROM fuel_consumption fc
-                      WHERE fc.id_car = $id_car AND fc.start_date <= NOW()
-                      ORDER BY fc.start_date DESC
-                      LIMIT 1
-                      ) fc ON c.id = fc.id_car
-                  LEFT JOIN (SELECT w.id_car, w.mileage_after
-                      FROM waybills w
-                      WHERE w.id_car  = $id_car AND w.deleted <> 1 AND w.end_date <= NOW()
-                      ORDER BY w.start_date DESC
-                      LIMIT 1) m ON c.id = m.id_car
-                WHERE c.id = $id_car";
+                IFNULL(m.mileage_after, 0) AS mileage_after,
+                c.is_active, IFNULL(fl.`limit`, 0) AS fuel_month_limit
+              FROM cars c
+                LEFT JOIN car_models cm ON c.id_model = cm.id_model
+                LEFT JOIN (
+                    SELECT fc.fuel_consumption, fc.id_car
+                    FROM fuel_consumption fc
+                    WHERE fc.id_car = $id_car AND fc.start_date <= NOW()
+                    ORDER BY fc.start_date DESC
+                    LIMIT 1
+                    ) fc ON c.id = fc.id_car
+                LEFT JOIN (SELECT w.id_car, w.mileage_after
+                    FROM waybills w
+                    WHERE w.id_car  = $id_car AND w.deleted <> 1 AND w.end_date <= NOW()
+                    ORDER BY w.start_date DESC
+                    LIMIT 1) m ON c.id = m.id_car
+                LEFT JOIN (SELECT * FROM fuel_month_limit fl
+                  WHERE fl.id_car = $id_car AND fl.start_date <= NOW()
+                  ORDER BY fl.start_date DESC
+                  LIMIT 1) fl ON c.id = fl.id_car
+              WHERE c.id = $id_car";
         $result = mysqli_query($this->link, $query);
         $car = mysqli_fetch_assoc($result);
         return [
@@ -113,7 +118,9 @@ class CarsClass
             "number" => $car["number"],
             "type" => $car["type"],
             "current_fuel_consumption" => $car["fuel_consumption"],
-            "current_mileages" => $car["mileage_after"]
+            "current_fuel_month_limit" => $car["fuel_month_limit"],
+            "current_mileages" => $car["mileage_after"],
+            "is_active" => $car["is_active"]
         ];
     }
 
@@ -163,5 +170,71 @@ class CarsClass
             ]);
         }
         return $waybills;
+    }
+
+    public function UpdateFuelConsumption($carId, $fuelConsumption, $fuelConsumptionDate)
+    {
+        $deleteQuery = "DELETE FROM fuel_consumption WHERE id_car = ? AND DATE_FORMAT(start_date, '%d.%m.%Y') = ?";
+        $insertQuery = "INSERT INTO fuel_consumption(id_car, start_date, fuel_consumption)
+                        VALUES(?,STR_TO_DATE(?, '%d.%m.%Y'),?)";
+        $selectQuery = "SELECT CAST(fc.fuel_consumption AS DECIMAL(18,3)) AS fuel_consumption
+                        FROM fuel_consumption fc
+                        WHERE fc.id_car = $carId AND fc.start_date <= NOW()
+                        ORDER BY fc.start_date DESC
+                        LIMIT 1";
+        $deleteStmt = mysqli_prepare($this->link, $deleteQuery);
+        mysqli_stmt_bind_param($deleteStmt, 'is', $carId, $fuelConsumptionDate);
+        mysqli_stmt_execute($deleteStmt);
+        if (mysqli_errno($this->link) <> 0)
+        {
+            die('Ошибка удаления старой нормы расхода топлива из базы данных');
+        }
+        $insertQuery = mysqli_prepare($this->link, $insertQuery);
+        mysqli_stmt_bind_param($insertQuery, 'isd', $carId, $fuelConsumptionDate, $fuelConsumption);
+        mysqli_stmt_execute($insertQuery);
+        if (mysqli_errno($this->link) <> 0)
+        {
+            die('Ошибка добавления нормы расхода топлива');
+        }
+        $result = mysqli_query($this->link, $selectQuery);
+        $row = mysqli_fetch_assoc($result);
+        if ($row == null)
+        {
+            return "0.000";
+        }
+        return $row["fuel_consumption"];
+    }
+
+    public function UpdateFuelMonthLimit($carId, $fuelMonthLimit, $fuelMonthLimitDate)
+    {
+        $deleteQuery = "DELETE FROM fuel_month_limit WHERE id_car = ? AND DATE_FORMAT(start_date, '%d.%m.%Y') = ?";
+        $insertQuery = "INSERT INTO fuel_month_limit(id_car, start_date, `limit`)
+                        VALUES(?,STR_TO_DATE(?, '%d.%m.%Y'),?)";
+        $selectQuery = "SELECT CAST(fml.limit AS DECIMAL(18,3)) AS fuel_month_limit
+                        FROM fuel_month_limit fml
+                        WHERE fml.id_car = $carId AND fml.start_date <= NOW()
+                        ORDER BY fml.start_date DESC
+                        LIMIT 1";
+        $deleteStmt = mysqli_prepare($this->link, $deleteQuery);
+        mysqli_stmt_bind_param($deleteStmt, 'is', $carId, $fuelMonthLimitDate);
+        mysqli_stmt_execute($deleteStmt);
+        if (mysqli_errno($this->link) <> 0)
+        {
+            die('Ошибка удаления старого лимита расхода топлива в месяц из базы данных');
+        }
+        $insertQuery = mysqli_prepare($this->link, $insertQuery);
+        mysqli_stmt_bind_param($insertQuery, 'isd', $carId, $fuelMonthLimitDate, $fuelMonthLimit);
+        mysqli_stmt_execute($insertQuery);
+        if (mysqli_errno($this->link) <> 0)
+        {
+            die('Ошибка добавления лимита расхода топлива в месяц');
+        }
+        $result = mysqli_query($this->link, $selectQuery);
+        $row = mysqli_fetch_assoc($result);
+        if ($row == null)
+        {
+            return "0.000";
+        }
+        return $row["fuel_month_limit"];
     }
 }

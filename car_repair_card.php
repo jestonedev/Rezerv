@@ -10,10 +10,14 @@ header("Cache-Control: no-cache, must-revalidate");
     <link rel="shortcut icon" href="favicon.png" type="image/png">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" href="css/cars.css">
     <script src="scripts/jquery-1.11.2.min.js"></script>
     <script src="scripts/bootstrap.min.js"></script>
+    <script src="scripts/bootstrap-datepicker.min.js"></script>
+    <script src="scripts/bootstrap-datepicker.ru.min.js"></script>
     <script src="scripts/cars.js"></script>
+    <script src="scripts/helper.js"></script>
 </head>
 <body>
 <?php
@@ -78,15 +82,40 @@ if (Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT)) {
     <div class="row cars-row text-center">
         <div class="col-md-6 col-xs-12">
             <dl>
-                <dt>Текущий пробег</dt>
-                <dd><?=$carInfo["current_mileages"]?></dd>
+                <dt>Статус</dt>
+                <?
+                    if ($carInfo["is_active"] == 1) {
+                        ?>
+                        <dd><div class="label label-success car-repair-card__state">Активный</div></dd>
+                        <?
+                    } else {
+                        ?>
+                        <dd><div class="label label-warning car-repair-card__state">Неактивный</div></dd>
+                        <?
+                    }
+                ?>
             </dl>
         </div>
         <div class="col-md-6 col-xs-12">
             <dl>
-                <dt>Текущая норма расхода</dt>
-                <dd><?=$carInfo["current_fuel_consumption"]?>
+                <dt>Текущая норма расхода топлива на 100 км.</dt>
+                <dd><span id="current-fuel-consumption"><?=number_format($carInfo["current_fuel_consumption"], 3, '.', ' ')?></span> л.
                     <button class="btn btn-info btn-xs cars__change-norm-button">Изменить</button></dd>
+            </dl>
+        </div>
+    </div>
+    <div class="row cars-row text-center">
+        <div class="col-md-6 col-xs-12">
+            <dl>
+                <dt>Текущий пробег</dt>
+                <dd><?=number_format($carInfo["current_mileages"],0, ',', ' ')?></dd>
+            </dl>
+        </div>
+        <div class="col-md-6 col-xs-12">
+            <dl>
+                <dt>Текущий лимит расхода топлива в месяц</dt>
+                <dd><span id="current-fuel-month-limit"><?=number_format($carInfo["current_fuel_month_limit"], 3, '.', ' ')?></span> л.
+                    <button class="btn btn-info btn-xs cars__change-month-fuel-limit-button">Изменить</button></dd>
             </dl>
         </div>
     </div>
@@ -135,5 +164,74 @@ if (Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT)) {
     <?php
 }
 ?>
+<div class="modal fade" id="car-fuel-consumption-change" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Изменение нормы расхода топлива</h4>
+            </div>
+            <div class="modal-body clearfix">
+                <div class="alert alert-danger text-center col-sm-10 col-sm-offset-1 fuel-consumption-data-error" style="display: none">
+                </div>
+                <form class="fuel-consumption-form form-horizontal col-sm-10 col-sm-offset-1" role="form">
+                    <input type="hidden" id="fuelConsumptionIdCar" value="<?=$carInfo["id_car"]?>">
+                    <div class="form-group">
+                        <label for="fuelConsumption" class="control-label">Норма</label>
+                        <input type="text" class="form-control" id="fuelConsumption" placeholder="Норма расхода топлива">
+                    </div>
+                    <div class="form-group">
+                        <label for="fuelConsumptionDate" class="control-label">На дату</label>
+                        <div class="input-group date">
+                            <input type="text" class="form-control date" value="<?=date('d.m.Y')?>" id="fuelConsumptionDate" placeholder="Дата начала действия нормы расхода топлива">
+                            <div class="input-group-addon select-date-button">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="save-fuel-consumption">Сохранить</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="car-fuel-month-limit-change" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Изменение лимита расхода топлива в месяц</h4>
+            </div>
+            <div class="modal-body clearfix">
+                <div class="alert alert-danger text-center col-sm-10 col-sm-offset-1 fuel-month-limit-data-error" style="display: none">
+                </div>
+                <form class="fuel-consumption-form form-horizontal col-sm-10 col-sm-offset-1" role="form">
+                    <input type="hidden" id="fuelMonthLimitIdCar" value="<?=$carInfo["id_car"]?>">
+                    <div class="form-group">
+                        <label for="fuelMonthLimit" class="control-label">Лимит</label>
+                        <input type="text" class="form-control" id="fuelMonthLimit" placeholder="Лимит расхода топлива">
+                    </div>
+                    <div class="form-group">
+                        <label for="fuelMonthLimitDate" class="control-label">На дату</label>
+                        <div class="input-group date">
+                            <input type="text" class="form-control date" value="<?=date('d.m.Y')?>" id="fuelMonthLimitDate" placeholder="Дата начала действия лимита расхода топлива">
+                            <div class="input-group-addon select-date-button">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="save-fuel-month-limit">Сохранить</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 </body>
 </html>

@@ -93,8 +93,8 @@ if (Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT)) {
                 <tr>
                     <td><?= $waybill["number"] ?></td>
                     <td><?= $waybill["travel_date"] ?></td>
-                    <td><?= $waybill["mileages"] ?></td>
-                    <td><?= $waybill["fuel_consumption"] ?></td>
+                    <td><?= $waybill["mileages"] ?> км.</td>
+                    <td><?= $waybill["fuel_consumption"] ?> л.</td>
                     <td><?= $waybill["state"] ?></td>
                     <td>
                         <div class="btn-group">
