@@ -27,7 +27,7 @@ var carsDatePickerSettings = {
     orientation: "bottom auto",
     autoclose: true,
     todayHighlight: true,
-    startDate: "01/01/1753"
+    startDate: "01.01.1990"
 };
 
 $(document).ready(

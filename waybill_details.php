@@ -43,6 +43,14 @@ if (Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT)) {
                 <li><a href="tires.php">Автошины</a></li>
                 <li><a href="accumulator.php">Аккумуляторы</a></li>
                 <li><a href="index.php">Заявки</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Отчеты <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="car_reports/fuel_by_month_report.php">Расход топлива за месяц</a></li>
+                        <li><a href="car_reports/fuel_by_quarter_report.php">Расход топлива за квартал</a></li>
+                        <li><a href="car_reports/fuel_by_period_report.php">Расход топлива за период</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </nav>

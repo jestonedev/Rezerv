@@ -116,7 +116,7 @@ $(document).ready(function() {
             }
         );
 
-        $.ajax( {
+        $.ajax({
                 type: "POST",
                 url: "inc/mechanics_list.php",
                 success: function(msg)
@@ -127,8 +127,7 @@ $(document).ready(function() {
                 error: function(msg)
                 {
                 }
-            }
-        );
+        });
         $("#insert_expended").click(function() {
             $("#error_add_expended").hide();
             $("#act_expended_edit_name").prop("value","");
