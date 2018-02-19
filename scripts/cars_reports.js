@@ -25,5 +25,7 @@ $(document).ready(function() {
             todayHighlight: true,
             startDate: "1990"
         });
+
+        $("#reportFuelByPeriodDateFrom, #reportFuelByPeriodDateTo").datepicker(carsDatePickerSettings);
     }
 });

@@ -80,7 +80,7 @@ if (Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT))
             $fuelDataArray = $reportClass->GetFuelByMonthReportData($_GET['reportFuelByMonthDate']);
             ?>
             <div class="col-sm-12">
-                <table class="table table-striped car__table">
+                <table class="table table-striped table-bordered car__table">
                     <thead>
                         <tr>
                             <th rowspan="2">Автомобиль</th>
@@ -114,11 +114,11 @@ if (Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT))
                             foreach($fuelDataArray as $fuelDataItem)
                             {
                                 ?>
-                                    <tr>
+                                    <tr class="<?=$fuelDataItem['order'] == 1 ? "success" : ""?>">
                                         <td><?=$fuelDataItem['car']?></td>
                                         <td><?=$fuelDataItem['fuel_consumption'] == 'н/а' ?
                                                 '<span class="label label-danger">н/а</span>' :
-                                            number_format($fuelDataItem['fuel_consumption'], 3, '.', '&nbsp;')?></td>
+                                            number_format($fuelDataItem['fuel_consumption'], 2, '.', '&nbsp;')?></td>
                                         <td><?=$fuelDataItem['fuel_start_month'] == 'н/а' ?
                                                 '<span class="label label-danger">н/а</span>' :
                                                 number_format($fuelDataItem['fuel_start_month'], 3, '.', '&nbsp;')?></td>

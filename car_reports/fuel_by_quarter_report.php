@@ -46,8 +46,8 @@ if (Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT))
                 <li class="active dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Отчеты <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li class="active"><a href="fuel_by_month_report.php">Расход топлива за месяц</a></li>
-                        <li><a href="fuel_by_quarter_report.php">Расход топлива за квартал</a></li>
+                        <li><a href="fuel_by_month_report.php">Расход топлива за месяц</a></li>
+                        <li class="active"><a href="fuel_by_quarter_report.php">Расход топлива за квартал</a></li>
                         <li><a href="fuel_by_period_report.php">Расход топлива за период</a></li>
                     </ul>
                 </li>
@@ -89,7 +89,7 @@ if (Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT))
         $fuelDataArray = $reportClass->GetFuelByQuarterReportData($_GET['reportFuelByQuarterYear'], $_GET['reportFuelByQuarterQuarter']);
         ?>
         <div class="col-sm-12">
-            <table class="table table-striped car__table">
+            <table class="table table-bordered table-striped car__table">
                 <thead>
                 <tr>
                     <th rowspan="3">Автомобиль</th>
@@ -153,11 +153,11 @@ if (Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT))
                     foreach($fuelDataArray as $fuelDataItem)
                     {
                         ?>
-                        <tr>
+                        <tr class="<?=$fuelDataItem['order'] == 1 ? "success" : ""?>">
                             <td><?=$fuelDataItem['car']?></td>
                             <td><?=$fuelDataItem['fuel_consumption'] == 'н/а' ?
                                     '<span class="label label-danger">н/а</span>' :
-                                    number_format($fuelDataItem['fuel_consumption'], 3, '.', '&nbsp;')?></td>
+                                    number_format($fuelDataItem['fuel_consumption'], 2, '.', '&nbsp;')?></td>
                             <td><?=$fuelDataItem['fuel_start_quartal'] == 'н/а' ?
                                     '<span class="label label-danger">н/а</span>' :
                                     number_format($fuelDataItem['fuel_start_quartal'], 3, '.', '&nbsp;')?></td>
