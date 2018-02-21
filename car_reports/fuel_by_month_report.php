@@ -42,7 +42,7 @@ if (Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT))
                 <li><a href="../cars.php">Автомобили</a></li>
                 <li><a href="../tires.php">Автошины</a></li>
                 <li><a href="../accumulator.php">Аккумуляторы</a></li>
-                <li><a href="index.php">Заявки</a></li>
+                <li><a href="../index.php">Заявки</a></li>
                 <li class="active dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Отчеты <b class="caret"></b></a>
                     <ul class="dropdown-menu">

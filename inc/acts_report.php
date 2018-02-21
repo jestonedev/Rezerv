@@ -34,10 +34,11 @@ $query = "SELECT cra.id_repair,
   cra.repair_start_date,
   cra.repair_end_date,
   cra.self_repair,
-  cra.deleted, m.name AS mechanic, d.name AS driver, r.name AS respondent, c.number, c.model
+  cra.deleted, m.name AS mechanic, d.name AS driver, r.name AS respondent, c.number, cm.model
                     FROM cars_repair_acts cra
                       LEFT JOIN mechanics m ON (cra.id_performer = m.id_mechanic)
                       LEFT JOIN cars c ON (cra.id_car = c.id)
+                      LEFT JOIN car_models cm ON (c.id_model = cm.id_model)
                       LEFT JOIN drivers d ON (cra.id_driver = d.id_driver)
                       LEFT JOIN respondents r ON (cra.id_respondent = r.id_respondent) WHERE id_repair=".addslashes($id_repair);
 $query_expended = "SELECT * FROM expended WHERE id_repair=".addslashes($id_repair);

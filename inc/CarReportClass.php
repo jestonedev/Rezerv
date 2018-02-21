@@ -494,31 +494,31 @@ ORDER BY v.id_fuel_type, `order`, car";
             die('Передан некорректный формат месяца');
         }
         $query = "SELECT *
-                    FROM (
-                    SELECT 0 AS `order`, c.id_fuel_default AS id_fuel_type,
-                      IFNULL(CONCAT(c.number,' г/н ', cm.model), c.type) AS car,
-                      SUM(w.mileage_after - w.mileage_before) AS factical_mileages,
-                      ROUND(SUM(IFNULL(w.fuel_before, 0) + IFNULL(w.given_fuel, 0) - IFNULL(w.fuel_after, 0)), 3) AS factical_fuel
-                    FROM waybills w
-                      INNER JOIN cars c ON w.id_car = c.id
-                      LEFT JOIN car_models cm ON c.id_model = cm.id_model
-                    WHERE w.deleted <> 1 AND w.end_date BETWEEN
-                      STR_TO_DATE('$from', '%d.%m.%Y') AND
-                      STR_TO_DATE('$to', '%d.%m.%Y')
-                    GROUP BY c.id
-                    UNION ALL
-                    SELECT 1 AS `order`, c.id_fuel_default AS id_fuel_type,
-                      ft.fuel_type,
-                      SUM(w.mileage_after - w.mileage_before) AS factical_mileages,
-                      ROUND(SUM(IFNULL(w.fuel_before, 0) + IFNULL(w.given_fuel, 0) - IFNULL(w.fuel_after, 0)), 3) AS factical_fuel
-                    FROM waybills w
-                      INNER JOIN cars c ON w.id_car = c.id
-                      INNER JOIN fuel_types ft ON c.id_fuel_default = ft.id_fuel_type
-                    WHERE w.deleted <> 1 AND w.end_date BETWEEN
-                      STR_TO_DATE('$from', '%d.%m.%Y') AND
-                      STR_TO_DATE('$to', '%d.%m.%Y')
-                    GROUP BY c.id_fuel_default) v
-                    ORDER BY v.id_fuel_type, `order`, car";
+                FROM (
+                SELECT 0 AS `order`, c.id_fuel_default AS id_fuel_type,
+                  IFNULL(CONCAT(c.number,' г/н ', cm.model), c.type) AS car,
+                  SUM(w.mileage_after - w.mileage_before) AS factical_mileages,
+                  ROUND(SUM(IFNULL(w.fuel_before, 0) + IFNULL(w.given_fuel, 0) - IFNULL(w.fuel_after, 0)), 3) AS factical_fuel
+                FROM cars c
+                  LEFT JOIN waybills w ON w.id_car = c.ID
+                  LEFT JOIN car_models cm ON c.id_model = cm.id_model
+                WHERE w.deleted <> 1 AND c.is_active = 1 AND w.end_date BETWEEN
+                  STR_TO_DATE('$from', '%d.%m.%Y') AND
+                  STR_TO_DATE('$to', '%d.%m.%Y') AND c.id NOT IN (SELECT chfm.id_car FROM cars_hided_from_managment chfm)
+                GROUP BY c.id
+                UNION ALL
+                SELECT 1 AS `order`, c.id_fuel_default AS id_fuel_type,
+                  ft.fuel_type,
+                  SUM(w.mileage_after - w.mileage_before) AS factical_mileages,
+                  ROUND(SUM(IFNULL(w.fuel_before, 0) + IFNULL(w.given_fuel, 0) - IFNULL(w.fuel_after, 0)), 3) AS factical_fuel
+                FROM cars c
+                  LEFT JOIN waybills w ON w.id_car = c.ID
+                  INNER JOIN fuel_types ft ON c.id_fuel_default = ft.id_fuel_type
+                WHERE w.deleted <> 1 AND c.is_active = 1 AND w.end_date BETWEEN
+                  STR_TO_DATE('$from', '%d.%m.%Y') AND
+                  STR_TO_DATE('$to', '%d.%m.%Y') AND c.id NOT IN (SELECT chfm.id_car FROM cars_hided_from_managment chfm)
+                GROUP BY c.id_fuel_default) v
+                ORDER BY v.id_fuel_type, `order`, car";
         $result = mysqli_query($this->link, $query);
         $carFuelResultArray = [];
         while($row = mysqli_fetch_assoc($result))

@@ -46,7 +46,8 @@
     margin-right: 0;
 }
 
-.waybill-control-buttons button, .waybill-control-buttons a {
+.waybill-control-buttons button, .waybill-control-buttons a,
+.repair-act-control-buttons button, .repair-act-control-buttons a {
     width: 150px;
 }
 
@@ -63,17 +64,17 @@
     background-color: #d9fff5;
 }
 
-.waybill-require-mark {
+.waybill-require-mark, .repair-act-require-mark {
     color: #e64a54;
     margin-left: 3px;
 }
 
 @media (min-width: 992px) {
-    .waybills-form-md-right-padding {
+    .waybills-form-md-right-padding, .repair-acts-form-md-right-padding {
         padding-right: 20pt;
     }
 
-    .waybills-form-md-left-padding {
+    .waybills-form-md-left-padding, .repair-acts-form-md-left-padding {
         padding-left: 20pt;
     }
 }
@@ -103,4 +104,37 @@
 .car-repair-card__state {
     margin-top: 1px;
     display: inline-block;
+}
+
+.repair-act__add-button, .waybill__add-button,
+.repair-act-control-buttons,  .waybill-control-buttons {
+    margin-bottom: 20px;
+}
+
+.waybill__manage-buttons {
+    width: 150px;
+}
+
+.repair-act__manage-buttons {
+    width: 125px;
+}
+
+.repair-act__manage-buttons .button--padding {
+    margin-bottom: 3px;
+}
+
+#repair-start-date-wrapper, #repair-end-date-wrapper,
+#wait-start-date-wrapper, #wait-end-date-wrapper {
+    margin-bottom: 10px;
+}
+
+@media (min-width: 992px) {
+    #repair-start-date-wrapper, #repair-end-date-wrapper,
+    #wait-start-date-wrapper, #wait-end-date-wrapper  {
+        margin-bottom: 0;
+    }
+}
+
+.repair-acts__repair-period {
+    min-width: 200px;
 }

@@ -104,8 +104,8 @@ if (Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT)) {
                     <td><?= $waybill["mileages"] ?> км.</td>
                     <td><?= $waybill["fuel_consumption"] ?> л.</td>
                     <td><?= $waybill["state"] ?></td>
-                    <td>
-                        <div class="btn-group">
+                    <td class="waybill__manage-buttons">
+                        <div>
                             <a title="Детальная информация"
                                href="waybill_details.php?id_waybill=<?= $waybill["id_waybill"] ?>"
                                class="btn btn-default">
@@ -158,7 +158,7 @@ if (Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT)) {
             </li>
         </ul>
         <div class="row text-center">
-            <a href="waybill_add.php?id_car=<?= $car_id ?>" class="btn btn-success right">Добавить путевой лист</a>
+            <a href="waybill_add.php?id_car=<?= $car_id ?>" class="btn btn-success waybill__add-button">Добавить путевой лист</a>
         </div>
     </div>
     <?php

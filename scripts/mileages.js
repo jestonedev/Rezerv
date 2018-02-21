@@ -20,6 +20,20 @@ $(document).ready(function() {
         forceRefreshCounter = 0;
     });
 
+    $.ajax( {
+            type: "POST",
+            url: "inc/chiefs_list.php",
+            success: function(msg)
+            {
+                $('#car_chief_wrapper select').remove();
+                $('#car_chief_wrapper').append(msg);
+            },
+            error: function(msg)
+            {
+            }
+        }
+    );
+
     //Функция инициализации формы редактирования пробега по транспорту
     function initMileagesEditor()
     {

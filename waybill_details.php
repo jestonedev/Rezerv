@@ -121,11 +121,11 @@ if (Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT)) {
         </li>
         <li class="list-group-item">
             <dl class="dl-horizontal waybill-detail-dl">
-                <dt>Показание спидометра (до выезда)</dt>
+                <dt>Показание одометра (до выезда)</dt>
                 <dd><?=empty($waybillInfo["mileage_before"]) ? 0 : $waybillInfo["mileage_before"]?> км.</dd>
                 <dt>Пробег</dt>
                 <dd><?=($waybillInfo["mileage_after"] - $waybillInfo["mileage_before"])?> км.</dd>
-                <dt>Показание спидометра (возвр.)</dt>
+                <dt>Показание одометра (возвр.)</dt>
                 <dd><?=empty($waybillInfo["mileage_after"]) ? 0 : $waybillInfo["mileage_after"]?> км.</dd>
             </dl>
         </li>

@@ -63,10 +63,6 @@ function initButtonsState()
         document.getElementById('btnCarsInfo').checked = true;
         header = "Информация по пробегу транспортных средств администрации";
         setCookie("header", header);
-    } else if(menu_code == 3) {
-        document.getElementById('btnRepairActs').checked = true;
-        header = "Акты выполненных работ по обслуживанию автотранспорта";
-        setCookie("header", header);
     } else {
             switch (id_request.toString()) {
                 case "0":
@@ -103,12 +99,6 @@ function initButtonsState()
     } else
     {
         $('#btnCreateRequest').hide();
-    }
-    if (hasCreateActsPrivilege() && menu_code == 3) {
-        $('#btnCreateAct').show();
-    } else
-    {
-        $('#btnCreateAct').hide();
     }
     if (hasManageCarsPrivilege())
     {

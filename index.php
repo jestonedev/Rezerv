@@ -49,7 +49,6 @@ header("Cache-Control: no-cache, must-revalidate");
         <script src="scripts/index.js" type="text/javascript"></script>
         <script src="scripts/requests.js" type="text/javascript"></script>
         <script src="scripts/mileages.js" type="text/javascript"></script>
-        <script src="scripts/repair_acts.js" type="text/javascript"></script>
         <script src="scripts/reports.js" type="text/javascript"></script>
         <script src="scripts/gantt.js" type="text/javascript"></script>
         <script src="scripts/calendar.js" type="text/javascript"></script>
@@ -69,10 +68,8 @@ header("Cache-Control: no-cache, must-revalidate");
             <input type="radio" name="rq" id="btnSmallHallRequests"><label id="rqlb3" for="btnSmallHallRequests">Заявки на зал думы</label>
 
             <input type="radio" name="rq" id="btnCarsInfo"><label id="rqlb4" for="btnCarsInfo">Пробег транспорта</label>
-            <input type="radio" name="rq" id="btnRepairActs"><label id="rqlb5" for="btnRepairActs">Акты обслуживания</label>
         </div>
         <button id="btnCreateRequest">Подать заявку</button>
-        <button id="btnCreateAct">Создать акт</button>
         <button id="btnShowGantt">Диаграмма Ганта</button>
         <button id="btnShowCalendar">Календарь заявок</button>
         <a id="cars" href="cars.php">Транспорт</a>
@@ -179,105 +176,6 @@ header("Cache-Control: no-cache, must-revalidate");
             </tr>
         </table>
         <div id="error_mileagesEditor"></div>
-    </div>
-    <div id='act_create_form'>                                       <!--Форма подачи акта выполненных работ-->
-        <table>
-            <tr>
-                <td>Номер акта</td>
-                <td colspan="2">
-                    <input id="act_number" type="text">
-                </td>
-            </tr>
-            <tr>
-                <td>Дата формирования акта<span class="required_field_mark">*</span></td>
-                <td colspan="2"><input id="act_date" type="text" colspan="2"></td>
-            </tr>
-            <tr>
-                <td class="col1">Ответственный<span class="required_field_mark">*</span></td>
-                <td class="col2" id="act_respondent" name="act_respondent" colspan="2">
-                </td>
-            </tr>
-            <tr>
-                <td>Транспортное средство<span class="required_field_mark">*</span></td>
-                <td id="act_car" name="act_car" colspan="2">
-                </td>
-            </tr>
-            <tr>
-                <td>Водитель<span class="required_field_mark">*</span></td>
-                <td id="act_driver" name="act_driver" colspan="2">
-                </td>
-            </tr>
-            <tr>
-                <td>Механик<span class="required_field_mark">*</span></td>
-                <td id="act_mechanic" name="act_mechanic" colspan="2">
-                </td>
-            </tr>
-            <tr>
-                <td>Причина ремонта</td>
-                <td colspan="2">
-                    <input id="reason_for_repair" type="text">
-                </td>
-            </tr>
-            <tr>
-                <td>Выполненные работы</td>
-                <td colspan="2">
-                    <textarea id="work_performed" cols="50" rows="2" type="text"></textarea>
-                </td>
-            </tr>
-            <tr>
-                <td>Показание одометра</td>
-                <td colspan="2">
-                    <input id="act_odometer" type="text">
-                </td>
-            </tr>
-            <tr>
-                <td class = "col1">Период ожидания (с-по)</td>
-                <td class = "col2"><input id="act_wait_start_date" type="text"></td>
-                <td class = "col4"><input id="act_wait_end_date" type="text"></td>
-            </tr>
-            <tr>
-                <td class = "col1">Период факт. ремонта (с-по)</td>
-                <td class = "col2"><input id="act_repair_start_date" type="text"></td>
-                <td class = "col4"><input id="act_repair_end_date" type="text"></td>
-            </tr>
-            <tr>
-                <td>Израсходованные материалы</td>
-                <td id="act_expended" colspan="2">
-                    <select size="3" id="act_expended_list" multiple name="act_expended_list"></select>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td id="act_expended_buttons" colspan="2">
-                    <input type="button" id="insert_expended" name="insert_expended" value="Добавить материал">
-                    <input type="button" id="delete_expended" name="delete_expended" value="Удалить материал">
-                </td>
-            </tr>
-            <tr>
-                <td>Собственный ремонт</td>
-                <td colspan="2">
-                    <input type="checkbox" id="self_repair" name="self_repair" checked>
-                </td>
-            </tr>
-        </table>
-        <div id="error_act_create"></div>
-    </div>
-    <div id="add_expended">             <!-- Форма добавления расходного материала -->
-        <table>
-            <tr>
-                <td class="col1">Наименование</td>
-                <td class="col2">
-                    <input type="text" id="act_expended_edit_name" name="act_expended_edit_name">
-                </td>
-            </tr>
-            <tr>
-                <td>Количество</td>
-                <td>
-                    <input type="text" id="act_expended_edit_count" name="act_expended_edit_count">
-                </td>
-            </tr>
-        </table>
-        <div id="error_add_expended"></div>
     </div>
     <?php } else { ?>
         <h1 id="permission_denied">У вас нет прав на просмотр содержимого этого сайта</h1>

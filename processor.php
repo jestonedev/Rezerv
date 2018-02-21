@@ -40,8 +40,5 @@ if ($_SERVER["REQUEST_METHOD"]==="POST") {
         case 'display_all_transport_combobox':
             echo $req->CreateCarsComboBox(true);
             break;
-        case 'display_all_fuel_type_combobox':
-            echo $req->CreateFuelTypesComboBox(true);
-            break;
     }
 }

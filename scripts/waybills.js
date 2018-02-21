@@ -139,7 +139,7 @@ $(document).ready(
             }
             if (($.trim(waybill_mileage_before) != "") && (!intCorrect(waybill_mileage_before)))
             {
-                alert.append("<div>Показание спидометра до выезда указано неверно</div>");
+                alert.append("<div>Показание одометра до выезда указано неверно</div>");
                 is_correct = false;
             }
             if (($.trim(waybill_mileages) != "") && (!intCorrect(waybill_mileages)))

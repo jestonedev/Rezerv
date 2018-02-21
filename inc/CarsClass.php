@@ -42,6 +42,41 @@ class CarsClass
         return $drivers;
     }
 
+    public function GetMechanics()
+    {
+        $query = "SELECT *
+            FROM mechanics m
+            WHERE m.is_active = 1
+            ORDER BY name";
+        $result = mysqli_query($this->link, $query);
+        $mechanics = [];
+        while($mechanic = mysqli_fetch_assoc($result))
+        {
+            array_push($mechanics, [
+                "id_mechanic" => $mechanic["id_mechanic"],
+                "name" => $mechanic["name"]
+            ]);
+        }
+        return $mechanics;
+    }
+
+    public function GetRespondents()
+    {
+        $query = "SELECT *
+            FROM respondents r
+            ORDER BY name";
+        $result = mysqli_query($this->link, $query);
+        $respondents = [];
+        while($respondent = mysqli_fetch_assoc($result))
+        {
+            array_push($respondents, [
+                "id_respondent" => $respondent["id_respondent"],
+                "name" => $respondent["name"]
+            ]);
+        }
+        return $respondents;
+    }
+
     public function GetFuelTypes()
     {
         $query = "SELECT *
@@ -170,6 +205,63 @@ class CarsClass
             ]);
         }
         return $waybills;
+    }
+
+    public function GetCarActsPageCount($id_car)
+    {
+        $query = "SELECT COUNT(*) AS cnt FROM cars_repair_acts WHERE id_car = $id_car";
+        $result = mysqli_query($this->link, $query);
+        return ceil(mysqli_fetch_assoc($result)["cnt"] / 10);
+    }
+
+    public function GetCarActs($id_car, $page)
+    {
+        $start_limit = ($page - 1)*10;
+        $query = "SELECT
+              cra.id_repair,
+              cra.repair_act_number,
+              cra.work_performed,
+              e.materials,
+              IF(cra.repair_start_date IS NULL AND cra.repair_end_date IS NOT NULL, DATE_FORMAT(cra.repair_end_date, '%d.%m.%Y %H:%i'),
+              IF (cra.repair_end_date IS NULL AND cra.repair_start_date IS NOT NULL, DATE_FORMAT(cra.repair_start_date, '%d.%m.%Y %H:%i'),
+              IF (date(cra.repair_start_date) <> date(cra.repair_end_date),
+                  CONCAT(DATE_FORMAT(cra.repair_start_date, '%d.%m.%Y %H:%i'), ' - ', DATE_FORMAT(cra.repair_end_date, '%d.%m.%Y %H:%i')),
+                  CONCAT(DATE_FORMAT(cra.repair_start_date, '%d.%m.%Y %H:%i'), '-', DATE_FORMAT(cra.repair_end_date, '%H:%i')))
+              )) AS repair_date,
+              IF(cra.wait_start_date IS NULL AND cra.wait_end_date IS NOT NULL, DATE_FORMAT(cra.wait_end_date, '%d.%m.%Y %H:%i'),
+              IF (cra.repair_end_date IS NULL AND cra.wait_start_date IS NOT NULL, DATE_FORMAT(cra.wait_start_date, '%d.%m.%Y %H:%i'),
+              IF (date(cra.wait_start_date) <> date(cra.wait_end_date),
+                  CONCAT(DATE_FORMAT(cra.wait_start_date, '%d.%m.%Y %H:%i'), ' - ', DATE_FORMAT(cra.wait_end_date, '%d.%m.%Y %H:%i')),
+                  CONCAT(DATE_FORMAT(cra.wait_start_date, '%d.%m.%Y %H:%i'), '-', DATE_FORMAT(cra.wait_end_date, '%H:%i')))
+              )) AS wait_date, m.name AS mechanic, cra.reason_for_repairs,  cra.deleted
+            FROM cars_repair_acts cra
+              INNER JOIN mechanics m ON cra.id_performer = m.id_mechanic
+              LEFT JOIN
+                (SELECT e.id_repair, GROUP_CONCAT(e.material ORDER BY e.material SEPARATOR '<br>') AS materials
+                  FROM expended e GROUP BY e.id_repair) e ON cra.id_repair = e.id_repair
+            WHERE cra.id_car = $id_car
+            ORDER BY cra.id_repair DESC
+            LIMIT $start_limit, 10";
+        $result = mysqli_query($this->link, $query);
+        $acts = [];
+        while($act = mysqli_fetch_assoc($result))
+        {
+            array_push($acts, [
+                "id_repair" => $act["id_repair"],
+                "number" => $act["repair_act_number"],
+                "repair_date" => $act["repair_date"],
+                "wait_date" => $act["wait_date"],
+                "work_performed" => $act["work_performed"],
+                "materials" => $act["materials"],
+                "mechanic" => $act["mechanic"],
+                "reason_for_repairs" => $act["reason_for_repairs"],
+                "state" => $act["deleted"] == 1 ?
+                    '<span class="label label-warning">Удаленный</span>' :
+                    '<span class="label label-success">Действительный</span>',
+                "deleted" => $act["deleted"]
+            ]);
+        }
+        return $acts;
     }
 
     public function UpdateFuelConsumption($carId, $fuelConsumption, $fuelConsumptionDate)

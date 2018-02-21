@@ -16,9 +16,4 @@ if (Auth::hasPrivilege(AUTH_READ_GREAT_HALL_REQUEST))
 if (Auth::hasPrivilege(AUTH_READ_TRANSPORT_MILEAGE))
     $req_mask += 8;
 
-if (Auth::hasPrivilege(AUTH_READ_REPAIR_ACTS))
-    $req_mask += 16;
-if (Auth::hasPrivilege(AUTH_READ_WAYBILLS))
-    $req_mask += 32;
-
 echo $req_mask;

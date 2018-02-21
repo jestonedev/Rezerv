@@ -156,8 +156,8 @@ if (Auth::hasPrivilege(AUTH_MANAGE_TRANSPORT)) {
             <div class="row">
                 <div class="col-xs-12 col-md-6 waybills-form-md-right-padding">
                     <div class="form-group">
-                        <label for="waybillMileagesBefore" class="control-label">Показание спидометра (до выезда)</label>
-                        <input type="text" class="form-control" value="<?=$waybillAutocompleteInfo["mileage_after"]?>" id="waybillMileagesBefore" placeholder="Показание спидометра (до выезда)">
+                        <label for="waybillMileagesBefore" class="control-label">Показание одометра (до выезда)</label>
+                        <input type="text" class="form-control" value="<?=$waybillAutocompleteInfo["mileage_after"]?>" id="waybillMileagesBefore" placeholder="Показание одометра (до выезда)">
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6 waybills-form-md-left-padding">
